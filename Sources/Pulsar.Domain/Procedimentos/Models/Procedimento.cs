@@ -12,7 +12,6 @@ namespace Pulsar.Domain.Procedimentos.Models
 {
     public class Procedimento
     {
-        [BsonId]
         public ObjectId Id { get; set; }
         public string Codigo { get; set; }
         public string Nome { get; set; }

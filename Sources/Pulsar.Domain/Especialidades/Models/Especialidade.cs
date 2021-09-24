@@ -10,7 +10,6 @@ namespace Pulsar.Domain.Especialidades.Models
 {
     public class Especialidade
     {
-        [BsonId]
         public ObjectId Id { get; set; }
         public  string Codigo { get; set; }
         public  string Nome { get; set; }

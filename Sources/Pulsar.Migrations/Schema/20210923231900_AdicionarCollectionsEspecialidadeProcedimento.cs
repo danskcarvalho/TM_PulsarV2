@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Pulsar.Common;
+using Pulsar.Infrastructure;
 
 namespace Pulsar.Migrations.Schema
 {

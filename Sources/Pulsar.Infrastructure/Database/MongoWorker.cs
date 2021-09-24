@@ -9,9 +9,9 @@ namespace Pulsar.Infrastructure.Database
 {
     public class MongoWorker
     {
-        public MongoUnitOfWorkFactory Factory { get; }
+        public MongoContextFactory Factory { get; }
 
-        public MongoWorker(MongoUnitOfWorkFactory factory)
+        public MongoWorker(MongoContextFactory factory)
         {
             this.Factory = factory;
         }
@@ -19,11 +19,11 @@ namespace Pulsar.Infrastructure.Database
 
     public class MongoWorker<T> : MongoWorker
     {
-        public MongoWorker(string collectionName, MongoUnitOfWorkFactory factory) : base(factory)
+        public MongoWorker(string collectionName, MongoContextFactory factory) : base(factory)
         {
             this.CollectionName = collectionName;
         }
         public string CollectionName { get; }
-        public IMongoCollection<T> Collection(MongoUnitOfWork uow) => uow.GetCollection<T>(CollectionName);
+        public IMongoCollection<T> Collection(MongoContext uow) => uow.GetCollection<T>(CollectionName);
     }
 }

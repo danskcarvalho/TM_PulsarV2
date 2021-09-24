@@ -5,11 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MongoDB.Bson" Version="2.13.1" />
+    <PackageReference Include="MongoDB.Driver" Version="2.13.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Pulsar.Common\Pulsar.Common.csproj" />
+    <ProjectReference Include="..\Pulsar.Domain\Pulsar.Domain.csproj" />
+    <ProjectReference Include="..\Pulsar.Infrastructure\Pulsar.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

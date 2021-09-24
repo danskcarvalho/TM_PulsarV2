@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using Pulsar.Common.Database;
 using Pulsar.Infrastructure.Database;
 using System;
 using System.Collections.Generic;
@@ -19,11 +20,11 @@ namespace Pulsar.Infrastructure.Migrations
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
                 .Build();
 
-            var factory = new MongoUnitOfWorkFactory(configuration);
+            var factory = new MongoContextFactory(configuration);
             var migrations = await factory.Start(async uow =>
             {
                 return await GatherMigrations(assembly, uow);
-            }, options: MongoUnitOfWorkOptions.Committed);
+            }, options: IsolationOptions.Committed);
             //run migrations
             int number = 1;
             foreach (var mig in migrations)
@@ -33,7 +34,7 @@ namespace Pulsar.Infrastructure.Migrations
             }
         }
 
-        private static async Task<List<Type>> GatherMigrations(Assembly assembly, MongoUnitOfWork uow)
+        private static async Task<List<Type>> GatherMigrations(Assembly assembly, MongoContext uow)
         {
             var allMigrationTypes = assembly.GetTypes().ToList();
             allMigrationTypes = allMigrationTypes.Where(t => IsMigrationType(t)).ToList();
@@ -64,13 +65,13 @@ namespace Pulsar.Infrastructure.Migrations
             return t.IsClass && !t.IsGenericTypeDefinition && t.GetCustomAttributes<MigrationAttribute>().Any() && typeof(Migration).IsAssignableFrom(t);
         }
 
-        private static async Task<List<MigrationModel>> GetCurrentMigrations(MongoUnitOfWork uow)
+        private static async Task<List<MigrationModel>> GetCurrentMigrations(MongoContext uow)
         {
             var collection = uow.GetCollection<MigrationModel>(MigrationConstants.CollectionName);
             return await (await collection.FindAsync(m => true)).ToListAsync();
         }
 
-        private static async Task CreateMigrationsCollectionIfNotExists(MongoUnitOfWork uow)
+        private static async Task CreateMigrationsCollectionIfNotExists(MongoContext uow)
         {
             //check for existence of collection _Migrations
             var filter = new BsonDocument("name", MigrationConstants.CollectionName);

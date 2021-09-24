@@ -19,9 +19,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pulsar.Infrastructure", "Pu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pulsar.Common", "Pulsar.Common\Pulsar.Common.csproj", "{5B621C11-0445-435C-B9B5-369335E7D24A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pulsar.Migrations", "Pulsar.Migrations\Pulsar.Migrations.csproj", "{50628EE7-3CB6-46D1-B848-39B94EF1C9F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pulsar.Migrations", "Pulsar.Migrations\Pulsar.Migrations.csproj", "{50628EE7-3CB6-46D1-B848-39B94EF1C9F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pulsar.Domain", "Pulsar.Domain\Pulsar.Domain.csproj", "{C104ADCB-1D3E-463B-87A4-EE11803751F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pulsar.Domain", "Pulsar.Domain\Pulsar.Domain.csproj", "{C104ADCB-1D3E-463B-87A4-EE11803751F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pulsar.Domain.Infrastructure", "Pulsar.Domain.Infrastructure\Pulsar.Domain.Infrastructure.csproj", "{F562AF3E-026C-4645-9026-897D5B7BAFFC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{C104ADCB-1D3E-463B-87A4-EE11803751F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C104ADCB-1D3E-463B-87A4-EE11803751F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C104ADCB-1D3E-463B-87A4-EE11803751F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F562AF3E-026C-4645-9026-897D5B7BAFFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F562AF3E-026C-4645-9026-897D5B7BAFFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F562AF3E-026C-4645-9026-897D5B7BAFFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F562AF3E-026C-4645-9026-897D5B7BAFFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -54,6 +60,7 @@ Global
 		{5B621C11-0445-435C-B9B5-369335E7D24A} = {FBD7202D-86CD-475D-AFFB-BE15A5623ED0}
 		{50628EE7-3CB6-46D1-B848-39B94EF1C9F5} = {180D8AA3-2B79-4AA8-9A6A-44374588BCFD}
 		{C104ADCB-1D3E-463B-87A4-EE11803751F2} = {8FEADC43-DDA8-407E-A9DB-ED3AC5F1DCCC}
+		{F562AF3E-026C-4645-9026-897D5B7BAFFC} = {8FEADC43-DDA8-407E-A9DB-ED3AC5F1DCCC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4D15D182-B97E-4ADF-A116-DFD0BA91F7A7}

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using Pulsar.Common;
+using Pulsar.Common.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace Pulsar.Infrastructure.Database
 {
-    public class MongoUnitOfWorkFactory
+    public class MongoContextFactory : IDbContextFactory
     {
         public IConfiguration Configuration { get; }
         private MongoConfigurationSection ConfigurationSection { get; }
-        public MongoUnitOfWorkFactory(IConfiguration configuration)
+        public MongoContextFactory(IConfiguration configuration)
         {
             this.Configuration = configuration;
             this.ConfigurationSection = configuration.GetSection("MongoDB")?.Get<MongoConfigurationSection>();
@@ -23,7 +24,7 @@ namespace Pulsar.Infrastructure.Database
             if (this.ConfigurationSection?.Database == null)
                 throw new InvalidOperationException("database name was not provided");
         }
-        public MongoUnitOfWorkFactory(MongoConfigurationSection configuration)
+        public MongoContextFactory(MongoConfigurationSection configuration)
         {
             this.ConfigurationSection = configuration;
             if (this.ConfigurationSection?.ConnectionString == null)
@@ -31,14 +32,14 @@ namespace Pulsar.Infrastructure.Database
             if (this.ConfigurationSection?.Database == null)
                 throw new InvalidOperationException("database name was not provided");
         }
-        public async Task<T> Start<T>(Func<MongoUnitOfWork, Task<T>> work,
-            MongoUnitOfWorkOptions? options = null,
+        public async Task<T> Start<T>(Func<MongoContext, Task<T>> work,
+            IsolationOptions? options = null,
             CancellationToken? cancellationToken = null,
             IClientSessionHandle currentSession = null
             )
         {
             if (options == null)
-                options = new MongoUnitOfWorkOptions();
+                options = new IsolationOptions();
             IMongoClient client = new MongoClient(ConfigurationSection.ConnectionString);
             var db = client.GetDatabase(ConfigurationSection.Database);
             IClientSessionHandle session = null;
@@ -49,9 +50,9 @@ namespace Pulsar.Infrastructure.Database
                 {
                     CausalConsistency = options.Value.EnableCasualConsistency,
                     DefaultTransactionOptions = new TransactionOptions(
-                        readConcern: options.Value.ReadConcern,
-                        readPreference: options.Value.ReadPreference,
-                        writeConcern: options.Value.WriteConcern,
+                        readConcern: options.Value.Read?.ToReadConcern(),
+                        readPreference: options.Value.Preference?.ToReadPreference(),
+                        writeConcern: options.Value.Write?.ToWriteConcern(),
                         maxCommitTime: options.Value.MaxCommitTime)
                 });
 
@@ -63,14 +64,14 @@ namespace Pulsar.Infrastructure.Database
                     {
                         return await session.WithTransactionAsync(async (s, ct) =>
                         {
-                            var uow = new MongoUnitOfWork(s, client, ct, db, options.Value);
+                            var uow = new MongoContext(s, client, ct, db, options.Value);
                             return await work(uow);
                         }, cancellationToken: cancellationToken ?? CancellationToken.None);
                     }
                     else
                     {
                         SetUpClientAndDatabase(options, ref client, ref db);
-                        var uow = new MongoUnitOfWork(null, client, cancellationToken ?? CancellationToken.None, db, options.Value);
+                        var uow = new MongoContext(null, client, cancellationToken ?? CancellationToken.None, db, options.Value);
                         return await work(uow);
                     }
                 });
@@ -81,32 +82,32 @@ namespace Pulsar.Infrastructure.Database
                 {
                     return await session.WithTransactionAsync(async (s, ct) =>
                     {
-                        var uow = new MongoUnitOfWork(s, client, ct, db, options.Value);
+                        var uow = new MongoContext(s, client, ct, db, options.Value);
                         return await work(uow);
                     }, cancellationToken: cancellationToken ?? CancellationToken.None);
                 }
                 else
                 {
                     SetUpClientAndDatabase(options, ref client, ref db);
-                    var uow = new MongoUnitOfWork(null, client, cancellationToken ?? CancellationToken.None, db, options.Value);
+                    var uow = new MongoContext(null, client, cancellationToken ?? CancellationToken.None, db, options.Value);
                     return await work(uow);
                 }
             }
         }
 
-        private void SetUpClientAndDatabase(MongoUnitOfWorkOptions? options, ref IMongoClient client, ref IMongoDatabase db)
+        private void SetUpClientAndDatabase(IsolationOptions? options, ref IMongoClient client, ref IMongoDatabase db)
         {
-            if (options.Value.ReadConcern != null)
+            if (options.Value.Read != null)
             {
-                client = client.WithReadConcern(options.Value.ReadConcern);
+                client = client.WithReadConcern(options.Value.Read?.ToReadConcern());
             }
-            if (options.Value.WriteConcern != null)
+            if (options.Value.Write != null)
             {
-                client = client.WithWriteConcern(options.Value.WriteConcern);
+                client = client.WithWriteConcern(options.Value.Write?.ToWriteConcern());
             }
-            if (options.Value.ReadPreference != null)
+            if (options.Value.Preference != null)
             {
-                client = client.WithReadPreference(options.Value.ReadPreference);
+                client = client.WithReadPreference(options.Value.Preference?.ToReadPreference());
             }
             db = client.GetDatabase(ConfigurationSection.Database);
         }
@@ -137,6 +138,15 @@ namespace Pulsar.Infrastructure.Database
                     maxWait *= 2;
                 }
             }
+        }
+
+        async Task<T> IDbContextFactory.Start<T>(Func<IDbContext, Task<T>> work, IsolationOptions? options, CancellationToken? cancellationToken, 
+            object currentSession)
+        {
+            return await Start(async ctx =>
+            {
+                return await work(ctx);
+            }, options, cancellationToken, currentSession as IClientSessionHandle);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using Newtonsoft.Json;
+using Pulsar.Common.Database;
 using Pulsar.Infrastructure.Database;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace Pulsar.Infrastructure.Migrations
             int migrationNumber,
             int totalMigrations,
             Type migrationType,
-            MongoUnitOfWorkFactory factory) : base(factory)
+            MongoContextFactory factory) : base(factory)
         {
             this.MigrationNumber = migrationNumber;
             this.TotalMigrations = totalMigrations;
@@ -28,13 +29,13 @@ namespace Pulsar.Infrastructure.Migrations
         public async Task Migrate()
         {
             var startTransaction = GetRequiresTransaction(MigrationType);
-            var options = startTransaction ? MongoUnitOfWorkOptions.Committed.WithTransaction() : MongoUnitOfWorkOptions.Committed;
-            await Factory.Start(async (uow) =>
+            var options = startTransaction ? IsolationOptions.Committed.WithTransaction() : IsolationOptions.Committed;
+            await Factory.Start(async ctx =>
             {
                 var migration = Activator.CreateInstance(MigrationType) as Migration;
                 if (migration == null)
                     throw new InvalidOperationException("invalid migration type");
-                migration.Set(uow.Client, uow.Database);
+                migration.Set(ctx.Client, ctx.Database);
 
                 var model = new MigrationModel()
                 {
@@ -44,7 +45,7 @@ namespace Pulsar.Infrastructure.Migrations
                 };
                 Console.WriteLine($"[{MigrationNumber}/{TotalMigrations}] executing {model.Version}:{MigrationType.Name}");
                 //insert into the collection _Migrations
-                var collection = uow.GetCollection<MigrationModel>(MigrationConstants.CollectionName);
+                var collection = ctx.GetCollection<MigrationModel>(MigrationConstants.CollectionName);
                 await collection.InsertOneAsync(model);
 
                 try
