@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31624.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0 - Presentation", "0 - Presentation", "{863A1999-AAA7-442D-9970-E736F83EF8FE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Application", "1 - Application", "{75D9AC3E-E715-4679-A31C-CA0C309A7D2B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Domain", "2 - Domain", "{8FEADC43-DDA8-407E-A9DB-ED3AC5F1DCCC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Infrastructure", "3 - Infrastructure", "{180D8AA3-2B79-4AA8-9A6A-44374588BCFD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Common", "4 - Common", "{FBD7202D-86CD-475D-AFFB-BE15A5623ED0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5 - Services", "5 - Services", "{8C11859C-998A-4F55-A49E-63E691D8F3F2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pulsar.Infrastructure", "Pulsar.Infrastructure\Pulsar.Infrastructure.csproj", "{B98B73B6-1A69-448F-A559-82E6A5672C2E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pulsar.Common", "Pulsar.Common\Pulsar.Common.csproj", "{5B621C11-0445-435C-B9B5-369335E7D24A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pulsar.Migrations", "Pulsar.Migrations\Pulsar.Migrations.csproj", "{50628EE7-3CB6-46D1-B848-39B94EF1C9F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pulsar.Domain", "Pulsar.Domain\Pulsar.Domain.csproj", "{C104ADCB-1D3E-463B-87A4-EE11803751F2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B98B73B6-1A69-448F-A559-82E6A5672C2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B98B73B6-1A69-448F-A559-82E6A5672C2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B98B73B6-1A69-448F-A559-82E6A5672C2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B98B73B6-1A69-448F-A559-82E6A5672C2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B621C11-0445-435C-B9B5-369335E7D24A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B621C11-0445-435C-B9B5-369335E7D24A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B621C11-0445-435C-B9B5-369335E7D24A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B621C11-0445-435C-B9B5-369335E7D24A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50628EE7-3CB6-46D1-B848-39B94EF1C9F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50628EE7-3CB6-46D1-B848-39B94EF1C9F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50628EE7-3CB6-46D1-B848-39B94EF1C9F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50628EE7-3CB6-46D1-B848-39B94EF1C9F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C104ADCB-1D3E-463B-87A4-EE11803751F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C104ADCB-1D3E-463B-87A4-EE11803751F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C104ADCB-1D3E-463B-87A4-EE11803751F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C104ADCB-1D3E-463B-87A4-EE11803751F2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B98B73B6-1A69-448F-A559-82E6A5672C2E} = {180D8AA3-2B79-4AA8-9A6A-44374588BCFD}
+		{5B621C11-0445-435C-B9B5-369335E7D24A} = {FBD7202D-86CD-475D-AFFB-BE15A5623ED0}
+		{50628EE7-3CB6-46D1-B848-39B94EF1C9F5} = {180D8AA3-2B79-4AA8-9A6A-44374588BCFD}
+		{C104ADCB-1D3E-463B-87A4-EE11803751F2} = {8FEADC43-DDA8-407E-A9DB-ED3AC5F1DCCC}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4D15D182-B97E-4ADF-A116-DFD0BA91F7A7}
+	EndGlobalSection
+EndGlobal
