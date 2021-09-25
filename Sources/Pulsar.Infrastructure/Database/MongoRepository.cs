@@ -43,12 +43,8 @@ namespace Pulsar.Infrastructure.Database
                 collection = collection.WithWriteConcern(wc?.ToWriteConcern());
 
             var filter = Builders<T>.Filter.Eq("_id", id);
-            if (Context.Session != null)
-                await collection.DeleteOneAsync(Context.Session, filter,
-                    cancellationToken: ct ?? CancellationToken.None);
-            else
-                await collection.DeleteOneAsync(filter,
-                    cancellationToken: ct ?? CancellationToken.None);
+            await collection.DeleteOneAsync(Context.Session, filter,
+                cancellationToken: ct ?? CancellationToken.None);
         }
 
         async Task<T> IAsyncRepository<T>.FindOneById(ObjectId id, ReadAck? rc, ReadPref? rp, CancellationToken? ct)
@@ -60,12 +56,8 @@ namespace Pulsar.Infrastructure.Database
                 collection = collection.WithReadPreference(rp?.ToReadPreference());
 
             var filter = Builders<T>.Filter.Eq("_id", id);
-            if (Context.Session != null)
-                return await (await collection.FindAsync(Context.Session, filter,
-                    cancellationToken: ct ?? CancellationToken.None)).FirstOrDefaultAsync();
-            else
-                return await (await collection.FindAsync(filter,
-                    cancellationToken: ct ?? CancellationToken.None)).FirstOrDefaultAsync();
+            return await (await collection.FindAsync(Context.Session, filter,
+                cancellationToken: ct ?? CancellationToken.None)).FirstOrDefaultAsync();
         }
 
         async Task IAsyncRepository<T>.InsertMany(IEnumerable<T> items, WriteAck? wc, CancellationToken? ct)
@@ -74,12 +66,8 @@ namespace Pulsar.Infrastructure.Database
             if (wc != null)
                 collection = collection.WithWriteConcern(wc?.ToWriteConcern());
 
-            if (Context.Session != null)
-                await collection.InsertManyAsync(Context.Session, items,
-                    cancellationToken: ct ?? CancellationToken.None);
-            else
-                await collection.InsertManyAsync(items,
-                    cancellationToken: ct ?? CancellationToken.None);
+            await collection.InsertManyAsync(Context.Session, items,
+                cancellationToken: ct ?? CancellationToken.None);
         }
 
         async Task IAsyncRepository<T>.InsertOne(T item, WriteAck? wc, CancellationToken? ct)
@@ -88,12 +76,8 @@ namespace Pulsar.Infrastructure.Database
             if (wc != null)
                 collection = collection.WithWriteConcern(wc?.ToWriteConcern());
 
-            if (Context.Session != null)
-                await collection.InsertOneAsync(Context.Session, item,
-                    cancellationToken: ct ?? CancellationToken.None);
-            else
-                await collection.InsertOneAsync(item,
-                    cancellationToken: ct ?? CancellationToken.None);
+            await collection.InsertOneAsync(Context.Session, item,
+                cancellationToken: ct ?? CancellationToken.None);
         }
 
         async Task IAsyncRepository<T>.UpdateOne(T item, WriteAck? wc, CancellationToken? ct)
@@ -103,12 +87,8 @@ namespace Pulsar.Infrastructure.Database
                 collection = collection.WithWriteConcern(wc?.ToWriteConcern());
 
             var filter = Builders<T>.Filter.Eq("_id", (ObjectId)_IdProperty.GetValue(item));
-            if (Context.Session != null)
-                await collection.FindOneAndReplaceAsync(Context.Session, filter, item,
-                    cancellationToken: ct ?? CancellationToken.None);
-            else 
-                await collection.FindOneAndReplaceAsync(filter, item,
-                    cancellationToken: ct ?? CancellationToken.None);
+            await collection.FindOneAndReplaceAsync(Context.Session, filter, item,
+                cancellationToken: ct ?? CancellationToken.None);
         }
 
         async Task<T> IAsyncRepository<T>.FindOne(Expression<Func<T, bool>> predicate, ReadAck? rc, ReadPref? rp, CancellationToken? ct)
@@ -119,12 +99,8 @@ namespace Pulsar.Infrastructure.Database
             if (rp != null)
                 collection = collection.WithReadPreference(rp?.ToReadPreference());
 
-            if (Context.Session != null)
-                return await(await collection.FindAsync(Context.Session, predicate,
-                    cancellationToken: ct ?? CancellationToken.None)).FirstOrDefaultAsync();
-            else
-                return await (await collection.FindAsync(predicate,
-                         cancellationToken: ct ?? CancellationToken.None)).FirstOrDefaultAsync();
+            return await(await collection.FindAsync(Context.Session, predicate,
+                cancellationToken: ct ?? CancellationToken.None)).FirstOrDefaultAsync();
         }
 
         async Task<List<T>> IAsyncRepository<T>.FindMany(Expression<Func<T, bool>> predicate,
@@ -147,12 +123,8 @@ namespace Pulsar.Infrastructure.Database
             if (sortBy != null && sortBy.Count != 0)
                 findOptions.Sort = BuildSortDefinition(sortBy);
 
-            if (Context.Session != null)
-                return await (await collection.FindAsync(Context.Session, predicate, options: findOptions,
-                    cancellationToken: ct ?? CancellationToken.None)).ToListAsync();
-            else
-                return await (await collection.FindAsync(predicate, options: findOptions,
-                    cancellationToken: ct ?? CancellationToken.None)).ToListAsync();
+            return await (await collection.FindAsync(Context.Session, predicate, options: findOptions,
+                cancellationToken: ct ?? CancellationToken.None)).ToListAsync();
         }
 
         async Task<List<TProjection>> IAsyncRepository<T>.FindMany<TProjection>(Expression<Func<T, bool>> predicate,
@@ -178,12 +150,8 @@ namespace Pulsar.Infrastructure.Database
             if (sortBy != null && sortBy.Count != 0)
                 findOptions.Sort = BuildSortDefinition(sortBy);
 
-            if (Context.Session != null)
-                return await (await collection.FindAsync<TProjection>(Context.Session, predicate, options: findOptions,
-                    cancellationToken: ct ?? CancellationToken.None)).ToListAsync();
-            else
-                return await (await collection.FindAsync<TProjection>(predicate, options: findOptions,
-                    cancellationToken: ct ?? CancellationToken.None)).ToListAsync();
+            return await (await collection.FindAsync<TProjection>(Context.Session, predicate, options: findOptions,
+                cancellationToken: ct ?? CancellationToken.None)).ToListAsync();
         }
 
         async Task<long> IAsyncRepository<T>.DeleteMany(Expression<Func<T, bool>> predicate, WriteAck? wc, CancellationToken? ct)
@@ -192,12 +160,8 @@ namespace Pulsar.Infrastructure.Database
             if (wc != null)
                 collection = collection.WithWriteConcern(wc?.ToWriteConcern());
 
-            if (Context.Session != null)
-                return (await collection.DeleteManyAsync(Context.Session, predicate,
-                    cancellationToken: ct ?? CancellationToken.None)).DeletedCount;
-            else
-                return (await collection.DeleteManyAsync(predicate,
-                    cancellationToken: ct ?? CancellationToken.None)).DeletedCount;
+            return (await collection.DeleteManyAsync(Context.Session, predicate,
+                cancellationToken: ct ?? CancellationToken.None)).DeletedCount;
         }
 
         async Task<long> IAsyncRepository<T>.UpdateMany(Expression<Func<T, bool>> predicate, object fields, WriteAck? wc, CancellationToken? ct)
@@ -206,12 +170,18 @@ namespace Pulsar.Infrastructure.Database
             if (wc != null)
                 collection = collection.WithWriteConcern(wc?.ToWriteConcern());
 
-            if (Context.Session != null)
-                return (await collection.UpdateManyAsync(Context.Session, predicate, ToUpdateDefinition(fields),
-                    cancellationToken: ct ?? CancellationToken.None)).ModifiedCount;
-            else
-                return (await collection.UpdateManyAsync(predicate, ToUpdateDefinition(fields),
-                    cancellationToken: ct ?? CancellationToken.None)).ModifiedCount;
+            return (await collection.UpdateManyAsync(Context.Session, predicate, ToUpdateDefinition(fields),
+                cancellationToken: ct ?? CancellationToken.None)).ModifiedCount;
+        }
+
+        async Task<long> IAsyncRepository<T>.UpdateOne(Expression<Func<T, bool>> predicate, object fields, WriteAck? wc, CancellationToken? ct)
+        {
+            var collection = Collection;
+            if (wc != null)
+                collection = collection.WithWriteConcern(wc?.ToWriteConcern());
+
+            return (await collection.UpdateOneAsync(Context.Session, predicate, ToUpdateDefinition(fields),
+                cancellationToken: ct ?? CancellationToken.None)).ModifiedCount;
         }
 
         private UpdateDefinition<T> ToUpdateDefinition(object fields)

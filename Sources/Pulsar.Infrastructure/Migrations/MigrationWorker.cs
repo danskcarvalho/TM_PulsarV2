@@ -72,7 +72,6 @@ namespace Pulsar.Infrastructure.Migrations
                     }
                     throw;
                 }
-                return 0;
             }, options: options);
         }
 

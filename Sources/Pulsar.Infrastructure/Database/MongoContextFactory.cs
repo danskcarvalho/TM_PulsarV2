@@ -32,7 +32,7 @@ namespace Pulsar.Infrastructure.Database
             if (this.ConfigurationSection?.Database == null)
                 throw new InvalidOperationException("database name was not provided");
         }
-        public async Task<T> Start<T>(Func<MongoContext, Task<T>> work,
+        public async Task<T> StartWithResponse<T>(Func<MongoContext, Task<T>> work,
             IsolationOptions? options = null,
             CancellationToken? cancellationToken = null,
             IClientSessionHandle currentSession = null
@@ -45,7 +45,7 @@ namespace Pulsar.Infrastructure.Database
             IClientSessionHandle session = null;
             if (currentSession != null)
                 session = currentSession;
-            if (options.Value.EnableCasualConsistency || options.Value.OpenTransaction)
+            else
                 session = await client.StartSessionAsync(new ClientSessionOptions()
                 {
                     CausalConsistency = options.Value.EnableCasualConsistency,
@@ -56,9 +56,29 @@ namespace Pulsar.Infrastructure.Database
                         maxCommitTime: options.Value.MaxCommitTime)
                 });
 
-            if (options.Value.HandleOptimisticFailures)
+            try
             {
-                return await RetryOnOptimisticFailure(async () =>
+                if (options.Value.HandleOptimisticFailures)
+                {
+                    return await RetryOnOptimisticFailure(async () =>
+                    {
+                        if (options.Value.OpenTransaction)
+                        {
+                            return await session.WithTransactionAsync(async (s, ct) =>
+                            {
+                                var uow = new MongoContext(s, client, ct, db, options.Value);
+                                return await work(uow);
+                            }, cancellationToken: cancellationToken ?? CancellationToken.None);
+                        }
+                        else
+                        {
+                            SetUpClientAndDatabase(options, ref client, ref db);
+                            var uow = new MongoContext(session, client, cancellationToken ?? CancellationToken.None, db, options.Value);
+                            return await work(uow);
+                        }
+                    });
+                }
+                else
                 {
                     if (options.Value.OpenTransaction)
                     {
@@ -74,25 +94,26 @@ namespace Pulsar.Infrastructure.Database
                         var uow = new MongoContext(null, client, cancellationToken ?? CancellationToken.None, db, options.Value);
                         return await work(uow);
                     }
-                });
+                }
             }
-            else
+            finally
             {
-                if (options.Value.OpenTransaction)
-                {
-                    return await session.WithTransactionAsync(async (s, ct) =>
-                    {
-                        var uow = new MongoContext(s, client, ct, db, options.Value);
-                        return await work(uow);
-                    }, cancellationToken: cancellationToken ?? CancellationToken.None);
-                }
-                else
-                {
-                    SetUpClientAndDatabase(options, ref client, ref db);
-                    var uow = new MongoContext(null, client, cancellationToken ?? CancellationToken.None, db, options.Value);
-                    return await work(uow);
-                }
+                if(currentSession == null)
+                    session.Dispose();
             }
+        }
+
+        public async Task Start(Func<MongoContext, Task> work,
+            IsolationOptions? options = null,
+            CancellationToken? cancellationToken = null,
+            IClientSessionHandle currentSession = null
+            )
+        {
+            await StartWithResponse(async ctx =>
+            {
+                await work(ctx);
+                return 0;
+            }, options, cancellationToken, currentSession);
         }
 
         private void SetUpClientAndDatabase(IsolationOptions? options, ref IMongoClient client, ref IMongoDatabase db)
@@ -140,12 +161,21 @@ namespace Pulsar.Infrastructure.Database
             }
         }
 
-        async Task<T> IDbContextFactory.Start<T>(Func<IDbContext, Task<T>> work, IsolationOptions? options, CancellationToken? cancellationToken, 
+        async Task<T> IDbContextFactory.StartWithResponse<T>(Func<IDbContext, Task<T>> work, IsolationOptions? options, CancellationToken? cancellationToken, 
             object currentSession)
         {
-            return await Start(async ctx =>
+            return await StartWithResponse(async ctx =>
             {
                 return await work(ctx);
+            }, options, cancellationToken, currentSession as IClientSessionHandle);
+        }
+
+        async Task IDbContextFactory.Start(Func<IDbContext, Task> work, IsolationOptions? options, CancellationToken? cancellationToken, object currentSession)
+        {
+            await StartWithResponse(async ctx =>
+            {
+                await work(ctx);
+                return 0;
             }, options, cancellationToken, currentSession as IClientSessionHandle);
         }
     }

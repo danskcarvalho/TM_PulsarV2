@@ -18,13 +18,4 @@
     <ProjectReference Include="..\Pulsar.Common\Pulsar.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="Conecti.Common">
-      <HintPath>..\Conecti.Libs\Conecti.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Conecti.Cqrs">
-      <HintPath>..\Conecti.Libs\Conecti.Cqrs.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

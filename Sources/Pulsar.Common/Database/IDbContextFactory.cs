@@ -9,7 +9,12 @@ namespace Pulsar.Common.Database
 {
     public interface IDbContextFactory
     {
-        Task<T> Start<T>(Func<IDbContext, Task<T>> work,
+        Task Start(Func<IDbContext, Task> work,
+            IsolationOptions? options = null,
+            CancellationToken? cancellationToken = null,
+            object currentSession = null);
+
+        Task<T> StartWithResponse<T>(Func<IDbContext, Task<T>> work,
             IsolationOptions? options = null,
             CancellationToken? cancellationToken = null,
             object currentSession = null);

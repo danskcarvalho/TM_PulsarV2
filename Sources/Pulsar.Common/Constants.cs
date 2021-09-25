@@ -4,7 +4,7 @@ namespace Pulsar.Common
 {
     public static class Constants
     {
-        public const int MaxRetriesOnOptimisticFailure = 3;
+        public const int MaxRetriesOnOptimisticFailure = 2;
 
         public static class CollectionNames
         {

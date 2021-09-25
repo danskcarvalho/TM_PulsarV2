@@ -32,6 +32,11 @@ namespace Pulsar.Common.Database
             object fields,
             WriteAck? wc = null,
             CancellationToken? ct = null);
+
+        Task<long> UpdateOne(Expression<Func<T, bool>> predicate,
+            object fields,
+            WriteAck? wc = null,
+            CancellationToken? ct = null);
         Task<T> FindOneById(ObjectId id, 
             ReadAck? rc = null, 
             ReadPref? rp = null, 

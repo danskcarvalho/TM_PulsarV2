@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
+using MongoDB.Bson.Serialization.Serializers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Pulsar.Infrastructure.Database
 {
-    public static class AutoMapper
+    public static class MongoAutoMapper
     {
         public static void Map()
         {
@@ -40,6 +41,12 @@ namespace Pulsar.Infrastructure.Database
                         c.SetIsRootClass(true);
                 }
                 
+            });
+
+            pack.AddMemberMapConvention("DateShouldBeLocal", c =>
+            {
+                if (c.MemberType == typeof(DateTime) || c.MemberType == typeof(DateTime?))
+                    c.SetSerializer(new DateTimeSerializer(DateTimeKind.Local));
             });
 
             ConventionRegistry.Register(

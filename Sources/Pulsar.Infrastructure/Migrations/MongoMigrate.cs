@@ -21,7 +21,7 @@ namespace Pulsar.Infrastructure.Migrations
                 .Build();
 
             var factory = new MongoContextFactory(configuration);
-            var migrations = await factory.Start(async uow =>
+            var migrations = await factory.StartWithResponse(async uow =>
             {
                 return await GatherMigrations(assembly, uow);
             }, options: IsolationOptions.Committed);
