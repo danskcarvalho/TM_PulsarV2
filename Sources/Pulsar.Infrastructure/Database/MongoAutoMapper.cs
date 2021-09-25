@@ -118,7 +118,7 @@ namespace Pulsar.Infrastructure.Database
 
         private static List<Type> GetAllModels()
         {
-            List<Type> result = new List<Type>();
+            List<Type> result = new();
             foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())
             {
                 if (!a.FullName.Contains("Pulsar.Domain,"))

@@ -40,7 +40,7 @@ namespace Pulsar.Infrastructure.Database
         {
             if (options == null)
                 options = new IsolationOptions();
-            IMongoClient client = new MongoClient(ConfigurationSection.ConnectionString);
+            IMongoClient client = new MongoClient(EnableRetryWrites(ConfigurationSection.ConnectionString));
             var db = client.GetDatabase(ConfigurationSection.Database);
             IClientSessionHandle session = null;
             if (currentSession != null)
@@ -101,6 +101,20 @@ namespace Pulsar.Infrastructure.Database
                 if(currentSession == null)
                     session.Dispose();
             }
+        }
+
+        private string EnableRetryWrites(string connectionString)
+        {
+            if (connectionString.Contains("?retryWrites", StringComparison.InvariantCultureIgnoreCase) ||
+               connectionString.Contains("&retryWrites", StringComparison.InvariantCultureIgnoreCase))
+                return connectionString;
+
+            if (!connectionString.Contains("?"))
+                connectionString += "?retryWrites=true";
+            else
+                connectionString += "&retryWrites=true";
+
+            return connectionString;
         }
 
         public async Task Start(Func<MongoContext, Task> work,

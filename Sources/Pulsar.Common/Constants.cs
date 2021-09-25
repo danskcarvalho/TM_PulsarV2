@@ -9,7 +9,8 @@ namespace Pulsar.Common
         public static class CollectionNames
         {
             public const string Procedimentos = "Procedimentos";
-            public const string Especialidades = "Especialidades";
+            public const string Especialidades = "Especialidades"; 
+            public const string Jobs = "_Jobs";
         }
     }
 }

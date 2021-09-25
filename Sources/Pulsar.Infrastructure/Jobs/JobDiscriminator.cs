@@ -30,7 +30,7 @@ namespace Pulsar.Infrastructure.Jobs
 
                     foreach (var type in assembly.GetTypes())
                     {
-                        if (!typeof(ICommand).IsAssignableFrom(type))
+                        if (!typeof(ICommand).IsAssignableFrom(type) || !type.IsClass || type.IsInterface)
                             continue;
 
                         var d = type.GetCustomAttribute<JobDiscriminatorAttribute>();

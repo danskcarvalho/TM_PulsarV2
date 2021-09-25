@@ -11,24 +11,27 @@ namespace Pulsar.Infrastructure.Jobs
 {
     public class JobOrchestrator
     {
-        private JobProducer Producer { get; }
-        private List<JobConsumer> Consumers { get; }
+        private IConfiguration Configuration { get; }
+        public ICommandBus CommandBus { get; }
 
         public JobOrchestrator(IConfiguration configuration, ICommandBus commandBus)
         {
-            this.Producer = new JobProducer(configuration);
-            this.Consumers = new List<JobConsumer>();
-            for (int i = 0; i < JobConstants.MaxConsumers; i++)
-            {
-                Consumers.Add(new JobConsumer(configuration, this.Producer, commandBus));
-            }
+            this.Configuration = configuration;
+            this.CommandBus = commandBus;
         }
 
         public async Task Run(CancellationToken ct)
         {
+            var producer = new JobProducer(Configuration);
+            var consumers = new List<JobConsumer>();
+            for (int i = 0; i < JobConstants.MaxConsumers; i++)
+            {
+                consumers.Add(new JobConsumer(Configuration, producer, CommandBus));
+            }
+
             List<Task> tasks = new List<Task>();
-            tasks.Add(Producer.Run(ct));
-            foreach (var c in Consumers)
+            tasks.Add(producer.Run(ct));
+            foreach (var c in consumers)
             {
                 tasks.Add(c.Run(ct));
             }

@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>dotnet-Pulsar.Job.Service-B462EFF5-3F4B-4352-B529-E524B86DA32A</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Pulsar.CommandHandlers\Pulsar.CommandHandlers.csproj" />
+    <ProjectReference Include="..\Pulsar.Contracts\Pulsar.Contracts.csproj" />
+    <ProjectReference Include="..\Pulsar.Domain\Pulsar.Domain.csproj" />
+    <ProjectReference Include="..\Pulsar.Infrastructure.Repositories\Pulsar.Infrastructure.Repositories.csproj" />
+    <ProjectReference Include="..\Pulsar.Infrastructure\Pulsar.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>
