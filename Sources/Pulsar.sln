@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pulsar.CommandHandlers", "P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pulsar.RequestHandlers", "Pulsar.RequestHandlers\Pulsar.RequestHandlers.csproj", "{B21E1B4C-AA54-4F2D-9DAD-FCE680D879A3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pulsar.Infrastructure.Database", "Pulsar.Infrastructure.Database\Pulsar.Infrastructure.Database.csproj", "{56C6161C-7C11-4654-88DF-2585C80DC216}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{B21E1B4C-AA54-4F2D-9DAD-FCE680D879A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B21E1B4C-AA54-4F2D-9DAD-FCE680D879A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B21E1B4C-AA54-4F2D-9DAD-FCE680D879A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56C6161C-7C11-4654-88DF-2585C80DC216}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56C6161C-7C11-4654-88DF-2585C80DC216}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56C6161C-7C11-4654-88DF-2585C80DC216}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56C6161C-7C11-4654-88DF-2585C80DC216}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -89,6 +95,7 @@ Global
 		{63742D41-BDF4-4C5B-B317-8623D8682F30} = {8FEADC43-DDA8-407E-A9DB-ED3AC5F1DCCC}
 		{1FE4D485-3823-4450-B903-16832816FB29} = {75D9AC3E-E715-4679-A31C-CA0C309A7D2B}
 		{B21E1B4C-AA54-4F2D-9DAD-FCE680D879A3} = {75D9AC3E-E715-4679-A31C-CA0C309A7D2B}
+		{56C6161C-7C11-4654-88DF-2585C80DC216} = {180D8AA3-2B79-4AA8-9A6A-44374588BCFD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4D15D182-B97E-4ADF-A116-DFD0BA91F7A7}

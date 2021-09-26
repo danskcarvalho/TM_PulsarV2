@@ -4,6 +4,7 @@ using Pulsar.Common;
 using Pulsar.Infrastructure;
 using Pulsar.Infrastructure.Jobs;
 using MongoDB.Driver;
+using Pulsar.Infrastructure.Database;
 
 namespace Pulsar.Migrations.Schema
 {

@@ -17,7 +17,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Pulsar.CommandHandlers\Pulsar.CommandHandlers.csproj" />
     <ProjectReference Include="..\Pulsar.Common\Pulsar.Common.csproj" />
+    <ProjectReference Include="..\Pulsar.Contracts\Pulsar.Contracts.csproj" />
+    <ProjectReference Include="..\Pulsar.Domain\Pulsar.Domain.csproj" />
+    <ProjectReference Include="..\Pulsar.Infrastructure.Database\Pulsar.Infrastructure.Database.csproj" />
+    <ProjectReference Include="..\Pulsar.Infrastructure.Repositories\Pulsar.Infrastructure.Repositories.csproj" />
+    <ProjectReference Include="..\Pulsar.RequestHandlers\Pulsar.RequestHandlers.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,15 +1,22 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Pulsar.CommandHandlers.Usuarios;
 using Pulsar.Common.Cqrs;
 using Pulsar.Common.Database;
 using Pulsar.Common.Services;
+using Pulsar.Contracts.Commands.Usuarios;
+using Pulsar.Contracts.Requests.Usuarios;
+using Pulsar.Domain.Infrastructure.Procedimentos.Repositories;
+using Pulsar.Domain.Procedimentos.Models;
 using Pulsar.Infrastructure.Cqrs;
 using Pulsar.Infrastructure.Database;
 using Pulsar.Infrastructure.Jobs;
 using Pulsar.Infrastructure.Services;
+using Pulsar.RequestHandlers.Usuarios;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,26 +36,21 @@ namespace Pulsar.Infrastructure
         private static void RegisterRequestBus(IServiceCollection services)
         {
             List<Type> types = new List<Type>();
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+
+            foreach (var type in typeof(UsuarioRequestHandler).Assembly.GetTypes())
             {
-                if (!assembly.FullName.Contains("Pulsar."))
+                if (!type.IsClass || type.IsInterface)
                     continue;
 
-                foreach (var type in assembly.GetTypes())
-                {
-                    if (!type.IsClass || type.IsInterface)
-                        continue;
-
-                    var impl = type.GetInterfaces()
-                        .FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IAsyncRequestHandler<,>));
-                    if (impl == null)
-                        continue;
-                    services.AddSingleton(type);
-                    types.Add(type);
-                }
+                var impl = type.GetInterfaces()
+                    .FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IAsyncRequestHandler<,>));
+                if (impl == null)
+                    continue;
+                services.AddSingleton(type);
+                types.Add(type);
             }
 
-            services.AddSingleton<ICommandBus>(a =>
+            services.AddSingleton<IRequestBus>(a =>
             {
                 var container = a.GetService<MemoryContainerBus>();
                 foreach (var type in types)
@@ -71,23 +73,18 @@ namespace Pulsar.Infrastructure
         private static void RegisterCommandBus(IServiceCollection services)
         {
             List<Type> types = new List<Type>();
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+
+            foreach (var type in typeof(UsuarioCommandHandler).Assembly.GetTypes())
             {
-                if (!assembly.FullName.Contains("Pulsar."))
+                if (!type.IsClass || type.IsInterface)
                     continue;
 
-                foreach (var type in assembly.GetTypes())
-                {
-                    if (!type.IsClass || type.IsInterface)
-                        continue;
-
-                    var impl = type.GetInterfaces()
-                        .FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IAsyncCommandHandler<>));
-                    if (impl == null)
-                        continue;
-                    services.AddSingleton(type);
-                    types.Add(type);
-                }
+                var impl = type.GetInterfaces()
+                    .FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IAsyncCommandHandler<>));
+                if (impl == null)
+                    continue;
+                services.AddSingleton(type);
+                types.Add(type);
             }
 
             services.AddSingleton<ICommandBus>(a =>
@@ -119,11 +116,14 @@ namespace Pulsar.Infrastructure
             services.AddSingleton<JobOrchestrator>();
             services.AddSingleton<MemoryContainerBus>();
 
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            var assemblies = new Assembly[]
             {
-                if (!assembly.FullName.Contains("Pulsar."))
-                    continue;
+                typeof(UsuarioRequestHandler).Assembly,
+                typeof(Procedimento).Assembly
+            };
 
+            foreach (var assembly in assemblies)
+            {
                 foreach (var type in assembly.GetTypes())
                 {
                     if (typeof(IService).IsAssignableFrom(type) && type.IsClass && !type.IsInterface)
@@ -134,29 +134,25 @@ namespace Pulsar.Infrastructure
 
         private static void RegisterRepositoryFactories(IServiceCollection services)
         {
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+
+            foreach (var type in typeof(ProcedimentoMongoRepository).Assembly.GetTypes())
             {
-                if (!assembly.FullName.Contains("Pulsar."))
+                var impl = type.GetInterfaces()
+                    .FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IAsyncRepository<>));
+                if (impl == null)
                     continue;
+                var modelType = impl.GetGenericArguments()[0];
 
-                foreach (var type in assembly.GetTypes())
-                {
-                    var impl = type.GetInterfaces()
-                        .FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IAsyncRepository<>));
-                    if (impl == null)
-                        continue;
-                    var modelType = impl.GetGenericArguments()[0];
-
-                    services.AddSingleton(
-                        typeof(IAsyncRepositoryFactory<>).MakeGenericType(modelType),
-                        typeof(MongoRepositoryFactory<,>).MakeGenericType(modelType, type));
-                }
+                services.AddSingleton(
+                    typeof(IAsyncRepositoryFactory<>).MakeGenericType(modelType),
+                    typeof(MongoRepositoryFactory<,>).MakeGenericType(modelType, type));
             }
         }
 
         private static void RegisterFactory(IServiceCollection services)
         {
-            MongoAutoMapper.Map();
+            MongoAutoMapper.Map(typeof(Procedimento).Assembly);
+            services.AddSingleton<MongoContextFactory>();
             services.AddSingleton<IDbContextFactory, MongoContextFactory>();
         }
     }

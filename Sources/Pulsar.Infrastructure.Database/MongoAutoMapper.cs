@@ -12,9 +12,9 @@ namespace Pulsar.Infrastructure.Database
 {
     public static class MongoAutoMapper
     {
-        public static void Map()
+        public static void Map(Assembly assembly)
         {
-            var allModels = GetAllModels();
+            var allModels = GetAllModels(assembly);
             var inheritanceGraph = BuildInheritanceGraph(allModels);
 
             var pack = new ConventionPack();
@@ -113,21 +113,17 @@ namespace Pulsar.Infrastructure.Database
 
         private static bool IsValidBaseClass(Type baseType)
         {
-            throw new NotImplementedException();
+            return baseType != typeof(object) && baseType.FullName.Contains("Models.");
         }
 
-        private static List<Type> GetAllModels()
+        private static List<Type> GetAllModels(Assembly assembly)
         {
             List<Type> result = new();
-            foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())
+
+            foreach (Type t in assembly.GetTypes())
             {
-                if (!a.FullName.Contains("Pulsar.Domain,"))
-                    continue;
-                foreach (Type t in a.GetTypes())
-                {
-                    if (t.IsClass && !t.IsGenericTypeDefinition && t.FullName.Contains("Models.") && !t.IsInterface)
-                        result.Add(t);
-                }
+                if (t.IsClass && !t.IsGenericTypeDefinition && t.FullName.Contains("Models.") && !t.IsInterface)
+                    result.Add(t);
             }
             return result;
         }
