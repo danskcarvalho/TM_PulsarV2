@@ -25,7 +25,7 @@ namespace Pulsar.Infrastructure.Jobs
 
         Task IJobService.Push<T>(T cmd)
         {
-            return CreateJob(cmd, null);
+            return CreateJob(cmd, DateTime.Now);
         }
 
         Task IJobService.Schedule<T>(DateTime on, T cmd)
@@ -33,7 +33,7 @@ namespace Pulsar.Infrastructure.Jobs
             return CreateJob(cmd, on);
         }
 
-        private async Task CreateJob(ICommand cmd, DateTime? scheduledOn)
+        private async Task CreateJob(ICommand cmd, DateTime scheduledOn)
         {
             var factory = new MongoContextFactory(Configuration);
             await factory.Start(async ctx =>

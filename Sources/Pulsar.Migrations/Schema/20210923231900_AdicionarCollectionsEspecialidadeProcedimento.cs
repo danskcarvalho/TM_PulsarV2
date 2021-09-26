@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using Pulsar.Common;
 using Pulsar.Infrastructure;
 using Pulsar.Infrastructure.Database;
+using Pulsar.Domain.Procedimentos.Models;
+using MongoDB.Driver;
+using Pulsar.Domain.Especialidades.Models;
 
 namespace Pulsar.Migrations.Schema
 {
@@ -20,6 +23,24 @@ namespace Pulsar.Migrations.Schema
 
             if (!(await Database.CollectionExists(Constants.CollectionNames.Especialidades)))
                 await Database.CreateCollectionAsync(Constants.CollectionNames.Especialidades);
+
+            var ix_Procedimentos_TermosPesquisa = Builders<Procedimento>.IndexKeys
+                .Text(j => j.TermosPesquisa);
+
+            var procedimentos = Database.GetCollection<Procedimento>(Constants.CollectionNames.Procedimentos);
+            await procedimentos.Indexes.CreateOneAsync(new MongoDB.Driver.CreateIndexModel<Procedimento>(ix_Procedimentos_TermosPesquisa, new CreateIndexOptions()
+            {
+                Name = "ix_TermosPesquisa"
+            }));
+
+            var ix_Especialidades_TermosPesquisa = Builders<Especialidade>.IndexKeys
+                .Text(j => j.TermosPesquisa);
+
+            var especialidades = Database.GetCollection<Especialidade>(Constants.CollectionNames.Especialidades);
+            await especialidades.Indexes.CreateOneAsync(new MongoDB.Driver.CreateIndexModel<Especialidade>(ix_Especialidades_TermosPesquisa, new CreateIndexOptions()
+            {
+                Name = "ix_TermosPesquisa"
+            }));
 
         }
     }

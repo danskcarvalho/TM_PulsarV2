@@ -18,16 +18,12 @@ namespace Pulsar.Migrations.Schema
 
             var collection = Database.GetCollection<JobModel>(Constants.CollectionNames.Jobs);
 
-            var ixStatus = Builders<JobModel>.IndexKeys.Ascending(j => j.Status);
-            collection.Indexes.CreateOne(new MongoDB.Driver.CreateIndexModel<JobModel>(ixStatus, new CreateIndexOptions()
+            var ix_Status_ScheduledForExecution = Builders<JobModel>.IndexKeys
+                .Ascending(j => j.Status)
+                .Ascending(j => j.ScheduledForExecution);
+            collection.Indexes.CreateOne(new MongoDB.Driver.CreateIndexModel<JobModel>(ix_Status_ScheduledForExecution, new CreateIndexOptions()
             {
-                Name = "ix_jobs_Status"
-            }));
-
-            var ixScheduledForExecution = Builders<JobModel>.IndexKeys.Ascending(j => j.ScheduledForExecution);
-            collection.Indexes.CreateOne(new MongoDB.Driver.CreateIndexModel<JobModel>(ixScheduledForExecution, new CreateIndexOptions()
-            {
-                Name = "ix_jobs_ScheduledForExecution"
+                Name = "ix_Status_ScheduledForExecution"
             }));
         }
     }

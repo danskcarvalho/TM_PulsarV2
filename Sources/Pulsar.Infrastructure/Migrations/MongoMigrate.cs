@@ -31,6 +31,7 @@ namespace Pulsar.Infrastructure.Migrations
             {
                 var worker = new MigrationWorker(number, migrations.Count, mig, factory);
                 await worker.Migrate();
+                number++;
             }
         }
 

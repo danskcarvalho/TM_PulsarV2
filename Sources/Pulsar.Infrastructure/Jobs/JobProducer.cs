@@ -52,6 +52,7 @@ namespace Pulsar.Infrastructure.Jobs
         {
             await Task.Run(async () =>
             {
+                List<Common.Jobs.JobStatus> statuses = new List<Common.Jobs.JobStatus>();
                 while (true)
                 {
                     if (ct.IsCancellationRequested)
@@ -73,11 +74,11 @@ namespace Pulsar.Infrastructure.Jobs
                                     var collection = ctx.GetCollection<JobModel>(JobConstants.CollectionName);
                                     var jobs = await (await collection
                                         .FindAsync(ctx.Session,
-                                            j => (j.Status == Common.Jobs.JobStatus.Pending || j.Status == Common.Jobs.JobStatus.Executing) &&
-                                                 (j.ScheduledForExecution == null || DateTime.Now > j.ScheduledForExecution),
+                                            j => statuses.Contains(j.Status) && DateTime.Now > j.ScheduledForExecution,
                                             new FindOptions<JobModel, JobModel>()
                                             {
-                                                Limit = JobConstants.MaxJobs
+                                                Limit = JobConstants.MaxJobs,
+                                                Sort = Builders<JobModel>.Sort.Ascending(j => j.ScheduledForExecution)
                                             })).ToListAsync();
                                     foreach (var j in jobs)
                                     {

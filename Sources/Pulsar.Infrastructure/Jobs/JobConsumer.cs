@@ -62,13 +62,7 @@ namespace Pulsar.Infrastructure.Jobs
             {
                 //test if job is pending for too long...
                 //if the job is scheduled
-                if (job.ScheduledForExecution != null && DateTime.Now > job.ScheduledForExecution.Value.AddMilliseconds(JobConstants.PendingTimeout))
-                {
-                    await JobHasExpiredPendingTimeout(job, factory);
-                    return;
-                }
-                //if the job is not scheduled
-                if (job.ScheduledForExecution == null && DateTime.Now > job.CreatedOn.AddMilliseconds(JobConstants.PendingTimeout))
+                if (DateTime.Now > job.ScheduledForExecution.AddMilliseconds(JobConstants.PendingTimeout))
                 {
                     await JobHasExpiredPendingTimeout(job, factory);
                     return;
@@ -91,7 +85,7 @@ namespace Pulsar.Infrastructure.Jobs
                 }
 
                 if (bFinished)
-                    await FinishJob(job);
+                    await FinishJob(job, factory);
             }
             else
             {
@@ -148,9 +142,17 @@ namespace Pulsar.Infrastructure.Jobs
             }
         }
 
-        private Task FinishJob(JobModel job)
+        private async Task FinishJob(JobModel job, MongoContextFactory factory)
         {
-            throw new NotImplementedException();
+            await factory.Start(async ctx =>
+            {
+                var collection = ctx.GetCollection<JobModel>(JobConstants.CollectionName);
+                var u = await collection.UpdateOneAsync(ctx.Session, j => j.Id == job.Id,
+                    Builders<JobModel>.Update
+                        .Set(j => j.Status, Common.Jobs.JobStatus.Done)
+                        .Set(j => j.EndedExecutionOn, DateTime.Now)
+                    );
+            }, IsolationOptions.Committed);
         }
 
         private async Task RunJob(JobModel job, CancellationToken ct)

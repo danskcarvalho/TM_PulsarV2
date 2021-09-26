@@ -23,7 +23,7 @@ namespace Pulsar.Infrastructure.Jobs
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime? EndedExecutionOn { get; set; }
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
-        public DateTime? ScheduledForExecution { get; set; }
+        public DateTime ScheduledForExecution { get; set; }
         public JobErrorCategory? ErrorCategory { get; set; }
         public string ExceptionJson { get; set; }
 
