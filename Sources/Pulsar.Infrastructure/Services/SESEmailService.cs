@@ -25,7 +25,7 @@ namespace Pulsar.Infrastructure.Services
 
         public async Task Send(string to, string templateName, object templateData)
         {
-            using var client = new AmazonSimpleEmailServiceClient(Region);
+            using var client = new AmazonSimpleEmailServiceClient(Configuration.AccessKey, Configuration.SecretKey, Region);
             var sendRequest = new SendTemplatedEmailRequest
             {
                 Source = !string.IsNullOrWhiteSpace(Configuration.FromEmail) ? 
@@ -45,6 +45,8 @@ namespace Pulsar.Infrastructure.Services
 
     class SESConfigurationSection
     {
+        public string AccessKey { get; set; }
+        public string SecretKey { get; set; }
         public string FromName { get; set; }
         public string FromEmail { get; set; }
         public string Region { get; set; }

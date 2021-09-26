@@ -115,6 +115,7 @@ namespace Pulsar.Infrastructure
             services.AddSingleton<IJobService, JobService>();
             services.AddSingleton<JobOrchestrator>();
             services.AddSingleton<MemoryContainerBus>();
+            services.AddSingleton<ISpeechSynthesizer, PollyService>();
 
             var assemblies = new Assembly[]
             {

@@ -14,24 +14,29 @@ namespace Pulsar.Infrastructure.Services
 {
     public class S3FileService : IFileService
     {
-        private string BucketName = null;
+        private S3ConfigurationSection Configuration = null;
         private RegionEndpoint Region = null;
         public S3FileService(IConfiguration configuration)
         {
-            BucketName = configuration.GetSection("S3")?.Get<S3ConfigurationSection>().BucketName;
+            Configuration = configuration.GetSection("S3")?.Get<S3ConfigurationSection>();
             Region = RegionEndpoint.GetBySystemName(configuration.GetSection("S3")?.Get<S3ConfigurationSection>().Region);
         }
 
-        public async Task Upload(Stream stream, string filename)
+        public async Task<string> Upload(Stream stream, string filename)
         {
-            using var s3Client = new AmazonS3Client();
+            filename = filename ?? throw new ArgumentNullException(nameof(filename));
+            filename = filename.Trim();
+            using var s3Client = new AmazonS3Client(Configuration.AccessKey, Configuration.SecretKey, Region);
             using var fileTransferUtility = new TransferUtility(s3Client);
-            await fileTransferUtility.UploadAsync(stream, BucketName, filename);
+            await fileTransferUtility.UploadAsync(stream, Configuration.BucketName, filename);
+            return $"https://{Configuration.BucketName}.s3.{Configuration.Region}.amazonaws.com/{filename}";
         }
     }
 
     class S3ConfigurationSection
     {
+        public string AccessKey { get; set; }
+        public string SecretKey { get; set; }
         public string BucketName { get; set; }
         public string Region { get; set; }
     }

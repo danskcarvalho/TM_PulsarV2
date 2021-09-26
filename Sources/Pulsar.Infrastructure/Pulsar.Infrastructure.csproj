@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AWSSDK.Polly" Version="3.7.3.14" />
     <PackageReference Include="AWSSDK.S3" Version="3.7.3.4" />
     <PackageReference Include="AWSSDK.SimpleEmail" Version="3.7.0.71" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
