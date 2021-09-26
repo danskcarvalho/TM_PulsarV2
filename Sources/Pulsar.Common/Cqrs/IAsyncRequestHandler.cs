@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Pulsar.Common.Cqrs
 {
     public interface IAsyncRequestHandler<TRequest, TResponse>
-        where TRequest : class, IRequest<TResponse>
+        where TRequest : class, IRequest
         where TResponse : class
     {
         Task<TResponse> Handle(TRequest req, CancellationToken ct);

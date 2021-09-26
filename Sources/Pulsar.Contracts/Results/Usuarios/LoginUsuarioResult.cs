@@ -8,6 +8,9 @@ namespace Pulsar.Contracts.Results.Usuarios
 {
     public class LoginUsuarioResult
     {
+        /// <summary>
+        /// Token de acesso.
+        /// </summary>
         public string Token { get; set; }
     }
 }

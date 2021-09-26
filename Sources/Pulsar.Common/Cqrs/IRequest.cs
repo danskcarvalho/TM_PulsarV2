@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Pulsar.Common.Cqrs
 {
-    public interface IRequest<TResponse> where TResponse : class
+    public interface IRequest
     {
     }
 }

@@ -25,15 +25,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pulsar.Domain", "Pulsar.Dom
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pulsar.Infrastructure.Repositories", "Pulsar.Infrastructure.Repositories\Pulsar.Infrastructure.Repositories.csproj", "{F562AF3E-026C-4645-9026-897D5B7BAFFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pulsar.Jobs.Service", "Pulsar.Job.Service\Pulsar.Jobs.Service.csproj", "{2FB26BEF-943C-4E86-822B-1A1ABA2094A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pulsar.Jobs.Service", "Pulsar.Job.Service\Pulsar.Jobs.Service.csproj", "{2FB26BEF-943C-4E86-822B-1A1ABA2094A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pulsar.Contracts", "Pulsar.Contracts\Pulsar.Contracts.csproj", "{63742D41-BDF4-4C5B-B317-8623D8682F30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pulsar.Contracts", "Pulsar.Contracts\Pulsar.Contracts.csproj", "{63742D41-BDF4-4C5B-B317-8623D8682F30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pulsar.CommandHandlers", "Pulsar.CommandHandlers\Pulsar.CommandHandlers.csproj", "{1FE4D485-3823-4450-B903-16832816FB29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pulsar.CommandHandlers", "Pulsar.CommandHandlers\Pulsar.CommandHandlers.csproj", "{1FE4D485-3823-4450-B903-16832816FB29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pulsar.RequestHandlers", "Pulsar.RequestHandlers\Pulsar.RequestHandlers.csproj", "{B21E1B4C-AA54-4F2D-9DAD-FCE680D879A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pulsar.RequestHandlers", "Pulsar.RequestHandlers\Pulsar.RequestHandlers.csproj", "{B21E1B4C-AA54-4F2D-9DAD-FCE680D879A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pulsar.Infrastructure.Database", "Pulsar.Infrastructure.Database\Pulsar.Infrastructure.Database.csproj", "{56C6161C-7C11-4654-88DF-2585C80DC216}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pulsar.Infrastructure.Database", "Pulsar.Infrastructure.Database\Pulsar.Infrastructure.Database.csproj", "{56C6161C-7C11-4654-88DF-2585C80DC216}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pulsar.Web.Api", "Pulsar.Web.Api\Pulsar.Web.Api.csproj", "{2B93E4B9-82E1-4182-BAED-EB4614836E74}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +83,10 @@ Global
 		{56C6161C-7C11-4654-88DF-2585C80DC216}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56C6161C-7C11-4654-88DF-2585C80DC216}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56C6161C-7C11-4654-88DF-2585C80DC216}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B93E4B9-82E1-4182-BAED-EB4614836E74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B93E4B9-82E1-4182-BAED-EB4614836E74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B93E4B9-82E1-4182-BAED-EB4614836E74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B93E4B9-82E1-4182-BAED-EB4614836E74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -96,6 +102,7 @@ Global
 		{1FE4D485-3823-4450-B903-16832816FB29} = {75D9AC3E-E715-4679-A31C-CA0C309A7D2B}
 		{B21E1B4C-AA54-4F2D-9DAD-FCE680D879A3} = {75D9AC3E-E715-4679-A31C-CA0C309A7D2B}
 		{56C6161C-7C11-4654-88DF-2585C80DC216} = {180D8AA3-2B79-4AA8-9A6A-44374588BCFD}
+		{2B93E4B9-82E1-4182-BAED-EB4614836E74} = {863A1999-AAA7-442D-9970-E736F83EF8FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4D15D182-B97E-4ADF-A116-DFD0BA91F7A7}

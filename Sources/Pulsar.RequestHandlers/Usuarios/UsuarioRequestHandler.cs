@@ -18,9 +18,9 @@ namespace Pulsar.RequestHandlers.Usuarios
         {
         }
 
-        public Task<LoginUsuarioResult> Handle(LoginUsuarioRequest req, CancellationToken ct)
+        public async Task<LoginUsuarioResult> Handle(LoginUsuarioRequest req, CancellationToken ct)
         {
-            throw new NotImplementedException();
+            return new LoginUsuarioResult() { };
         }
     }
 }

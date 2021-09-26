@@ -9,6 +9,6 @@ namespace Pulsar.Common.Cqrs
 {
     public interface IRequestBus
     {
-        Task<TResponse> Request<T, TResponse>(T request, CancellationToken? ct = null) where T : class, IRequest<TResponse> where TResponse : class;
+        Task<TResponse> Request<T, TResponse>(T request, CancellationToken? ct = null) where T : class, IRequest where TResponse : class;
     }
 }
