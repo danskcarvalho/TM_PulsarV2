@@ -91,7 +91,7 @@ namespace Pulsar.Infrastructure.Database
                     else
                     {
                         SetUpClientAndDatabase(options, ref client, ref db);
-                        var uow = new MongoContext(null, client, cancellationToken ?? CancellationToken.None, db, options.Value);
+                        var uow = new MongoContext(session, client, cancellationToken ?? CancellationToken.None, db, options.Value);
                         return await work(uow);
                     }
                 }

@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Pulsar.Common\Pulsar.Common.csproj" />
+    <ProjectReference Include="..\Pulsar.Contracts\Pulsar.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

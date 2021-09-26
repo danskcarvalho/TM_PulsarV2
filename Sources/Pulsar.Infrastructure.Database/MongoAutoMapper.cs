@@ -45,8 +45,10 @@ namespace Pulsar.Infrastructure.Database
 
             pack.AddMemberMapConvention("DateShouldBeLocal", c =>
             {
-                if (c.MemberType == typeof(DateTime) || c.MemberType == typeof(DateTime?))
+                if (c.MemberType == typeof(DateTime))
                     c.SetSerializer(new DateTimeSerializer(DateTimeKind.Local));
+                else if (c.MemberType == typeof(DateTime?))
+                    c.SetSerializer(new NullableSerializer<DateTime>().WithSerializer(new DateTimeSerializer(DateTimeKind.Local)));
             });
 
             ConventionRegistry.Register(
