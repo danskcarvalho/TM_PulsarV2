@@ -1,0 +1,60 @@
+{ "_id" : ObjectId("61521e38dc47ab33ad069c60"), "Codigo" : 11, "Nome" : "Incisivo Central Superior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c61"), "Codigo" : 12, "Nome" : "Incisivo Lateral Superior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c62"), "Codigo" : 13, "Nome" : "Canino Superior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c63"), "Codigo" : 14, "Nome" : "Primeiro Pré-molar Superior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c64"), "Codigo" : 15, "Nome" : "Segundo Pré-molar Superior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c65"), "Codigo" : 16, "Nome" : "Primeiro Molar Superior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c66"), "Codigo" : 17, "Nome" : "Segundo Molar Superior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c67"), "Codigo" : 18, "Nome" : "Terceiro Molar Superior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c68"), "Codigo" : 19, "Nome" : "Dente Permanente Supranumerário Hemi-arco", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c69"), "Codigo" : 21, "Nome" : "Incisivo Central Superior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c6a"), "Codigo" : 22, "Nome" : "Incisivo Lateral Superior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c6b"), "Codigo" : 23, "Nome" : "Canino Superior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c6c"), "Codigo" : 24, "Nome" : "Primeiro Pré-molar Superior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c6d"), "Codigo" : 25, "Nome" : "Segundo Pré-molar Superior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c6e"), "Codigo" : 26, "Nome" : "Primeiro Molar Superior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c6f"), "Codigo" : 27, "Nome" : "Segundo Molar Superior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c70"), "Codigo" : 28, "Nome" : "Terceiro Molar Superior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c71"), "Codigo" : 29, "Nome" : "Dente Permanente Supranumerário Hemi-arco Superior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c72"), "Codigo" : 31, "Nome" : "Incisivo Central Inferior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c73"), "Codigo" : 32, "Nome" : "Incisivo Lateral Inferior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c74"), "Codigo" : 33, "Nome" : "Canino Inferior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c75"), "Codigo" : 34, "Nome" : "Primeiro Pré-molar Inferior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c76"), "Codigo" : 35, "Nome" : "Segundo Pré-molar Inferior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c77"), "Codigo" : 36, "Nome" : "Primeiro Molar Inferior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c78"), "Codigo" : 37, "Nome" : "Segundo Molar Inferior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c79"), "Codigo" : 38, "Nome" : "Terceiro Molar Inferior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c7a"), "Codigo" : 39, "Nome" : "Dente Permanente Supranumerário Hemi-arco Inferior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c7b"), "Codigo" : 41, "Nome" : "Incisivo Central Inferior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c7c"), "Codigo" : 42, "Nome" : "Incisivo Lateral Inferior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c7d"), "Codigo" : 43, "Nome" : "Canino Inferior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c7e"), "Codigo" : 44, "Nome" : "Primeiro Pré-molar Inferior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c7f"), "Codigo" : 45, "Nome" : "Segundo Pré-molar Inferior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c80"), "Codigo" : 46, "Nome" : "Primeiro Molar Inferior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c81"), "Codigo" : 47, "Nome" : "Segundo Molar Inferior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c82"), "Codigo" : 48, "Nome" : "Terceiro Molar Inferior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c83"), "Codigo" : 49, "Nome" : "Dente Permanente Supranumerário Hemi-arco Inferior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c84"), "Codigo" : 51, "Nome" : "Incisivo Central Decíduo Superior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c85"), "Codigo" : 52, "Nome" : "Incisivo Lateral Decíduo Superior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c86"), "Codigo" : 53, "Nome" : "Canino Decíduo Superior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c87"), "Codigo" : 54, "Nome" : "Primeiro Molar Decíduo Superior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c88"), "Codigo" : 55, "Nome" : "Segundo Molar Decíduo Superior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c89"), "Codigo" : 59, "Nome" : "Dente Decíduo Supranumerário Hemi-arco Superior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c8a"), "Codigo" : 61, "Nome" : "Incisivo Central Decíduo Superior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c8b"), "Codigo" : 62, "Nome" : "Incisivo Lateral Decíduo Superior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c8c"), "Codigo" : 63, "Nome" : "Canino Decíduo Superior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c8d"), "Codigo" : 64, "Nome" : "Primeiro Molar Decíduo Superior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c8e"), "Codigo" : 65, "Nome" : "Segundo Molar Decíduo Superior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c8f"), "Codigo" : 69, "Nome" : "Dente Decíduo Supranumerário Hemi-arco Superior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c90"), "Codigo" : 71, "Nome" : "Incisivo Central Decíduo Inferior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c91"), "Codigo" : 72, "Nome" : "Incisivo Lateral Decíduo Inferior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c92"), "Codigo" : 73, "Nome" : "Canino Decíduo Inferior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c93"), "Codigo" : 74, "Nome" : "Primeiro Molar Decíduo Inferior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c94"), "Codigo" : 75, "Nome" : "Segundo Molar Decíduo Inferior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c95"), "Codigo" : 79, "Nome" : "Dente Decíduo Supranumerário Hemi-arco Inferior Esquerdo", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c96"), "Codigo" : 81, "Nome" : "Incisivo Central Decíduo Inferior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c97"), "Codigo" : 82, "Nome" : "Incisivo Lateral Decíduo Inferior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c98"), "Codigo" : 83, "Nome" : "Canino Decíduo Inferior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c99"), "Codigo" : 84, "Nome" : "Primeiro Molar Decíduo Inferior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c9a"), "Codigo" : 85, "Nome" : "Segundo molar Decíduo Inferior Direito", "Ativo" : true }
+{ "_id" : ObjectId("61521e38dc47ab33ad069c9b"), "Codigo" : 89, "Nome" : "Dente Decíduo Supranumerário Hemi-arco Inferior Direito", "Ativo" : true }
