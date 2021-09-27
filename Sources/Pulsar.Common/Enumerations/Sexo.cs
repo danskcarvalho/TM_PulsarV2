@@ -8,7 +8,7 @@ namespace Pulsar.Common.Enumerations
 {
     public enum Sexo
     {
-        Masculino = 1,
-        Feminino = 2
+        Masculino = 0,
+        Feminino = 1
     }
 }
