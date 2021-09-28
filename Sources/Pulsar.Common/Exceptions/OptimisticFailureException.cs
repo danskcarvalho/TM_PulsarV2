@@ -8,12 +8,12 @@ namespace Pulsar.Common
 {
 
     [Serializable]
-    public class OptimisticException : Exception
+    public class OptimisticFailureException : Exception
     {
-        public OptimisticException() { }
-        public OptimisticException(string message) : base(message) { }
-        public OptimisticException(string message, Exception inner) : base(message, inner) { }
-        protected OptimisticException(
+        public OptimisticFailureException() { }
+        public OptimisticFailureException(string message) : base(message) { }
+        public OptimisticFailureException(string message, Exception inner) : base(message, inner) { }
+        protected OptimisticFailureException(
           System.Runtime.Serialization.SerializationInfo info,
           System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }

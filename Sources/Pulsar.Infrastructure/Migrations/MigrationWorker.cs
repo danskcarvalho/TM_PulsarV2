@@ -35,7 +35,7 @@ namespace Pulsar.Infrastructure.Migrations
                 var migration = Activator.CreateInstance(MigrationType) as Migration;
                 if (migration == null)
                     throw new InvalidOperationException("invalid migration type");
-                migration.Set(ctx.Client, ctx.Database);
+                
 
                 var model = new MigrationModel()
                 {
@@ -46,11 +46,15 @@ namespace Pulsar.Infrastructure.Migrations
                 Console.WriteLine($"[{MigrationNumber}/{TotalMigrations}] executing {model.Version}:{MigrationType.Name}");
                 //insert into the collection _Migrations
                 var collection = ctx.GetCollection<MigrationModel>(MigrationConstants.CollectionName);
-                await collection.InsertOneAsync(model);
+                await collection.InsertOneAsync(ctx.Session, model);
 
                 try
                 {
-                    await migration.Up();
+                    await Factory.Start(async ctx2 =>
+                    {
+                        migration.Set(ctx2.Client, ctx2.Database);
+                        await migration.Up();
+                    }, options);
                 }
                 catch(Exception e)
                 {
@@ -58,21 +62,9 @@ namespace Pulsar.Infrastructure.Migrations
                     if (!startTransaction)
                         PrintRed($"migration {model.Version}:{MigrationType.Name} did not run under a transaction");
                     PrintRed(ToJson(e));
-                    //undo insertion into collection _Migrations
-                    if (!startTransaction)
-                    {
-                        try
-                        {
-                            await collection.DeleteOneAsync(p => p.Version == model.Version);
-                        }
-                        catch
-                        {
-                            PrintRed($"failed to completely undo migration {model.Version}:{MigrationType.Name}");
-                        }
-                    }
                     throw;
                 }
-            }, options: options);
+            }, options: IsolationOptions.Committed.WithTransaction());
         }
 
         private string ToJson(Exception e)

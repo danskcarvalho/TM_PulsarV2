@@ -24,6 +24,8 @@ namespace Pulsar.Migrations.Data
             var especialidades = new List<Especialidade>();
             foreach (var item in linhas)
             {
+                if (string.IsNullOrWhiteSpace(item))
+                    continue;
                 especialidades.Add(item.FromBson<Especialidade>());
             }
 
@@ -37,6 +39,8 @@ namespace Pulsar.Migrations.Data
             var procedimentos = new List<Procedimento>();
             foreach (var item in linhas)
             {
+                if (string.IsNullOrWhiteSpace(item))
+                    continue;
                 procedimentos.Add(item.FromBson<Procedimento>());
             }
 

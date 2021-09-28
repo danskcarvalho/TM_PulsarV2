@@ -9,12 +9,12 @@ namespace Pulsar.Domain.PerguntasPuericultura.Models
 {
     public class PerguntaPuericultura
     {
-        public virtual ObjectId Id { get; set; }
-        public virtual AgrupadorPuericultura Agrupador { get; set; }
-        public virtual FaixaPuericultura Faixa { get; set; }
-        public virtual string Nome { get; set; }
-        public virtual string Descricao { get; set; }
-        public virtual bool ExibirAlcancadoEm { get; set; }
+        public ObjectId Id { get; set; }
+        public AgrupadorPuericultura Agrupador { get; set; }
+        public FaixaPuericultura Faixa { get; set; }
+        public string Nome { get; set; }
+        public string Descricao { get; set; }
+        public bool ExibirAlcancadoEm { get; set; }
         public bool Ativo { get; set; }
     }
 }

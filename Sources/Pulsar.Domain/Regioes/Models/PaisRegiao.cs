@@ -9,6 +9,9 @@ namespace Pulsar.Domain.Regioes.Models
 {
     public class PaisRegiao : Regiao
     {
-        public override LocalTipo Tipo => LocalTipo.Pais;
+        public PaisRegiao()
+        {
+            Tipo = LocalTipo.Pais;
+        }
     }
 }

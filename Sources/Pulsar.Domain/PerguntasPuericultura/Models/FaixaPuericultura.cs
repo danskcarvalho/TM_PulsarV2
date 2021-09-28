@@ -9,9 +9,9 @@ namespace Pulsar.Domain.PerguntasPuericultura.Models
 {
     public class FaixaPuericultura
     {
-        public virtual ObjectId FaixaId { get; set; }
-        public virtual string Nome { get; set; }
-        public virtual int? IdadeMinimaEmDias { get; set; }
-        public virtual int? IdadeMaximaEmDias { get; set; }
+        public ObjectId FaixaId { get; set; }
+        public string Nome { get; set; }
+        public int? IdadeMinimaEmDias { get; set; }
+        public int? IdadeMaximaEmDias { get; set; }
     }
 }

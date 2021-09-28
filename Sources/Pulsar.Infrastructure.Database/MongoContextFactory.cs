@@ -58,27 +58,7 @@ namespace Pulsar.Infrastructure.Database
 
             try
             {
-                if (options.Value.HandleOptimisticFailures)
-                {
-                    return await RetryOnOptimisticFailure(async () =>
-                    {
-                        if (options.Value.OpenTransaction)
-                        {
-                            return await session.WithTransactionAsync(async (s, ct) =>
-                            {
-                                var uow = new MongoContext(s, client, ct, db, options.Value);
-                                return await work(uow);
-                            }, cancellationToken: cancellationToken ?? CancellationToken.None);
-                        }
-                        else
-                        {
-                            SetUpClientAndDatabase(options, ref client, ref db);
-                            var uow = new MongoContext(session, client, cancellationToken ?? CancellationToken.None, db, options.Value);
-                            return await work(uow);
-                        }
-                    });
-                }
-                else
+                return await RetryOnOptimisticFailure(async () =>
                 {
                     if (options.Value.OpenTransaction)
                     {
@@ -94,11 +74,11 @@ namespace Pulsar.Infrastructure.Database
                         var uow = new MongoContext(session, client, cancellationToken ?? CancellationToken.None, db, options.Value);
                         return await work(uow);
                     }
-                }
+                });
             }
             finally
             {
-                if(currentSession == null)
+                if (currentSession == null)
                     session.Dispose();
             }
         }
@@ -150,7 +130,7 @@ namespace Pulsar.Infrastructure.Database
         private async Task<T> RetryOnOptimisticFailure<T>(Func<Task<T>> action)
         {
             Random rng = null;
-            int maxWait = 1000;
+            int maxWait = 2000;
             int retries = 0;
 
             while (true)
@@ -159,9 +139,24 @@ namespace Pulsar.Infrastructure.Database
                 {
                     return await action();
                 }
-                catch (OptimisticException)
+                catch (OptimisticFailureException)
                 {
-                    if (retries >= Constants.MaxRetriesOnOptimisticFailure)
+                    if (retries >= Constants.MaxRetriesOnTransientFailure)
+                        throw;
+
+                    if (rng == null)
+                        rng = new Random();
+                    int wait = (int)(rng.NextDouble() * maxWait);
+                    wait = Math.Max(wait, 150);
+                    await Task.Delay(wait);
+                    retries++;
+                    maxWait *= 2;
+                }
+                catch(MongoCommandException e)
+                {
+                    if (e.Code != 112) //no write conflict
+                        throw;
+                    if (retries >= Constants.MaxRetriesOnTransientFailure)
                         throw;
 
                     if (rng == null)

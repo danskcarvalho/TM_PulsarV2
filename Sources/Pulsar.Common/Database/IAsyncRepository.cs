@@ -41,6 +41,11 @@ namespace Pulsar.Common.Database
             ReadAck? rc = null, 
             ReadPref? rp = null, 
             CancellationToken? ct = null);
+
+        Task<List<T>> FindManyById(IEnumerable<ObjectId> ids,
+            ReadAck? rc = null,
+            ReadPref? rp = null,
+            CancellationToken? ct = null);
         Task<T> FindOne(Expression<Func<T, bool>> predicate, 
             ReadAck? rc = null, 
             ReadPref? rp = null, 

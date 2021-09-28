@@ -11,7 +11,7 @@ namespace Pulsar.Domain.Regioes.Models
     public class Regiao
     {
         public ObjectId Id { get; set; }
-        public virtual LocalTipo Tipo { get; }
+        public LocalTipo Tipo { get; set; }
         public long Codigo { get; set; }
         public string Nome { get; set; }
         public string TermosPesquisa { get; set; }

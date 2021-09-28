@@ -231,5 +231,19 @@ namespace Pulsar.Infrastructure.Database
 
             return r;
         }
+
+        public async Task<List<T>> FindManyById(IEnumerable<ObjectId> ids, ReadAck? rc = null, ReadPref? rp = null, CancellationToken? ct = null)
+        {
+            var idList = ids.ToList();
+            var collection = Collection;
+            if (rc != null)
+                collection = collection.WithReadConcern(rc?.ToReadConcern());
+            if (rp != null)
+                collection = collection.WithReadPreference(rp?.ToReadPreference());
+
+            var filter = Builders<T>.Filter.In("_id", idList);
+            return await (await collection.FindAsync(Context.Session, filter,
+                cancellationToken: ct ?? CancellationToken.None)).ToListAsync();
+        }
     }
 }

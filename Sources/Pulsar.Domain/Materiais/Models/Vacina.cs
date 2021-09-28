@@ -9,8 +9,10 @@ namespace Pulsar.Domain.Materiais.Models
 {
     public class Vacina : Material
     {
-        public override string Nome => ImunobiologicoNome;
-        public override TipoMaterial Tipo => TipoMaterial.Vacina;
+        public Vacina()
+        {
+            Tipo = TipoMaterial.Vacina;
+        }
         public string ImunobiologicoNome { get; set; }
         public int ImunobiologicoId { get; set; }
         public int? OrdemCalendario { get; set; }

@@ -14,11 +14,11 @@ namespace Pulsar.Infrastructure.Database
         public static ReadConcern ToReadConcern(this ReadAck r) => r switch
         {
             ReadAck.Available => ReadConcern.Available,
-            ReadAck.Default => ReadConcern.Available,
-            ReadAck.Linearizable => ReadConcern.Available,
-            ReadAck.Local => ReadConcern.Available,
-            ReadAck.Majority => ReadConcern.Available,
-            ReadAck.Snapshot => ReadConcern.Available,
+            ReadAck.Default => ReadConcern.Default,
+            ReadAck.Linearizable => ReadConcern.Linearizable,
+            ReadAck.Local => ReadConcern.Local,
+            ReadAck.Majority => ReadConcern.Majority,
+            ReadAck.Snapshot => ReadConcern.Snapshot,
             _ => throw new InvalidOperationException()
         };
         public static WriteConcern ToWriteConcern(this WriteAck r) => r switch

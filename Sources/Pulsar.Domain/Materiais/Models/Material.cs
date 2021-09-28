@@ -11,8 +11,8 @@ namespace Pulsar.Domain.Materiais.Models
     public class Material
     {
         public ObjectId Id { get; set; }
-        public virtual string Nome { get; }
-        public virtual TipoMaterial Tipo { get; }
+        public string Nome { get; set; }
+        public TipoMaterial Tipo { get; set; }
         public string TermosPesquisa { get; set; }
         public bool Ativo { get; set; }
     }

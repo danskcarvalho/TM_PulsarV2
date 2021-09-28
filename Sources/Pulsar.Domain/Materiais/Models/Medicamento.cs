@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 
 namespace Pulsar.Domain.Materiais.Models
 {
-    public class MedicamentoFinal : Material
+    public class Medicamento : Material
     {
-        public override string Nome => $"{Denominacao}, {Forma}, {Concentracao}";
-        public override TipoMaterial Tipo => TipoMaterial.Medicamento;
+        public Medicamento()
+        {
+            Tipo = TipoMaterial.Medicamento;
+        }
         public string Denominacao { get; set; }
         public string Forma { get; set; }
         public string Concentracao { get; set; }

@@ -18,16 +18,16 @@ namespace Pulsar.Infrastructure.Database
             var inheritanceGraph = BuildInheritanceGraph(allModels);
 
             var pack = new ConventionPack();
-            pack.AddClassMapConvention("ReadOnlyPropertyShouldBeSerialized", c =>
-            {
-                var properties = c.ClassType.GetProperties(BindingFlags.Instance | BindingFlags.Public);
-                foreach (var pi in properties)
-                {
-                    if (!pi.CanWrite)
-                        c.MapProperty(pi.Name);
-                }
+            //pack.AddClassMapConvention("ReadOnlyPropertyShouldBeSerialized", c =>
+            //{
+            //    var properties = c.ClassType.GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            //    foreach (var pi in properties)
+            //    {
+            //        if (!pi.CanWrite)
+            //            c.MapProperty(pi.Name);
+            //    }
 
-            });
+            //});
 
             pack.AddClassMapConvention("PolymorphicClasses", c =>
             {

@@ -12,7 +12,7 @@ namespace Pulsar.Web.Api.Filters
     {
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            if (context.Exception != null && context.Exception is ForbiddenException)
+            if (context.Exception != null && context.Exception is PulsarException pi && pi.ErrorCode == Common.Enumerations.PulsarErrorCode.Forbidden)
             {
                 context.ExceptionHandled = true;
                 context.Result = new ForbidResult();

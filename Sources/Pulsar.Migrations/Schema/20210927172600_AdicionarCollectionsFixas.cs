@@ -45,6 +45,9 @@ namespace Pulsar.Migrations.Schema
             if (!(await Database.CollectionExists(Constants.CollectionNames.Regioes)))
                 await Database.CreateCollectionAsync(Constants.CollectionNames.Regioes);
 
+            if (!(await Database.CollectionExists(Constants.CollectionNames.PrincipiosAtivos)))
+                await Database.CreateCollectionAsync(Constants.CollectionNames.PrincipiosAtivos);
+
             //criar índices
             //chaves de condição de saúde
             var ix_ChavesCondicaoSaude_TermosPesquisa = Builders<ChaveCondicaoSaude>.IndexKeys
@@ -90,6 +93,16 @@ namespace Pulsar.Migrations.Schema
 
             var ineps = Database.GetCollection<Inep>(Constants.CollectionNames.Ineps);
             await ineps.Indexes.CreateOneAsync(new MongoDB.Driver.CreateIndexModel<Inep>(ix_Ineps_TermosPesquisa, new CreateIndexOptions()
+            {
+                Name = "ix_TermosPesquisa"
+            }));
+
+            //princípios ativos
+            var ix_PrincipiosAtivos_TermosPesquisa = Builders<PrincipioAtivo>.IndexKeys
+                .Text(j => j.TermosPesquisa);
+
+            var principiosAtivos = Database.GetCollection<PrincipioAtivo>(Constants.CollectionNames.PrincipiosAtivos);
+            await principiosAtivos.Indexes.CreateOneAsync(new MongoDB.Driver.CreateIndexModel<PrincipioAtivo>(ix_PrincipiosAtivos_TermosPesquisa, new CreateIndexOptions()
             {
                 Name = "ix_TermosPesquisa"
             }));

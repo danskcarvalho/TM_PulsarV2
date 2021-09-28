@@ -9,7 +9,6 @@ namespace Pulsar.Common.Database
 {
     public struct IsolationOptions
     {
-        public bool HandleOptimisticFailures { get; set; }
         public bool OpenTransaction { get; set; }
         public bool EnableCasualConsistency { get; set; }
         public TimeSpan? MaxCommitTime { get; set; }
@@ -48,7 +47,6 @@ namespace Pulsar.Common.Database
         public IsolationOptions WithTransaction() => new IsolationOptions()
         {
             EnableCasualConsistency = this.EnableCasualConsistency,
-            HandleOptimisticFailures = this.HandleOptimisticFailures,
             MaxCommitTime = this.MaxCommitTime,
             OpenTransaction = true,
             Read = this.Read,
@@ -59,7 +57,6 @@ namespace Pulsar.Common.Database
         public IsolationOptions WithOptmistic() => new IsolationOptions()
         {
             EnableCasualConsistency = this.EnableCasualConsistency,
-            HandleOptimisticFailures = true,
             MaxCommitTime = this.MaxCommitTime,
             OpenTransaction = this.OpenTransaction,
             Read = this.Read,
@@ -70,7 +67,6 @@ namespace Pulsar.Common.Database
         public IsolationOptions WithCasualConsistency() => new IsolationOptions()
         {
             EnableCasualConsistency = true,
-            HandleOptimisticFailures = this.HandleOptimisticFailures,
             MaxCommitTime = this.MaxCommitTime,
             OpenTransaction = this.OpenTransaction,
             Read = this.Read,
@@ -81,7 +77,6 @@ namespace Pulsar.Common.Database
         public IsolationOptions WithOptimisticTransaction() => new IsolationOptions()
         {
             EnableCasualConsistency = this.EnableCasualConsistency,
-            HandleOptimisticFailures = true,
             MaxCommitTime = this.MaxCommitTime,
             OpenTransaction = true,
             Read = this.Read,

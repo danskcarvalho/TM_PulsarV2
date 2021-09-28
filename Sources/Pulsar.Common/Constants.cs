@@ -4,7 +4,7 @@ namespace Pulsar.Common
 {
     public static class Constants
     {
-        public const int MaxRetriesOnOptimisticFailure = 2;
+        public const int MaxRetriesOnTransientFailure = 2;
 
         public static class CollectionNames
         {
@@ -19,6 +19,7 @@ namespace Pulsar.Common
             public const string Materiais = "Materiais";
             public const string PerguntasPuericultura = "PerguntasPuericultura";
             public const string Regioes = "Regioes";
+            public const string PrincipiosAtivos = "PrincipiosAtivos";
         }
     }
 }
