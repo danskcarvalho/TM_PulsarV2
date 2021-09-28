@@ -21,5 +21,21 @@ namespace Pulsar.Common
             public const string Regioes = "Regioes";
             public const string PrincipiosAtivos = "PrincipiosAtivos";
         }
+
+        public static class EmailTemplates
+        {
+            public const string ActivateAccount = "ActivateAccount";
+            public const string ResetPassword = "ResetPassword";
+
+            public class ActivateAccountModel
+            {
+                public string Codigo { get; set; }
+            }
+
+            public class ResetPasswordModel
+            {
+                public string Codigo { get; set; }
+            }
+        }
     }
 }
