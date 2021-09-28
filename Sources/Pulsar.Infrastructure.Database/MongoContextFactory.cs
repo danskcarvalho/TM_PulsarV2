@@ -2,6 +2,7 @@
 using MongoDB.Driver;
 using Pulsar.Common;
 using Pulsar.Common.Database;
+using Pulsar.Common.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -142,7 +143,7 @@ namespace Pulsar.Infrastructure.Database
                 catch (OptimisticFailureException)
                 {
                     if (retries >= Constants.MaxRetriesOnTransientFailure)
-                        throw;
+                        throw new PulsarException(Common.Enumerations.PulsarErrorCode.TooBusy);
 
                     if (rng == null)
                         rng = new Random();
@@ -155,9 +156,9 @@ namespace Pulsar.Infrastructure.Database
                 catch(MongoCommandException e)
                 {
                     if (e.Code != 112) //no write conflict
-                        throw;
+                        throw new PulsarException(Common.Enumerations.PulsarErrorCode.TooBusy);
                     if (retries >= Constants.MaxRetriesOnTransientFailure)
-                        throw;
+                        throw new PulsarException(Common.Enumerations.PulsarErrorCode.TooBusy);
 
                     if (rng == null)
                         rng = new Random();

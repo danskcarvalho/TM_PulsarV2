@@ -26,20 +26,32 @@ namespace Pulsar.Migrations.Schema
 
             var ix_Procedimentos_TermosPesquisa = Builders<Procedimento>.IndexKeys
                 .Text(j => j.TermosPesquisa);
+            var ix_Procedimentos_Codigo = Builders<Procedimento>.IndexKeys
+                .Ascending(j => j.Codigo);
 
             var procedimentos = Database.GetCollection<Procedimento>(Constants.CollectionNames.Procedimentos);
             await procedimentos.Indexes.CreateOneAsync(new MongoDB.Driver.CreateIndexModel<Procedimento>(ix_Procedimentos_TermosPesquisa, new CreateIndexOptions()
             {
                 Name = "ix_TermosPesquisa"
             }));
+            await procedimentos.Indexes.CreateOneAsync(new MongoDB.Driver.CreateIndexModel<Procedimento>(ix_Procedimentos_Codigo, new CreateIndexOptions()
+            {
+                Name = "ix_Codigo"
+            }));
 
             var ix_Especialidades_TermosPesquisa = Builders<Especialidade>.IndexKeys
                 .Text(j => j.TermosPesquisa);
+            var ix_Especialidades_Codigo = Builders<Especialidade>.IndexKeys
+                .Ascending(j => j.Codigo);
 
             var especialidades = Database.GetCollection<Especialidade>(Constants.CollectionNames.Especialidades);
             await especialidades.Indexes.CreateOneAsync(new MongoDB.Driver.CreateIndexModel<Especialidade>(ix_Especialidades_TermosPesquisa, new CreateIndexOptions()
             {
                 Name = "ix_TermosPesquisa"
+            }));
+            await especialidades.Indexes.CreateOneAsync(new MongoDB.Driver.CreateIndexModel<Especialidade>(ix_Especialidades_Codigo, new CreateIndexOptions()
+            {
+                Name = "ix_Codigo"
             }));
 
         }

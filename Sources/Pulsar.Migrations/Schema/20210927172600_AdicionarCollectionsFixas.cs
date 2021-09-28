@@ -64,17 +64,18 @@ namespace Pulsar.Migrations.Schema
                 .Ascending(j => j.Tipo)
                 .Text(j => j.TermosPesquisa);
 
-            var ix_Diagnosticos_Tipo = Builders<Diagnostico>.IndexKeys
-                .Ascending(j => j.Tipo);
+            var ix_Diagnosticos_Tipo_Codigo = Builders<Diagnostico>.IndexKeys
+                .Ascending(j => j.Tipo)
+                .Ascending(j => j.Codigo);
 
             var diagnosticos = Database.GetCollection<Diagnostico>(Constants.CollectionNames.Diagnosticos);
             await diagnosticos.Indexes.CreateOneAsync(new MongoDB.Driver.CreateIndexModel<Diagnostico>(ix_Diagnosticos_Tipo_TermosPesquisa, new CreateIndexOptions()
             {
                 Name = "ix_Tipo_TermosPesquisa"
             }));
-            await diagnosticos.Indexes.CreateOneAsync(new MongoDB.Driver.CreateIndexModel<Diagnostico>(ix_Diagnosticos_Tipo, new CreateIndexOptions()
+            await diagnosticos.Indexes.CreateOneAsync(new MongoDB.Driver.CreateIndexModel<Diagnostico>(ix_Diagnosticos_Tipo_Codigo, new CreateIndexOptions()
             {
-                Name = "ix_Tipos"
+                Name = "ix_Tipo_Codigo"
             }));
 
             //etnias
@@ -91,10 +92,17 @@ namespace Pulsar.Migrations.Schema
             var ix_Ineps_TermosPesquisa = Builders<Inep>.IndexKeys
                 .Text(j => j.TermosPesquisa);
 
+            var ix_Ineps_Codigo = Builders<Inep>.IndexKeys
+                .Ascending(j => j.Codigo);
+
             var ineps = Database.GetCollection<Inep>(Constants.CollectionNames.Ineps);
             await ineps.Indexes.CreateOneAsync(new MongoDB.Driver.CreateIndexModel<Inep>(ix_Ineps_TermosPesquisa, new CreateIndexOptions()
             {
                 Name = "ix_TermosPesquisa"
+            }));
+            await ineps.Indexes.CreateOneAsync(new MongoDB.Driver.CreateIndexModel<Inep>(ix_Ineps_Codigo, new CreateIndexOptions()
+            {
+                Name = "ix_Codigo"
             }));
 
             //princípios ativos

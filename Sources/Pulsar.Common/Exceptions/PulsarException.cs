@@ -17,9 +17,21 @@ namespace Pulsar.Common.Exceptions
         public object Information { get; set; }
         public PulsarException() { }
         public PulsarException(PulsarErrorCode errorCode) : base(GetMessageFromErrorCode(errorCode))
-        { }
+        {
+            this.ErrorCode = errorCode;
+        }
+        public PulsarException(PulsarErrorCode errorCode, string message) : base(message)
+        {
+            this.ErrorCode = errorCode;
+        }
+        public PulsarException(PulsarErrorCode errorCode, string message, object information) : base(message)
+        {
+            this.ErrorCode = errorCode;
+            this.Information = information;
+        }
         public PulsarException(PulsarErrorCode errorCode, object information) : base(GetMessageFromErrorCode(errorCode))
         {
+            this.ErrorCode = errorCode;
             this.Information = information;
         }
         public PulsarException(string message) : base(message) { }

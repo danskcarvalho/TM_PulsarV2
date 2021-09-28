@@ -17,5 +17,6 @@ namespace Pulsar.Domain.Diagnosticos.Models
         public Sexo? Sexo { get; set; }
         public string TermosPesquisa { get; set; }
         public bool Ativo { get; set; }
+        public List<DiagnosticoResumido> Correlatos { get; set; }
     }
 }
