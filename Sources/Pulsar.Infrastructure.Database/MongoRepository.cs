@@ -56,7 +56,7 @@ namespace Pulsar.Infrastructure.Database
                 collection = collection.WithReadPreference(rp?.ToReadPreference());
 
             var filter = Builders<T>.Filter.Eq("_id", id);
-            return await (await collection.FindAsync(Context.Session, filter,
+            return await (await collection.FindAsync(Context.Session, filter, new FindOptions<T> { Limit = 1 },
                 cancellationToken: ct ?? CancellationToken.None)).FirstOrDefaultAsync();
         }
 
@@ -99,8 +99,9 @@ namespace Pulsar.Infrastructure.Database
             if (rp != null)
                 collection = collection.WithReadPreference(rp?.ToReadPreference());
 
-            return await(await collection.FindAsync(Context.Session, predicate,
-                cancellationToken: ct ?? CancellationToken.None)).FirstOrDefaultAsync();
+            return await(await collection.FindAsync(Context.Session, predicate, new FindOptions<T> { 
+                Limit = 1
+            }, cancellationToken: ct ?? CancellationToken.None)).FirstOrDefaultAsync();
         }
 
         async Task<List<T>> IAsyncRepository<T>.FindMany(Expression<Func<T, bool>> predicate,

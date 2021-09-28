@@ -201,7 +201,7 @@ namespace Pulsar.Infrastructure.Jobs
             {
                 var collection = ctx.GetCollection<JobModel>(JobConstants.CollectionName);
                 var u = await collection.UpdateOneAsync(ctx.Session, j => j.Status == Common.Jobs.JobStatus.Pending
-                    && j.Id == job.Id && (j.ScheduledForExecution == null || DateTime.Now > j.ScheduledForExecution),
+                    && j.Id == job.Id,
                     Builders<JobModel>.Update
                         .Set(j => j.Status, Common.Jobs.JobStatus.Executing)
                         .Set(j => j.StartedExecutionOn, DateTime.Now)
