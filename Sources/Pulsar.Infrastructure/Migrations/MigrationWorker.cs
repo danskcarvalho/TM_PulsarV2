@@ -43,7 +43,7 @@ namespace Pulsar.Infrastructure.Migrations
                     Name = MigrationType.Name,
                     Version = GetVersion(MigrationType)
                 };
-                Console.WriteLine($"[{MigrationNumber}/{TotalMigrations}] executing {model.Version}:{MigrationType.Name}");
+                PrintGreen($"[{MigrationNumber}/{TotalMigrations}] executing {model.Version}:{MigrationType.Name}");
                 //insert into the collection _Migrations
                 var collection = ctx.GetCollection<MigrationModel>(MigrationConstants.CollectionName);
                 await collection.InsertOneAsync(ctx.Session, model);
@@ -88,6 +88,19 @@ namespace Pulsar.Infrastructure.Migrations
             try
             {
                 Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(msg);
+            }
+            finally
+            {
+                Console.ForegroundColor = previousForegroundColor;
+            }
+        }
+        private void PrintGreen(string msg)
+        {
+            var previousForegroundColor = Console.ForegroundColor;
+            try
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine(msg);
             }
             finally
