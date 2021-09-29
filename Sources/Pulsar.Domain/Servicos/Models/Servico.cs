@@ -16,7 +16,7 @@ namespace Pulsar.Domain.Servicos.Models
         public RedeEstabelecimentosResumida RedeEstabelecimentos { get; set; }
         public Restricoes Restricoes { get; set; }
         public List<ServicoTipoAtendimento> TiposAtendimentos { get; set; }
-        public CriacaoAtualizacao CriacaoAtualizacao { get; set; }
+        public DataRegistro DataRegistro { get; set; }
         public long DataVersion { get; set; }
 
     }

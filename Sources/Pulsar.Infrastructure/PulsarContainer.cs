@@ -135,7 +135,7 @@ namespace Pulsar.Infrastructure
 
         private static void RegisterRepositoryFactories(IServiceCollection services)
         {
-
+            Pulsar.Common.Extensions.AbstractExtensions = new MongoAbstractExtensions();
             foreach (var type in typeof(ProcedimentoMongoRepository).Assembly.GetTypes())
             {
                 var impl = type.GetInterfaces()

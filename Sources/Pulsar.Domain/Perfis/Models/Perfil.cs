@@ -18,6 +18,6 @@ namespace Pulsar.Domain.Perfis.Models
         public HashSet<Permissao> Permissoes { get; set; }
         public RedeEstabelecimentosResumida Rede { get; set; }
         public EstabelecimentoResumido Estabelecimento { get; set; }
-        public CriacaoAtualizacao CriacaoAtualizacao { get; set; }
+        public DataRegistro DataRegistro { get; set; }
     }
 }

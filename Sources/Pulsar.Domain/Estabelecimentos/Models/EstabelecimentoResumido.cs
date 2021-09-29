@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using Pulsar.Domain.RedesEstabelecimentos.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,6 @@ namespace Pulsar.Domain.Estabelecimentos.Models
         public ObjectId EstabelecimentoId { get; set; }
         public string Nome { get; set; }
         public string Cnes { get; set; }
-        public ObjectId RedeEstabelecimentoId { get; set; }
-        public string RedeEstabelecimentoNome { get; set; }
+        public RedeEstabelecimentosResumida RedeEstabelecimentos { get; set; }
     }
 }

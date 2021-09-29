@@ -20,10 +20,10 @@ namespace Pulsar.Domain.Usuarios.Models
         public RedeEstabelecimentosResumida RedeEstabelecimentos { get; set; }
         public PerfilResumido Perfil { get; set; }
         public EspecialidadeResumida Especialidade { get; set; }
-        public bool IsRoot { get; set; }
-        public bool IsGestor { get; set; }
+        public bool Raiz { get; set; }
+        public bool Gestor { get; set; }
         public ConselhoProfissional ConselhoProfissional { get; set; }
-        public CriacaoAtualizacao CriacaoAtualizacao { get; set; }
+        public DataRegistro DataRegistro { get; set; }
         public bool Ativo { get; set; }
     }
 }

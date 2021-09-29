@@ -12,6 +12,7 @@ namespace Pulsar.Common.Database
 {
     public interface IAsyncRepository<T> where T : class
     {
+        IQueryable<T> AsQueryable(ReadAck? rc = null, ReadPref? rp = null);
         Task InsertOne(T item, 
             WriteAck? wc = null, 
             CancellationToken? ct = null);

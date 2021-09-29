@@ -12,9 +12,9 @@ namespace Pulsar.Domain.Usuarios.Models
     public class RedeEstabelecimentoLotacao
     {
         public RedeEstabelecimentosResumida RedeEstabelecimentos { get; set; }
-        public bool IsRoot { get; set; }
+        public bool Raiz { get; set; }
         public PerfilResumido Perfil { get; set; }
-        public CriacaoAtualizacao CriacaoAtualizacao { get; set; }
+        public DataRegistro DataRegistro { get; set; }
         public bool Ativo { get; set; }
     }
 }

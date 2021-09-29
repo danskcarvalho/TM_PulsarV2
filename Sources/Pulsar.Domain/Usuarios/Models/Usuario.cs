@@ -12,11 +12,11 @@ namespace Pulsar.Domain.Usuarios.Models
     public class Usuario
     {
         public ObjectId Id { get; set; }
-        public bool IsRoot { get; set; }
+        public bool Raiz { get; set; }
         public DadosBasicos DadosBasicos { get; set; }
         public DadosPessoais DadosPessoais { get; set; }
         public string TermosPesquisa { get; set; }
-        public CriacaoAtualizacao CriacaoAtualizacao { get; set; }
+        public DataRegistro DataRegistro { get; set; }
         public List<RedeEstabelecimentoLotacao> LotacoesRedesEstabelecimentos { get; set; }
         public List<EstabelecimentoLotacao> LotacoesEstabelecimentos { get; set; }
         public List<EspecialidadeResumida> Especialidades { get; set; }

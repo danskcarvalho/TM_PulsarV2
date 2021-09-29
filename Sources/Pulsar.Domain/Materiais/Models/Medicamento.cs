@@ -19,5 +19,6 @@ namespace Pulsar.Domain.Materiais.Models
         public string CodigoEsus { get; set; }
         public PrincipioAtivoResumido PrincipioAtivo { get; set; }
         public List<MedicamentoUnidadeFornecimento> UnidadesFornecimento { get; set; }
+        public List<DoseTipo> Doses { get; set; }
     }
 }

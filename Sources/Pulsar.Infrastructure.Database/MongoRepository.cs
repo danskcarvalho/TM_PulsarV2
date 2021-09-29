@@ -246,5 +246,16 @@ namespace Pulsar.Infrastructure.Database
             return await (await collection.FindAsync(Context.Session, filter,
                 cancellationToken: ct ?? CancellationToken.None)).ToListAsync();
         }
+
+        public IQueryable<T> AsQueryable(ReadAck? rc = null, ReadPref? rp = null)
+        {
+            var collection = Collection;
+            if (rc != null)
+                collection = collection.WithReadConcern(rc?.ToReadConcern());
+            if (rp != null)
+                collection = collection.WithReadPreference(rp?.ToReadPreference());
+
+            return collection.AsQueryable<T>();
+        }
     }
 }

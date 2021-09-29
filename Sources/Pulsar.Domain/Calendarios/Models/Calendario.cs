@@ -15,7 +15,7 @@ namespace Pulsar.Domain.Calendarios.Models
         public string Nome { get; set; }
         public List<DataComNome> Datas { get; set; }
         public RedeEstabelecimentosResumida RedeEstabelecimentos { get; set; }
-        public CriacaoAtualizacao CriacaoAtualizacao { get; set; }
+        public DataRegistro DataRegistro { get; set; }
         public long DataVersion { get; set; }
     }
 }

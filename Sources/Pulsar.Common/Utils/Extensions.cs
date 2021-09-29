@@ -11,6 +11,19 @@ namespace Pulsar.Common
 {
     public static class Extensions
     {
+        public static IAbstractExtensions AbstractExtensions { get; set; }
+        public static Task<List<T>> ToListAsync<T>(IQueryable<T> queryable)
+        {
+            return AbstractExtensions.ToListAsync(queryable);
+        }
+        public static Task<T> FirstOrDefaultAsync<T>(IQueryable<T> queryable)
+        {
+            return AbstractExtensions.FirstOrDefaultAsync(queryable);
+        }
+        public static Task<T> FirstAsync<T>(IQueryable<T> queryable)
+        {
+            return AbstractExtensions.FirstAsync(queryable);
+        }
         public static T FromBson<T>(this string str)
         {
             return BsonSerializer.Deserialize<T>(str);

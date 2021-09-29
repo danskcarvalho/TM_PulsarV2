@@ -13,6 +13,11 @@ namespace Pulsar.Common.Enumerations
         AuxiliarEnfermagem = 3,
         RealizacaoProcedimentos = 3,
         Vacinacao = 5,
-        Odontologico = 6
+        Odontologico = 6,
+        Raiz = 7,
+        AlteracaoProntuario = 8,
+        MultiplosProfissionais = 9,
+        EscutaInicial = 10,
+        PreAtendimento = 11
     }
 }
