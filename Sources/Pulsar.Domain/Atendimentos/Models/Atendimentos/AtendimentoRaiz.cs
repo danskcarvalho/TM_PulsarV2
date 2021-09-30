@@ -1,6 +1,6 @@
 ﻿using Pulsar.Common.Enumerations;
 using Pulsar.Domain.Comum;
-using Pulsar.Domain.Prontuario.Models;
+using Pulsar.Domain.Prontuarios.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

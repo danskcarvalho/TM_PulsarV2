@@ -20,6 +20,26 @@ namespace Pulsar.Common
             public const string PerguntasPuericultura = "PerguntasPuericultura";
             public const string Regioes = "Regioes";
             public const string PrincipiosAtivos = "PrincipiosAtivos";
+            public const string Acompanhamentos = "Acompanhamentos";
+            public const string Agendamentos = "Agendamentos";
+            public const string Agendas = "Agendas";
+            public const string Atendimentos = "Atendimentos";
+            public const string Escalas = "Escalas";
+            public const string Estabelecimentos = "Estabelecimentos";
+            public const string Exportacoes = "Exportacoes";
+            public const string Familias = "Familias";
+            public const string FichasEsus = "FichasEsus";
+            public const string FilasAtendimentos = "FilasAtendimentos";
+            public const string Importacoes = "Importacoes";
+            public const string Notificacoes = "Notificacoes";
+            public const string Pacientes = "Pacientes";
+            public const string Pastas = "Pastas";
+            public const string Perfis = "Perfis";
+            public const string ProcedimentosOdontologicos = "ProcedimentosOdontologicos";
+            public const string Prontuarios = "Prontuarios";
+            public const string RedesEstabelecimentos = "RedesEstabelecimentos";
+            public const string Servicos = "Servicos";
+            public const string Usuarios = "Usuarios";
         }
 
         public static class EmailTemplates
