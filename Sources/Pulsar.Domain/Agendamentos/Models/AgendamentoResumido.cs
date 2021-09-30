@@ -17,6 +17,8 @@ namespace Pulsar.Domain.Agendamentos.Models
         public ObjectId AgendamentoId { get; set; }
         public AgendaResumida Agenda { get; set; }
         public DateTime Data { get; set; }
+        public TimeSpan Horario { get; set; }
+        public DateTime DataHorario { get; set; }
         public ServicoResumido Servico { get; set; }
         public AgendamentoFaixa FaixaHorarios { get; set; }
         public EstabelecimentoResumido Estabelecimento { get; set; }

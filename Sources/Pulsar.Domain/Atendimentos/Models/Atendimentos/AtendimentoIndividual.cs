@@ -1,4 +1,4 @@
-﻿using Pulsar.Domain.Atendimentos.Models.DadosAtendimento;
+﻿using Pulsar.Common.Enumerations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,5 +24,6 @@ namespace Pulsar.Domain.Atendimentos.Models
         public SaudeMulher SaudeMulher { get; set; }
         public SinaisVitais SinaisVitais { get; set; }
         public Subjetivo Subjetivo { get; set; }
+        public List<CondutaAtendimentoIndividual> Condutas { get; set; }
     }
 }

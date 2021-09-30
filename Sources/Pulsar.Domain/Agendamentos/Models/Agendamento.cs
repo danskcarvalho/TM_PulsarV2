@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using Pulsar.Common.Enumerations;
 using Pulsar.Domain.Agendas.Models;
+using Pulsar.Domain.Atendimentos.Models;
 using Pulsar.Domain.Comum;
 using Pulsar.Domain.Estabelecimentos.Models;
 using Pulsar.Domain.Pacientes.Models;
@@ -24,6 +25,7 @@ namespace Pulsar.Domain.Agendamentos.Models
         public AgendamentoFaixa FaixaHorariosRequisitada { get; set; }
         public AgendamentoConfiguracao Configuracao { get; set; }
         public EstabelecimentoResumido Estabelecimento { get; set; }
+        public AtendimentoResumido AtendimentoGerado { get; set; }
         public PacienteResumido Paciente { get; set; }
         public Cancelamento Cancelamento { get; set; }
         public StatusAgendamento Status { get; set; }
