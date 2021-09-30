@@ -8,21 +8,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pulsar.Domain.Atendimentos
+namespace Pulsar.Domain.Prontuario.Models
 {
-    public class PrescricaoMedicamentos : ArtefatoAtendimento
+    public class MedicamentoProntuario : ProntuarioDados
     {
-        public PrescricaoMedicamentos()
-        {
-            Tipo = ArtefatoAtendimentoTipo.PrescricaoMedicamentos;
-        }
-        public TipoMedicamento? TipoReceita { get; set; }
-        public List<MedicamentoItem> Items { get; set; }
-    }
-    public class MedicamentoItem
-    {
-        public ObjectId ItemId { get; set; }
-        public ObjectId? ProntuarioId { get; set; }
         public MaterialResumido Medicamento { get; set; }
         public TipoMedicamento? TipoReceita { get; set; }
         public ViaAdministracao? ViaAdministracao { get; set; }
@@ -37,6 +26,5 @@ namespace Pulsar.Domain.Atendimentos
         public DateTime? InicioTratamento { get; set; }
         public int? DuracaoTratamento { get; set; }
         public UnidadeTempo? DuracaoTratamentoUnidadeTempo { get; set; }
-        public CategoriaMedicamento? Categoria { get; set; }
     }
 }

@@ -14,5 +14,6 @@ namespace Pulsar.Domain.Atendimentos.Models.Atendimentos
         }
 
         public DateTime Data { get; set; }
+        public string Justificativa { get; set; }
     }
 }

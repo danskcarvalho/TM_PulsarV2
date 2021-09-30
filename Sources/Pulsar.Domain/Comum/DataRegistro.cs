@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using Pulsar.Domain.Usuarios.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,10 @@ namespace Pulsar.Domain.Comum
     public class DataRegistro
     {
         public DateTime? CriadoEm { get; set; }
-        public ObjectId? CriadoPorId { get; set; }
+        public UsuarioResumido CriadoPorId { get; set; }
         public DateTime? AtualizadoEm { get; set; }
-        public ObjectId? AtualizadoPorId { get; set; }
+        public UsuarioResumido AtualizadoPorId { get; set; }
         public DateTime? DeletadoEm { get; set; }
-        public ObjectId? DeletadoPorId { get; set; }
+        public UsuarioResumido DeletadoPorId { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using Pulsar.Domain.Atendimentos.Models;
 using Pulsar.Domain.Diagnosticos.Models;
 using Pulsar.Domain.Procedimentos.Models;
 using System;
@@ -7,21 +8,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pulsar.Domain.Atendimentos.Models
+namespace Pulsar.Domain.Prontuario.Models
 {
-    public class PrescricaoExames : ArtefatoAtendimento
+    public class ExameProntuario : ProntuarioDados
     {
-        public PrescricaoExames()
-        {
-            Tipo = Common.Enumerations.ArtefatoAtendimentoTipo.PrescricaoExames;
-        }
-        public List<ExameItem> Items { get; set; }
-    }
-
-    public class ExameItem
-    {
-        public ObjectId ItemId { get; set; }
-        public ObjectId? ProntuarioId { get; set; }
         public ProcedimentoResumido Procedimento { get; set; }
         public List<DiagnosticoResumido> Diagnosticos { get; set; }
         public string Justificativa { get; set; }

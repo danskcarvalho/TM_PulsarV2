@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pulsar.Domain.ProcedimentosOdontologicos.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,5 +25,6 @@ namespace Pulsar.Domain.Atendimentos.Models
         public List<Problema> Problemas { get; set; }
         public SinaisVitais SinaisVitais { get; set; }
         public Subjetivo Subjetivo { get; set; }
+        public ProcedimentosOdontologicos ProcedimentosOdontologicos { get; set; }
     }
 }

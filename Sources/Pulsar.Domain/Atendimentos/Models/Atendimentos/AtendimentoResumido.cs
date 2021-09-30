@@ -22,6 +22,7 @@ namespace Pulsar.Domain.Atendimentos.Models
         public TipoAtendimento Tipo { get; set; }
         public ServicoResumido Servico { get; set; }
         public StatusAtendimento? Status { get; set; }
-        public List<UsuarioResumido> Profissionais { get; set; }
+        public UsuarioResumido Profissional { get; set; }
+        public List<UsuarioResumido> VariosProfissionais { get; set; }
     }
 }

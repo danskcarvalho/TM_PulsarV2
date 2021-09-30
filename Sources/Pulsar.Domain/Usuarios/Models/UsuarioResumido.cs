@@ -16,5 +16,6 @@ namespace Pulsar.Domain.Usuarios.Models
         public string Cns { get; set; }
         public Sexo? Sexo { get; set; }
         public DateTime? DataNascimento { get; set; }
+        public ConselhoProfissional ConselhoProfissional { get; set; }
     }
 }

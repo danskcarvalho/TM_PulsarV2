@@ -1,5 +1,4 @@
 ﻿using Pulsar.Common.Enumerations;
-using Pulsar.Domain.Calendarios.Models;
 using Pulsar.Domain.Comum;
 using System;
 using System.Collections.Generic;

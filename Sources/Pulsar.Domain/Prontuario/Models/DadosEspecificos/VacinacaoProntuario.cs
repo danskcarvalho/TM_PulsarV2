@@ -6,15 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pulsar.Domain.Atendimentos.Models
+namespace Pulsar.Domain.Prontuario.Models
 {
-    public class AtividadeAdministrarVacina : Atividade
+    public class VacinacaoProntuario : ProntuarioDados
     {
-        public AtividadeAdministrarVacina()
-        {
-            Tipo = Common.Enumerations.TipoAtividade.Vacinacao;
-        }
-
         public MaterialResumido Vacina { get; set; }
         public EstrategiaVacinacao EstrategiaVacinacao { get; set; }
         public DoseVacinacao Dose { get; set; }

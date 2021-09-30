@@ -1,5 +1,6 @@
 ﻿using Pulsar.Common.Enumerations;
 using Pulsar.Domain.Comum;
+using Pulsar.Domain.Prontuario.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,5 +26,7 @@ namespace Pulsar.Domain.Atendimentos.Models
         public StatusAtendimentoRaiz Status { get; set; }
         public List<Atividade> Atividades { get; set; }
         public List<ArtefatoAtendimento> Artefatos { get; set; }
+        public List<ProntuarioDados> AlteracoesProntuario { get; set; }
+        public bool AtualizacaoPronturarioImediata { get; set; }
     }
 }

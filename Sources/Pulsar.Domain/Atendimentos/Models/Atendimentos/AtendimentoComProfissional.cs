@@ -25,7 +25,6 @@ namespace Pulsar.Domain.Atendimentos.Models
         public HistoricoStatus HistoricoStatus { get; set; }
         public RealizacaoAtendimento Realizacao { get; set; }
         public EspecialidadeResumida Especialidade { get; set; }
-        public ConselhoProfissional ConselhoProfissional { get; set; }
         public EquipeResumida Equipe { get; set; }
         public AgendamentoResumido Agendamento { get; set; }
         public List<ProcedimentoResumido> ProcedimentosReportados { get; set; }

@@ -25,6 +25,7 @@ namespace Pulsar.Domain.Atendimentos.Models
         public AtendimentoResumido AtendimentoGerador { get; set; }
         public List<PastaArquivo> Arquivos { get; set; }
         public bool OrigemExterna { get; set; }
+        public ObjectId? ProntuarioId { get; set; }
         public DataRegistro DataRegistro { get; set; }
         public long DataVersion { get; set; }
     }

@@ -12,15 +12,12 @@ namespace Pulsar.Domain.Pacientes.Models
     {
         public ObjectId Id { get; set; }
         public string TermosPesquisa { get; set; }
-        public Endereco Endereco { get; set; }
-        public DadosBasicos DadosBasicos { get; set; }
-        public DadosNacionalidade DadosNacionalidade { get; set; }
-        public Contatos Contatos { get; set; }
-        public DadosFinanceiros DadosFinanceiros { get; set; }
-        public CaracteristicasFisicas CaracteristicasFisicas { get; set; }
-        public EducacaoFamilia EducacaoFamilia { get; set; }
+        public PacienteHistorico DadosAtuais { get; set; }
         public bool Anonimo { get; set; }
+        public ObjectId? AntecedentesPessoais { get; set; }
+        public ObjectId? AntecedentesFamiliares { get; set; }
         public DataRegistro DataRegistro { get; set; }
         public long DataVersion { get; set; }
+        public List<PacienteHistorico> Historico { get; set; }
     }
 }
