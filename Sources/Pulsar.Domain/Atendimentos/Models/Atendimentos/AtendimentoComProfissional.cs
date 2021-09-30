@@ -17,19 +17,19 @@ namespace Pulsar.Domain.Atendimentos.Models
 {
     public class AtendimentoComProfissional : Atendimento
     {
-        public UsuarioResumido Profissional { get; set; }
-        public ServicoResumido Servico { get; set; }
-        public List<ServicoResumido> UltimosServicos { get; set; }
-        public ObjectId Raiz { get; set; }
+        public ObjectId ProfissionalId { get; set; }
+        public ObjectId? ServicoId { get; set; }
+        public List<ObjectId> UltimosServicos { get; set; }
+        public ObjectId AtendimentoRaizId { get; set; }
         public StatusAtendimento Status { get; set; }
         public HistoricoStatus HistoricoStatus { get; set; }
         public RealizacaoAtendimento Realizacao { get; set; }
         public EspecialidadeResumida Especialidade { get; set; }
         public EquipeResumida Equipe { get; set; }
-        public AgendamentoResumido Agendamento { get; set; }
+        public ObjectId? AgendamentoId { get; set; }
         public List<ProcedimentoResumido> ProcedimentosReportados { get; set; }
         public List<PastaArquivo> Documentos { get; set; }
-        public AgendamentoResumido AgendamentoAoFinalizar { get; set; }
-        public AtendimentoResumido InclusaoFilaAoFinalizar { get; set; }
+        public ObjectId? AgendamentoAoFinalizarId { get; set; }
+        public ObjectId? AtendimentoInclusoAoFinalizarId { get; set; }
     }
 }

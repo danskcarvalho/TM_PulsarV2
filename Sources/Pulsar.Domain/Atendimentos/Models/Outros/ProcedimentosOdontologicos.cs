@@ -1,4 +1,5 @@
-﻿using Pulsar.Domain.ProcedimentosOdontologicos.Models;
+﻿using MongoDB.Bson;
+using Pulsar.Domain.ProcedimentosOdontologicos.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,8 @@ namespace Pulsar.Domain.Atendimentos.Models
 {
     public class ProcedimentosOdontologicos
     {
-        public List<ProcedimentoOdontologicoResumido> Criados { get; set; }
-        public List<ProcedimentoOdontologicoResumido> Concluidos { get; set; }
-        public List<ProcedimentoOdontologicoResumido> Desfeitos { get; set; }
+        public List<ObjectId> Criados { get; set; }
+        public List<ObjectId> Concluidos { get; set; }
+        public List<ObjectId> Desfeitos { get; set; }
     }
 }

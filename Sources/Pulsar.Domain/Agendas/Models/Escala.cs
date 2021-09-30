@@ -16,7 +16,7 @@ namespace Pulsar.Domain.Agendas.Models
         public EscalaConfiguracao Configuracao { get; set; }
         public DateTime Data { get; set; }
         public List<EscalaSlot> Slots { get; set; }
-        public List<AgendamentoResumido> OutrosAgendamentos { get; set; }
+        public List<ObjectId> OutrosAgendamentos { get; set; }
         public DataRegistro DataRegistro { get; set; }
         public long DataVersion { get; set; }
     }

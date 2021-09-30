@@ -1,4 +1,5 @@
-﻿using Pulsar.Domain.Servicos.Models;
+﻿using MongoDB.Bson;
+using Pulsar.Domain.Servicos.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,11 @@ namespace Pulsar.Domain.RedesEstabelecimentos.Models
 {
     public class Servicos
     {
-        public ServicoResumido Puerperio { get; set; }
-        public ServicoResumido PreNatal { get; set; }
-        public ServicoResumido Puericultura { get; set; }
-        public ServicoResumido ConsultaManutencaoOdontologiaServico { get; set; }
-        public ServicoResumido ConsultaRetornoOdontologiaServico { get; set; }
-        public ServicoResumido PrimeiraConsultaOdontologiaServico { get; set; }
+        public ObjectId? PuerperioId { get; set; }
+        public ObjectId? PreNatalId { get; set; }
+        public ObjectId? PuericulturaId { get; set; }
+        public ObjectId? ConsultaManutencaoOdontologiaServicoId { get; set; }
+        public ObjectId? ConsultaRetornoOdontologiaServicoId { get; set; }
+        public ObjectId? PrimeiraConsultaOdontologiaServicoId { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace Pulsar.Domain.Importacoes.Models
         {
             Tipo = ImportacaoTipo.Cnes;
         }
-        public RedeEstabelecimentosResumida RedeEstabelecimentos { get; set; }
+        public ObjectId RedeEstabelecimentosId { get; set; }
         public string UrlArquivoXml { get; set; }
         public DateTime MesAno { get; set; }
         public ObjectId JobId { get; set; }

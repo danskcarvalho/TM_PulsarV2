@@ -16,8 +16,8 @@ namespace Pulsar.Domain.Atendimentos.Models
             Tipo = TipoAtendimento.MultiplosProfissionais;
         }
 
-        public List<UsuarioResumido> Profissionais { get; set; }
-        public ObjectId Raiz { get; set; }
-        public List<AtendimentoResumido> Filhos { get; set; }
+        public List<ObjectId> Profissionais { get; set; }
+        public ObjectId AtendimentoRaiz { get; set; }
+        public List<ObjectId> AtendimentoFilhos { get; set; }
     }
 }

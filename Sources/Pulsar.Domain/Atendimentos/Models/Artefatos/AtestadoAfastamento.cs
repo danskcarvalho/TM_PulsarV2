@@ -15,7 +15,7 @@ namespace Pulsar.Domain.Atendimentos.Models
         }
 
         public  int? DiasRepouso { get; set; }
-        public  List<DiagnosticoResumido> CID10 { get; set; }
+        public  List<DiagnosticoResumido> Diagnostico { get; set; }
         public  string Descricao { get; set; }
     }
 }

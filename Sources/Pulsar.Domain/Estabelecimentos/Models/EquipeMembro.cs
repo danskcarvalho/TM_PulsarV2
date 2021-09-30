@@ -12,7 +12,7 @@ namespace Pulsar.Domain.Estabelecimentos.Models
 {
     public class EquipeMembro
     {
-        public UsuarioResumido Profissional { get; set; }
+        public ObjectId ProfissionalId { get; set; }
         public string Microarea { get; set; }
         public EspecialidadeResumida Especialidade { get; set; }
     }

@@ -15,7 +15,7 @@ namespace Pulsar.Domain.Exportacoes.Models
         {
             Tipo = ExportacaoTipo.Esus;
         }
-        public RedeEstabelecimentosResumida RedeEstabelecimentos { get; set; }
+        public ObjectId RedeEstabelecimentosId { get; set; }
         public RemetenteEsus RemetenteEsus { get; set; }
         public long NumeroLote { get; set; }
         public string UrlArquivoExportado { get; set; }

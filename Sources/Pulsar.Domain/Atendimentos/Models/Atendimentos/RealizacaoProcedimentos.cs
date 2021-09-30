@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,6 @@ namespace Pulsar.Domain.Atendimentos.Models.Atendimentos
         public MedicaoGlicemia MedicaoGlicemia { get; set; }
         public SinaisVitais SinaisVitais { get; set; }
         public Subjetivo Subjetivo { get; set; }
-        public AtendimentoResumido AtendimentoPai { get; set; }
+        public ObjectId AtendimentoPaiId { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Pulsar.Common.Enumerations;
+﻿using MongoDB.Bson;
+using Pulsar.Common.Enumerations;
 using Pulsar.Domain.Usuarios.Models;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace Pulsar.Domain.Atendimentos.Models
         public int QuantidadeRealizada { get; set; }
         public int QuantidadeNaoRealizada { get; set; }
         public StatusFinalizacaoAtividade Status { get; set; }
-        public AtendimentoResumido AtendimentoExecutor { get; set; }
+        public ObjectId AtendimentoExecutorId { get; set; }
         public string Observacoes { get; set; }
         public TimeSpan? Horario { get; set; }
         public TimeSpan? Duracao { get; set; }

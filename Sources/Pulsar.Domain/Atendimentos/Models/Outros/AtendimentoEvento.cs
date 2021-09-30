@@ -13,7 +13,7 @@ namespace Pulsar.Domain.Atendimentos.Models
     {
         public DateTime OcorreuEm { get; set; }
         public TipoAtendimentoEvento Tipo { get; set; }
-        public AtendimentoResumido Atendimento { get; set; }
-        public AtividadeResumida Atividade { get; set; }
+        public ObjectId? Atendimento { get; set; }
+        public ObjectId? Atividade { get; set; }
     }
 }

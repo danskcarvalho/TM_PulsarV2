@@ -22,7 +22,7 @@ namespace Pulsar.Domain.Atendimentos.Models
         /// </summary>
         public string NomeDetalhes { get; set; }
         public ObjectId? ProntuarioId { get; set; }
-        public AtendimentoResumido AtendimentoGerador { get; set; }
+        public ObjectId AtendimentoGeradorId { get; set; }
         public string Observacoes { get; set; }
         public TipoAtividade Tipo { get; set; }
         public int Quantidade { get; set; }

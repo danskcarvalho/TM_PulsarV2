@@ -14,6 +14,6 @@ namespace Pulsar.Domain.Agendas.Models
         public string Descricao { get; set; }
         public TimeSpan DuracaoSlot { get; set; }
         public bool AgendamentosMultiplos { get; set; }
-        public IList<EscalaConfiguracaoFaixa> Faixas { get; set; }
+        public List<EscalaConfiguracaoFaixa> Faixas { get; set; }
     }
 }

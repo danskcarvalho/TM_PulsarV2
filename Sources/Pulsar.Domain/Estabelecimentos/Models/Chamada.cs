@@ -12,9 +12,9 @@ namespace Pulsar.Domain.Estabelecimentos.Models
     public class Chamada
     {
         public ObjectId ChamadaId { get; set; }
-        public PacienteResumido Paciente { get; set; }
+        public ObjectId PacienteId { get; set; }
         public LocalChamada Local { get; set; }
-        public UsuarioResumido Profissional { get; set; }
+        public ObjectId ProfissionalId { get; set; }
         public DateTime Data { get; set; }
     }
 }

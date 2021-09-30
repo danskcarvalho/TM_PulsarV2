@@ -1,4 +1,5 @@
-﻿using Pulsar.Common.Enumerations;
+﻿using MongoDB.Bson;
+using Pulsar.Common.Enumerations;
 using Pulsar.Domain.Agendamentos.Models;
 using Pulsar.Domain.Atendimentos.Models;
 using Pulsar.Domain.Comum;
@@ -13,9 +14,9 @@ namespace Pulsar.Domain.FilasAtendimento.Models
 {
     public class FilaAtendimentoItem
     {
-        public AtendimentoResumido Atendimento { get; set; }
-        public AgendamentoResumido Agendamento { get; set; }
-        public PacienteResumido Paciente { get; set; }
+        public ObjectId? AtendimentoId { get; set; }
+        public ObjectId? Agendamento { get; set; }
+        public ObjectId? Paciente { get; set; }
         public TipoAtendimento? TipoAtendimento { get; set; }
         public DateTime? DataInicioEspera { get; set; }
         public RiscoAtendimento? Risco { get; set; }

@@ -15,7 +15,7 @@ namespace Pulsar.Domain.Acompanhamentos.Models
         public ObjectId Id { get; set; }
         public AcompanhamentoTipo Tipo { get; set; }
         public StatusAcompanhamento Status { get; set; }
-        public List<AtendimentoResumido> Atendimentos { get; set; }
+        public List<ObjectId> AtendimentosIds { get; set; }
         public DateTime? DataPrimeiraAbertura { get; set; }
         public DateTime? DataUltimaFinalizacao { get; set; }
         public DataRegistro DataRegistro { get; set; }

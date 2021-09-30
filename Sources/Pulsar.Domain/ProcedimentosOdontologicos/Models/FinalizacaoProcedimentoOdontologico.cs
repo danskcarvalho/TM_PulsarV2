@@ -1,4 +1,5 @@
-﻿using Pulsar.Common.Enumerations;
+﻿using MongoDB.Bson;
+using Pulsar.Common.Enumerations;
 using Pulsar.Domain.Atendimentos.Models;
 using Pulsar.Domain.Usuarios.Models;
 using System;
@@ -12,7 +13,7 @@ namespace Pulsar.Domain.ProcedimentosOdontologicos.Models
     public class FinalizacaoProcedimentoOdontologico
     {
         public StatusFinalizacaoAtividade Status { get; set; }
-        public AtendimentoResumido AtendimentoExecutor { get; set; }
+        public ObjectId AtendimentoExecutorId { get; set; }
         public string Observacoes { get; set; }
         public TimeSpan? Horario { get; set; }
         public TimeSpan? Duracao { get; set; }

@@ -1,4 +1,5 @@
-﻿using Pulsar.Common.Enumerations;
+﻿using MongoDB.Bson;
+using Pulsar.Common.Enumerations;
 using Pulsar.Domain.Pacientes.Models;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace Pulsar.Domain.FichasEsus.Models
     {
         public Turno? Turno { get; set; }
         public string NumeroProntuario { get; set; }
-        public PacienteResumido Paciente { get; set; }
+        public ObjectId PacienteId { get; set; }
         public Sexo? PacienteSexo { get; set; }
         public DateTime? PacienteDataNascimento { get; set; }
         public string PacienteCPF { get; set; }

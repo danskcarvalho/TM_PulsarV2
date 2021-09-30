@@ -16,8 +16,8 @@ namespace Pulsar.Domain.FilasAtendimento.Models
         public ObjectId Id { get; set; }
         public DateTime Data { get; set; }
         public StatusFilaAtendimento Status { get; set; }
-        public EstabelecimentoResumido Estabelecimento { get; set; }
-        public UsuarioResumido Profissional { get; set; }
+        public ObjectId EstabelecimentoId { get; set; }
+        public ObjectId Profissional { get; set; }
         public List<FilaAtendimentoItem> Items { get; set; }
         public DataRegistro DataRegistro { get; set; }
         public long DataVersion { get; set; }

@@ -22,7 +22,7 @@ namespace Pulsar.Domain.ProcedimentosOdontologicos.Models
         public HashSet<Arcada> Arcadas { get; set; }
         public string OutroLocal { get; set; }
         public ProcedimentoResumido Procedimento { get; set; }
-        public AtendimentoResumido AtendimentoGerador { get; set; }
+        public ObjectId AtendimentoGeradorId { get; set; }
         public string Observacoes { get; set; }
         public FinalizacaoProcedimentoOdontologico Finalizacao { get; set; }
         public DataRegistro DataRegistro { get; set; }

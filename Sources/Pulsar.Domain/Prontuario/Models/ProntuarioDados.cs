@@ -19,7 +19,7 @@ namespace Pulsar.Domain.Prontuario.Models
         /// <summary>
         /// Atendimento que gerou ou modificou o prontuário.
         /// </summary>
-        public AtendimentoResumido AtendimentoGerador { get; set; }
+        public ObjectId AtendimentoGeradorId { get; set; }
         public List<PastaArquivo> Arquivos { get; set; }
         public ObjectId? ArtefatoId { get; set; }
         public ObjectId? AtividadeId { get; set; }

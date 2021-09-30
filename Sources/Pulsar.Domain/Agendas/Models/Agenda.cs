@@ -13,8 +13,7 @@ namespace Pulsar.Domain.Agendas.Models
     public class Agenda
     {
         public ObjectId Id { get; set; }
-        public EstabelecimentoResumido Estabelecimento { get; set; }
-        public RedeEstabelecimentosResumida RedeEstabelecimentos { get; set; }
+        public ObjectId EstabelecimentoId { get; set; }
         public string Nome { get; set; }
         public DataRegistro DataRegistro { get; set; }
         public long DataVersion { get; set; }

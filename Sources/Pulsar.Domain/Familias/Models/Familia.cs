@@ -13,10 +13,10 @@ namespace Pulsar.Domain.Familias.Models
     public class Familia
     {
         public ObjectId Id { get; set; }
-        public EstabelecimentoResumido Estabelecimento { get; set; }
+        public ObjectId EstabelecimentoId { get; set; }
         public string Codigo { get; set; }
-        public PacienteResumido Responsavel { get; set; }
-        public EquipeResumida Equipe { get; set; }
+        public ObjectId ResponsavelId { get; set; }
+        public ObjectId EquipeId { get; set; }
         public string Microarea { get; set; }
         public List<FamiliaIntegrante> Integrantes { get; set; }
         public DataRegistro DataRegistro { get; set; }

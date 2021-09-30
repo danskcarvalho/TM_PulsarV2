@@ -13,10 +13,10 @@ namespace Pulsar.Domain.Agendas.Models
     public class EscalaConfiguracaoFaixa
     {
         public ObjectId FaixaId { get; set; }
-        public List<UsuarioResumido> Profissionais { get; set; }
-        public List<ServicoResumido> Servicos { get; set; }
-        public List<ServicoResumido> ServicosOnlines { get; set; }
-        public List<EquipeResumida> Equipes { get; set; }
+        public List<ObjectId> Profissionais { get; set; }
+        public List<ObjectId> Servicos { get; set; }
+        public List<ObjectId> ServicosOnlines { get; set; }
+        public List<ObjectId> Equipes { get; set; }
         public TimeSpan Inicio { get; set; }
         public TimeSpan Fim { get; set; }
         public int? LimiteAgendamentos { get; set; }

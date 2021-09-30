@@ -13,7 +13,7 @@ namespace Pulsar.Domain.Servicos.Models
     {
         public ObjectId Id { get; set; }
         public string Nome { get; set; }
-        public RedeEstabelecimentosResumida RedeEstabelecimentos { get; set; }
+        public ObjectId RedeEstabelecimentosId { get; set; }
         public Restricoes Restricoes { get; set; }
         public List<ServicoTipoAtendimento> TiposAtendimentos { get; set; }
         public DataRegistro DataRegistro { get; set; }

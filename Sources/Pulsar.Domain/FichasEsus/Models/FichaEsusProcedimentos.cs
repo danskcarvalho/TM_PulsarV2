@@ -1,4 +1,5 @@
-﻿using Pulsar.Common.Enumerations;
+﻿using MongoDB.Bson;
+using Pulsar.Common.Enumerations;
 using Pulsar.Domain.Especialidades.Models;
 using Pulsar.Domain.Estabelecimentos.Models;
 using Pulsar.Domain.Pacientes.Models;
@@ -23,7 +24,7 @@ namespace Pulsar.Domain.FichasEsus.Models
         #region [HeaderTransport]
         public DateTime? DataAtendimento { get; set; }
         public MunicipioResumido Municipio { get; set; }
-        public UsuarioResumido Profissional { get; set; }
+        public ObjectId ProfissionalId { get; set; }
         public EspecialidadeResumida Especialidade { get; set; }
         public Equipe Equipe { get; set; }
         #endregion

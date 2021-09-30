@@ -15,12 +15,12 @@ namespace Pulsar.Domain.Prontuario.Models
     {
         public ObjectId Id { get; set; }
         public ArtefatoProntuarioTipo Tipo { get; set; }
-        public PacienteResumido Paciente { get; set; }
+        public ObjectId PacienteId { get; set; }
         public ProntuarioDados Atual { get; set; }
         /// <summary>
         /// Atendimento que gerou o prontuário.
         /// </summary>
-        public AtendimentoResumido AtendimentoGerador { get; set; }
+        public ObjectId AtendimentoGeradorId { get; set; }
         public List<ProntuarioDados> Historico { get; set; }
         public DataRegistro DataRegistro { get; set; }
         public long DataVersion { get; set; }

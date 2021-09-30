@@ -17,10 +17,10 @@ namespace Pulsar.Domain.Atendimentos.Models
     public class Atendimento
     {
         public ObjectId Id { get; set; }
-        public EstabelecimentoResumido Estabelecimento { get; set; }
-        public PacienteResumido Paciente { get; set; }
+        public ObjectId EstabelecimentoId { get; set; }
+        public ObjectId Paciente { get; set; }
         public TipoAtendimento Tipo { get; set; }
-        public List<FichaEsusResumida> FichasEsus { get; set; }
+        public List<ObjectId> FichasEsus { get; set; }
         public long DataVersion { get; set; }
     }
 }

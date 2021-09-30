@@ -1,4 +1,5 @@
-﻿using Pulsar.Common.Enumerations;
+﻿using MongoDB.Bson;
+using Pulsar.Common.Enumerations;
 using Pulsar.Domain.Comum;
 using Pulsar.Domain.Pastas.Models;
 using System;
@@ -14,7 +15,7 @@ namespace Pulsar.Domain.Atendimentos.Models
         /// <summary>
         /// Atendimento que informou o resultado.
         /// </summary>
-        public virtual AtendimentoResumido AtendimentoGerador { get; set; }
+        public virtual ObjectId AtendimentoGeradorId { get; set; }
         public virtual DateTime? DataRealizacao { get; set; }
         public virtual DateTime? DataDoResultado { get; set; }
         public virtual decimal? ResultadoNumerico { get; set; }

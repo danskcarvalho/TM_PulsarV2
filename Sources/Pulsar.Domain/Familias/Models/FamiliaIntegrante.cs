@@ -1,4 +1,5 @@
-﻿using Pulsar.Domain.Pacientes.Models;
+﻿using MongoDB.Bson;
+using Pulsar.Domain.Pacientes.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Pulsar.Domain.Familias.Models
 {
     public class FamiliaIntegrante
     {
-        public PacienteResumido Integrante { get; set; }
-        public PacienteResumido Responsavel { get; set; }
+        public ObjectId IntegranteId { get; set; }
+        public ObjectId? ResponsavelId { get; set; }
     }
 }

@@ -11,10 +11,10 @@ namespace Pulsar.Domain.Comum
     public class DataRegistro
     {
         public DateTime? CriadoEm { get; set; }
-        public UsuarioResumido CriadoPorId { get; set; }
+        public ObjectId? CriadoPorUsuarioId { get; set; }
         public DateTime? AtualizadoEm { get; set; }
-        public UsuarioResumido AtualizadoPorId { get; set; }
+        public ObjectId? AtualizadoPorUsuarioId { get; set; }
         public DateTime? DeletadoEm { get; set; }
-        public UsuarioResumido DeletadoPorId { get; set; }
+        public ObjectId? DeletadoPorUsuarioId { get; set; }
     }
 }

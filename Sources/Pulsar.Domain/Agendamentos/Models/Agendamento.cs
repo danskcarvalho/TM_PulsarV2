@@ -18,15 +18,15 @@ namespace Pulsar.Domain.Agendamentos.Models
     public class Agendamento
     {
         public ObjectId Id { get; set; }
-        public AgendaResumida Agenda { get; set; }
+        public ObjectId AgendaId { get; set; }
         public DateTime Data { get; set; }
-        public ServicoResumido Servico { get; set; }
+        public ObjectId ServicoId { get; set; }
         public AgendamentoFaixa FaixaHorarios { get; set; }
         public AgendamentoFaixa FaixaHorariosRequisitada { get; set; }
         public AgendamentoConfiguracao Configuracao { get; set; }
-        public EstabelecimentoResumido Estabelecimento { get; set; }
-        public AtendimentoResumido AtendimentoGerado { get; set; }
-        public PacienteResumido Paciente { get; set; }
+        public ObjectId EstabelecimentoId { get; set; }
+        public ObjectId? AtendimentoGeradoId { get; set; }
+        public ObjectId Paciente { get; set; }
         public Cancelamento Cancelamento { get; set; }
         public StatusAgendamento Status { get; set; }
         public bool Extra { get; set; }

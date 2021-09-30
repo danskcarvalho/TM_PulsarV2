@@ -1,4 +1,5 @@
-﻿using Pulsar.Domain.Comum;
+﻿using MongoDB.Bson;
+using Pulsar.Domain.Comum;
 using Pulsar.Domain.Especialidades.Models;
 using Pulsar.Domain.Estabelecimentos.Models;
 using Pulsar.Domain.Perfis.Models;
@@ -13,12 +14,12 @@ namespace Pulsar.Domain.Usuarios.Models
 {
     public class EstabelecimentoLotacao
     {
-        public EstabelecimentoResumido Estabelecimento { get; set; }
+        public ObjectId EstabelecimentoId { get; set; }
         /// <summary>
         /// Dá permissão a todos os estabelecimentos de uma rede de estabelecimentos.
         /// </summary>
-        public RedeEstabelecimentosResumida RedeEstabelecimentos { get; set; }
-        public PerfilResumido Perfil { get; set; }
+        public ObjectId? RedeEstabelecimentosId { get; set; }
+        public ObjectId PerfilId { get; set; }
         public EspecialidadeResumida Especialidade { get; set; }
         public bool Raiz { get; set; }
         public bool Gestor { get; set; }
