@@ -4,8 +4,6 @@ using Pulsar.CommandHandlers.Usuarios;
 using Pulsar.Common.Cqrs;
 using Pulsar.Common.Database;
 using Pulsar.Common.Services;
-using Pulsar.Contracts.Commands.Usuarios;
-using Pulsar.Contracts.Requests.Usuarios;
 using Pulsar.Domain.Infrastructure.Repositories;
 using Pulsar.Domain.Procedimentos.Models;
 using Pulsar.Infrastructure.Cqrs;

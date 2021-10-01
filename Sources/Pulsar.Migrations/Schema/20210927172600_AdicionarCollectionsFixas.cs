@@ -5,6 +5,7 @@ using Pulsar.Domain.Diagnosticos.Models;
 using Pulsar.Domain.Etnias.Models;
 using Pulsar.Domain.Ineps.Models;
 using Pulsar.Domain.Materiais.Models;
+using Pulsar.Domain.PrincipiosAtivos.Models;
 using Pulsar.Domain.Regioes.Models;
 using Pulsar.Infrastructure.Database;
 using Pulsar.Infrastructure.Migrations;

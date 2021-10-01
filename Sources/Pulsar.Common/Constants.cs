@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using System;
 
 namespace Pulsar.Common
 {
@@ -56,6 +57,12 @@ namespace Pulsar.Common
             {
                 public string Codigo { get; set; }
             }
+        }
+
+        public static class ObjectIds
+        {
+            public static readonly ObjectId Todos = ObjectId.Parse("6157160aaa427233695d20cc");
+            public static readonly ObjectId UsuarioLogado = ObjectId.Parse("61571628aa427233695d20ce");
         }
     }
 }

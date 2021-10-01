@@ -1,6 +1,6 @@
 ﻿using Pulsar.Common.Cqrs;
-using Pulsar.Contracts.Requests.Usuarios;
-using Pulsar.Contracts.Results.Usuarios;
+using Pulsar.Contracts.Usuarios.Requests;
+using Pulsar.Contracts.Usuarios.Results;
 using Pulsar.Infrastructure.Database;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Pulsar.RequestHandlers.Usuarios
+namespace Pulsar.RequestHandlers
 {
     public class UsuarioRequestHandler : MongoWorker,
         IAsyncRequestHandler<LoginUsuarioRequest, LoginUsuarioResult>

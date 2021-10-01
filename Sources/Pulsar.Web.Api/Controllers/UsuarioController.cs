@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using MongoDB.Bson;
 using Pulsar.Common.Cqrs;
 using Pulsar.Common.Exceptions;
 using System;
@@ -19,9 +20,51 @@ namespace Pulsar.Web.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Buscar()
+        public Task<ActionResult> Get()
         {
-            return Ok();
+            throw new NotImplementedException();
+        }
+
+        [HttpPut]
+        public Task<ActionResult> Criar()
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPost("{usuarioId}")]
+        public Task<ActionResult> Editar(ObjectId usuarioId)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpDelete("{usuarioId}")]
+        public Task<ActionResult> Remover(ObjectId usuarioId)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpGet("{usuarioId}/lotacoes/estabelecimentos")]
+        public Task<ActionResult> GetLotacoesEstabelecimentos(ObjectId usuarioId)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPost("{usuarioId}/lotacoes/estabelecimentos")]
+        public Task<ActionResult> SalvarLotacoesEstabelecimentos(ObjectId usuarioId)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpGet("{usuarioId}/lotacoes/redeestabelecimentos")]
+        public Task<ActionResult> GetLotacoesRedeEstabelecimentos(ObjectId usuarioId)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPost("{usuarioId}/lotacoes/redeestabelecimentos")]
+        public Task<ActionResult> SalvarLotacoesRedeEstabelecimentos(ObjectId usuarioId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

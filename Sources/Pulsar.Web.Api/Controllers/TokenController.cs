@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 using Pulsar.Common.Cqrs;
-using Pulsar.Contracts.Requests.Usuarios;
-using Pulsar.Contracts.Results.Usuarios;
+using Pulsar.Contracts.Usuarios.Requests;
+using Pulsar.Contracts.Usuarios.Results;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +39,18 @@ namespace Pulsar.Web.Api.Controllers
                     Role = $"_/{ObjectId.GenerateNewId()}"
                 })
             });
+        }
+
+        [HttpPost("ir/redeestabelecimentos")]
+        public Task<ActionResult> IrParaRedeEstabelecimentos()
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPost("ir/estabelecimentos")]
+        public Task<ActionResult> IrParaEstabelecimentos()
+        {
+            throw new NotImplementedException();
         }
     }
 }

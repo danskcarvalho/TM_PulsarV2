@@ -3,13 +3,18 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
+using MongoDB.Bson;
 using Pulsar.Infrastructure;
+using Pulsar.Web.Api.Common;
 using Pulsar.Web.Api.Filters;
 using Pulsar.Web.Api.Models;
 using System;
@@ -37,10 +42,21 @@ namespace Pulsar.Web.Api
             {
                 options.Filters.Add(typeof(RefreshJwtTokenFilter));
                 options.Filters.Add(typeof(HandleAuthorizationFilter));
+                options.ModelBinderProviders.Insert(0, new ObjectIdModelBinderProvider());
+                options.ModelMetadataDetailsProviders.Add(
+                    new BindingSourceMetadataProvider(typeof(ObjectId), BindingSource.Special));
+            }).AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new ObjectIdJsonConverter());
             });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v2", new OpenApiInfo { Title = "Pulsar.Web.Api", Version = "v2" });
+                c.MapType<ObjectId>(() => new OpenApiSchema()
+                {
+                    Type = "string",
+                    Example = new OpenApiString("61572d47aa427233695d20cf")
+                });
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                 {
@@ -76,6 +92,9 @@ namespace Pulsar.Web.Api
                 xmlFile = "Pulsar.Contracts.xml";
                 xmlPath = System.IO.Path.Combine(System.AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
+
+                //use fully qualified object names
+                c.CustomSchemaIds(x => x.FullName);
             });
 
             var jwtSettings = Configuration.GetSection("JWT")?.Get<JWTConfigurationSection>();

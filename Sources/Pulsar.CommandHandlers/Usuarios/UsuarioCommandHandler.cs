@@ -1,5 +1,5 @@
 ﻿using Pulsar.Common.Cqrs;
-using Pulsar.Contracts.Commands.Usuarios;
+using Pulsar.Contracts.Usuarios.Commands;
 using Pulsar.Domain.Procedimentos.Models;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Pulsar.CommandHandlers.Usuarios
+namespace Pulsar.CommandHandlers
 {
     public class UsuarioCommandHandler :
         IAsyncCommandHandler<RedefinirSenhaCommand>

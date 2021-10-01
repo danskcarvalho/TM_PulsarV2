@@ -29,6 +29,7 @@ namespace Pulsar.Domain.Atendimentos.Models
         public ObjectId? AgendamentoId { get; set; }
         public List<ProcedimentoResumido> ProcedimentosReportados { get; set; }
         public List<PastaArquivo> Documentos { get; set; }
+        public List<ObjectId> Acompanhamentos { get; set; }
         public ObjectId? AgendamentoAoFinalizarId { get; set; }
         public ObjectId? AtendimentoInclusoAoFinalizarId { get; set; }
     }
