@@ -133,7 +133,6 @@ namespace Pulsar.Web.Api.Controllers
             throw new NotImplementedException();
         }
 
-
         [HttpDelete("{atendimentoId}/artefatos/{artefatoId}")]
         public Task<ActionResult> RemoverArtefato(ObjectId atendimentoId, ObjectId artefatoId)
         {

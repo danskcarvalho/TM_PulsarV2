@@ -56,7 +56,7 @@ namespace Pulsar.Web.Api.Controllers
         }
 
         [HttpDelete("{estabelecimentoId}")]
-        public Task<ActionResult> Remove(ObjectId estabelecimentoId)
+        public Task<ActionResult> Remover(ObjectId estabelecimentoId)
         {
             throw new NotImplementedException();
         }
@@ -99,6 +99,12 @@ namespace Pulsar.Web.Api.Controllers
 
         [HttpPost("{estabelecimentoId}/locaischamada/{localChamadaId}")]
         public Task<ActionResult> EditarLocalChamada(ObjectId estabelecimentoId, ObjectId localChamadaId)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpGet("{estabelecimentoId}/locaischamada/{localChamadaId}/chamadas")]
+        public Task<ActionResult> GetChamadas(ObjectId estabelecimentoId, ObjectId localChamadaId)
         {
             throw new NotImplementedException();
         }

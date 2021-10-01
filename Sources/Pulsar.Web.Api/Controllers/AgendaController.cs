@@ -25,6 +25,12 @@ namespace Pulsar.Web.Api.Controllers
             throw new NotImplementedException();
         }
 
+        [HttpGet("{agendaId}")]
+        public Task<ActionResult> GetAgendaDia()
+        {
+            throw new NotImplementedException();
+        }
+
         [HttpGet("{agendaId}/datas")]
         public Task<ActionResult> GetDatas(ObjectId agendaId)
         {

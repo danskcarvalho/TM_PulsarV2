@@ -18,35 +18,4 @@
     <ProjectReference Include="..\Pulsar.Common\Pulsar.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Constantes\" />
-    <Folder Include="ChavesCondicaoSaude\" />
-    <Folder Include="Dentes\" />
-    <Folder Include="Diagnosticos\" />
-    <Folder Include="Especialidades\" />
-    <Folder Include="Etnias\" />
-    <Folder Include="Ineps\" />
-    <Folder Include="Materiais\" />
-    <Folder Include="Acompanhamentos\" />
-    <Folder Include="Agendas\" />
-    <Folder Include="Agendamentos\" />
-    <Folder Include="Atendimentos\" />
-    <Folder Include="Estabelecimentos\" />
-    <Folder Include="Exportacoes\" />
-    <Folder Include="Familias\" />
-    <Folder Include="FilasAtendimentos\" />
-    <Folder Include="Importacoes\" />
-    <Folder Include="Servicos\" />
-    <Folder Include="RedesEstabelecimentos\" />
-    <Folder Include="Prontuarios\" />
-    <Folder Include="ProcedimentosOdontologicos\" />
-    <Folder Include="Perfis\" />
-    <Folder Include="Pastas\" />
-    <Folder Include="Pacientes\" />
-    <Folder Include="Notificacoes\" />
-    <Folder Include="Regioes\" />
-    <Folder Include="Procedimentos\" />
-    <Folder Include="PrincipiosAtivos\" />
-  </ItemGroup>
-
 </Project>

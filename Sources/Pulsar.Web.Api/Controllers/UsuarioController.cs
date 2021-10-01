@@ -37,6 +37,18 @@ namespace Pulsar.Web.Api.Controllers
             throw new NotImplementedException();
         }
 
+        [HttpPost("{usuarioId}/senha")]
+        public Task<ActionResult> RedefinirSenha(ObjectId usuarioId)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPost("{usuarioId}/email")]
+        public Task<ActionResult> ReenviarEmail(ObjectId usuarioId)
+        {
+            throw new NotImplementedException();
+        }
+
         [HttpDelete("{usuarioId}")]
         public Task<ActionResult> Remover(ObjectId usuarioId)
         {

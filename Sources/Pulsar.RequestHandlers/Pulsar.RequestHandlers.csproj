@@ -11,8 +11,4 @@
     <ProjectReference Include="..\Pulsar.Infrastructure.Database\Pulsar.Infrastructure.Database.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 </Project>

@@ -55,7 +55,7 @@ namespace Pulsar.Web.Api
                 c.MapType<ObjectId>(() => new OpenApiSchema()
                 {
                     Type = "string",
-                    Example = new OpenApiString("61572d47aa427233695d20cf")
+                    Example = new OpenApiString("000000000000000000000000")
                 });
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()

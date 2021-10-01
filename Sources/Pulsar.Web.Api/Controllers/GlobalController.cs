@@ -20,8 +20,14 @@ namespace Pulsar.Web.Api.Controllers
         {
         }
 
+        [HttpGet("constantes/tipos")]
+        public Task<ActionResult> GetConstantesTipos()
+        {
+            throw new NotImplementedException();
+        }
+
         [HttpGet("constantes")]
-        public Task<ActionResult> Get()
+        public Task<ActionResult> GetConstantes()
         {
             throw new NotImplementedException();
         }
