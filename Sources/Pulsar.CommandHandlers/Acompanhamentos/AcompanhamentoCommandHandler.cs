@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Pulsar.CommandHandlers
+namespace Pulsar.CommandHandlers.Acompanhamentos
 {
     public class AcompanhamentoCommandHandler :
         IAsyncCommandHandler<CancelarAcompanhamentoCommand>

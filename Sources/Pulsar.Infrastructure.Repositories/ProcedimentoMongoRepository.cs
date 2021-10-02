@@ -1,7 +1,7 @@
 ﻿using Pulsar.Common;
 using Pulsar.Common.Database;
-using Pulsar.Domain.Procedimentos.Models;
-using Pulsar.Domain.Procedimentos.Repositories;
+using Pulsar.Domain.Global.Models;
+using Pulsar.Domain.Global.Repositories;
 using Pulsar.Infrastructure.Database;
 using System;
 using System.Collections.Generic;

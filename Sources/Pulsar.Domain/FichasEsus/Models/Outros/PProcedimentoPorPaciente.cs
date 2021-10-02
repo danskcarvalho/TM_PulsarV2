@@ -2,7 +2,7 @@
 using Pulsar.Common.Enumerations;
 using Pulsar.Domain.Pacientes;
 using Pulsar.Domain.Pacientes.Models;
-using Pulsar.Domain.Procedimentos.Models;
+using Pulsar.Domain.Global.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;

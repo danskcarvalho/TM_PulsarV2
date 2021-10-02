@@ -41,6 +41,7 @@ namespace Pulsar.Common
             public const string RedesEstabelecimentos = "RedesEstabelecimentos";
             public const string Servicos = "Servicos";
             public const string Usuarios = "Usuarios";
+            public const string Equipes = "Equipes";
         }
 
         public static class EmailTemplates

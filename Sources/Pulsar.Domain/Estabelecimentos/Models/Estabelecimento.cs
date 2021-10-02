@@ -19,7 +19,6 @@ namespace Pulsar.Domain.Estabelecimentos.Models
         public Configuracoes ConfiguracoesRede { get; set; }
         public Servicos Servicos { get; set; }
         public Servicos ServicosRede { get; set; }
-        public List<Equipe> Equipes { get; set; }
         public List<LocalChamada> LocaisChamadas { get; set; }
         public List<Chamada> UltimasChamadas { get; set; }
         public DataRegistro DataRegistro { get; set; }

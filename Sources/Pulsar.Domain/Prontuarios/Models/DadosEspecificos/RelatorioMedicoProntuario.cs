@@ -1,4 +1,4 @@
-﻿using Pulsar.Domain.Diagnosticos.Models;
+﻿using Pulsar.Domain.Global.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Pulsar.Domain.Prontuarios.Models
 {
-    public class RelatorioMedicoProntuario : ProntuarioDados
+    public class RelatorioMedicoProntuario : FragmentoProntuarioDados
     {
         public virtual string Titulo { get; set; }
         public virtual string Texto { get; set; }

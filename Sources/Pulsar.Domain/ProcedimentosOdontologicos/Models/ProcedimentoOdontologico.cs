@@ -2,9 +2,8 @@
 using Pulsar.Common.Enumerations;
 using Pulsar.Domain.Atendimentos.Models;
 using Pulsar.Domain.Comum;
-using Pulsar.Domain.Dentes.Models;
+using Pulsar.Domain.Global.Models;
 using Pulsar.Domain.Pacientes.Models;
-using Pulsar.Domain.Procedimentos.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

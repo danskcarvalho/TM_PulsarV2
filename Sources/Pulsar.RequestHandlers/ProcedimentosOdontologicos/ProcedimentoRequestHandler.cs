@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pulsar.RequestHandlers
+namespace Pulsar.RequestHandlers.ProcedimentosOdontologicos
 {
-    public class ProcedimentoRequestHandler
+    public class ProcedimentoOdontologicoRequestHandler
     {
     }
 }

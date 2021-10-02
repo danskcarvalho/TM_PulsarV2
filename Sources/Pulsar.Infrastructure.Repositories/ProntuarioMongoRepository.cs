@@ -10,7 +10,7 @@ using Pulsar.Infrastructure.Database;
 
 namespace Pulsar.Infrastructure.Repositories
 {
-    public class ProntuarioMongoRepository : MongoRepository<Prontuario>, IProntuarioRepository
+    public class ProntuarioMongoRepository : MongoRepository<FragmentoProntuario>, IProntuarioRepository
     {
         public ProntuarioMongoRepository(MongoContext ctx) : base(ctx)
         {

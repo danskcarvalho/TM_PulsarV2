@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Pulsar.Domain.Prontuarios.Models
 {
-    public class PrescricaoMedicamentosProntuario : ProntuarioDados
+    public class PrescricaoMedicamentosProntuario : FragmentoProntuarioDados
     {
         public TipoMedicamento? TipoReceita { get; set; }
         public List<MedicamentoItem> Items { get; set; }

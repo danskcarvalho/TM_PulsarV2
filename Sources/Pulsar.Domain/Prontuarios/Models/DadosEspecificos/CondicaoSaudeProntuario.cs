@@ -1,5 +1,5 @@
 ﻿using Pulsar.Common.Enumerations;
-using Pulsar.Domain.ChavesCondicaoSaude.Models;
+using Pulsar.Domain.Global.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Pulsar.Domain.Prontuarios.Models
 {
-    public class CondicaoSaudeProntuario : ProntuarioDados
+    public class CondicaoSaudeProntuario : FragmentoProntuarioDados
     {
         public virtual ChaveCondicaoSaudeResumida ChaveCondicaoSaude { get; set; }
         public virtual DateTime? DataInicial { get; set; }

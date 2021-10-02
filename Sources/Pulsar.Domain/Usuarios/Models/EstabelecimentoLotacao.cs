@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson;
 using Pulsar.Domain.Comum;
-using Pulsar.Domain.Especialidades.Models;
+using Pulsar.Domain.Global.Models;
 using Pulsar.Domain.Estabelecimentos.Models;
 using Pulsar.Domain.Perfis.Models;
 using Pulsar.Domain.RedesEstabelecimentos.Models;
@@ -20,7 +20,7 @@ namespace Pulsar.Domain.Usuarios.Models
         /// </summary>
         public ObjectId? RedeEstabelecimentosId { get; set; }
         public ObjectId PerfilId { get; set; }
-        public EspecialidadeResumida Especialidade { get; set; }
+        public UsuarioEspecialidade EspecialidadeConselho { get; set; }
         public bool Raiz { get; set; }
         public bool Gestor { get; set; }
         public ConselhoProfissional ConselhoProfissional { get; set; }

@@ -1,9 +1,8 @@
 ﻿using MongoDB.Bson;
 using Pulsar.Common.Enumerations;
-using Pulsar.Domain.Especialidades.Models;
+using Pulsar.Domain.Global.Models;
 using Pulsar.Domain.Estabelecimentos.Models;
 using Pulsar.Domain.Pacientes.Models;
-using Pulsar.Domain.Regioes.Models;
 using Pulsar.Domain.Usuarios.Models;
 using System;
 using System.Collections.Generic;

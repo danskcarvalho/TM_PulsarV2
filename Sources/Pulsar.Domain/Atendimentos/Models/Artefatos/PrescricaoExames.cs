@@ -1,6 +1,5 @@
 ﻿using MongoDB.Bson;
-using Pulsar.Domain.Diagnosticos.Models;
-using Pulsar.Domain.Procedimentos.Models;
+using Pulsar.Domain.Global.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

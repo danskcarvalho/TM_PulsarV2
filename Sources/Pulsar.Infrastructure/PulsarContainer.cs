@@ -5,7 +5,7 @@ using Pulsar.Common.Cqrs;
 using Pulsar.Common.Database;
 using Pulsar.Common.Services;
 using Pulsar.Domain.Infrastructure.Repositories;
-using Pulsar.Domain.Procedimentos.Models;
+using Pulsar.Domain.Global.Models;
 using Pulsar.Infrastructure.Cqrs;
 using Pulsar.Infrastructure.Database;
 using Pulsar.Infrastructure.Jobs;

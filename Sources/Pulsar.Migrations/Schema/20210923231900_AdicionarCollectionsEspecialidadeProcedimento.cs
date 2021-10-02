@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 using Pulsar.Common;
 using Pulsar.Infrastructure;
 using Pulsar.Infrastructure.Database;
-using Pulsar.Domain.Procedimentos.Models;
+using Pulsar.Domain.Global.Models;
 using MongoDB.Driver;
-using Pulsar.Domain.Especialidades.Models;
 
 namespace Pulsar.Migrations.Schema
 {

@@ -1,4 +1,4 @@
-﻿using Pulsar.Domain.Especialidades.Models;
+﻿using Pulsar.Domain.Global.Models;
 using Pulsar.Infrastructure.Migrations;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Pulsar.Common;
-using Pulsar.Domain.Procedimentos.Models;
 using MongoDB.Driver;
 
 namespace Pulsar.Migrations.Data

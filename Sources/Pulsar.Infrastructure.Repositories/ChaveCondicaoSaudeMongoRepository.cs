@@ -1,6 +1,6 @@
 ﻿using Pulsar.Common;
-using Pulsar.Domain.ChavesCondicaoSaude.Models;
-using Pulsar.Domain.ChavesCondicaoSaude.Repositories;
+using Pulsar.Domain.Global.Models;
+using Pulsar.Domain.Global.Repositories;
 using Pulsar.Infrastructure.Database;
 using System;
 using System.Collections.Generic;

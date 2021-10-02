@@ -1,5 +1,5 @@
 ﻿using Pulsar.Common.Enumerations;
-using Pulsar.Domain.Diagnosticos.Models;
+using Pulsar.Domain.Global.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Pulsar.Domain.Prontuarios.Models
 {
-    public class AntecedentesPessoaisProntuario : ProntuarioDados
+    public class AntecedentesPessoaisProntuario : FragmentoProntuarioDados
     {
         public AntecedentesGerais Gerais { get; set; }
         public AntecedentesClinicos Clinicos { get; set; }

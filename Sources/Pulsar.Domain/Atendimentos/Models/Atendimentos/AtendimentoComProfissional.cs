@@ -1,10 +1,9 @@
 ﻿using MongoDB.Bson;
 using Pulsar.Common.Enumerations;
 using Pulsar.Domain.Agendamentos.Models;
-using Pulsar.Domain.Especialidades.Models;
+using Pulsar.Domain.Global.Models;
 using Pulsar.Domain.Estabelecimentos.Models;
 using Pulsar.Domain.Pastas.Models;
-using Pulsar.Domain.Procedimentos.Models;
 using Pulsar.Domain.Servicos.Models;
 using Pulsar.Domain.Usuarios.Models;
 using System;
@@ -25,7 +24,7 @@ namespace Pulsar.Domain.Atendimentos.Models
         public HistoricoStatus HistoricoStatus { get; set; }
         public RealizacaoAtendimento Realizacao { get; set; }
         public EspecialidadeResumida Especialidade { get; set; }
-        public EquipeResumida Equipe { get; set; }
+        public ObjectId? EquipeId { get; set; }
         public ObjectId? AgendamentoId { get; set; }
         public List<ProcedimentoResumido> ProcedimentosReportados { get; set; }
         public List<PastaArquivo> Documentos { get; set; }

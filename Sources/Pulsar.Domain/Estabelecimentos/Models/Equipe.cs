@@ -9,7 +9,8 @@ namespace Pulsar.Domain.Estabelecimentos.Models
 {
     public class Equipe
     {
-        public ObjectId EquipeId { get; set; }
+        public ObjectId Id { get; set; }
+        public ObjectId EstabelecimentoId { get; set; }
         public string Nome { get; set; }
         public string CodigoIne { get; set; }
         public string CodigoArea { get; set; }

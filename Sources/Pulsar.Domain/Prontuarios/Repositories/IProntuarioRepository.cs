@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Pulsar.Domain.Prontuarios.Repositories
 {
-    public interface IProntuarioRepository : IAsyncRepository<Prontuario>
+    public interface IProntuarioRepository : IAsyncRepository<FragmentoProntuario>
     {
     }
 }

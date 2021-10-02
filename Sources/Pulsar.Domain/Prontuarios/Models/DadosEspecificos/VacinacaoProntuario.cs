@@ -1,5 +1,5 @@
 ﻿using Pulsar.Common.Enumerations;
-using Pulsar.Domain.Materiais.Models;
+using Pulsar.Domain.Global.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Pulsar.Domain.Prontuarios.Models
 {
-    public class VacinacaoProntuario : ProntuarioDados
+    public class VacinacaoProntuario : FragmentoProntuarioDados
     {
         public MaterialResumido Vacina { get; set; }
         public EstrategiaVacinacao EstrategiaVacinacao { get; set; }

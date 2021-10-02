@@ -1,6 +1,5 @@
 ﻿using Pulsar.Common.Enumerations;
-using Pulsar.Domain.Materiais.Models;
-using Pulsar.Domain.PrincipiosAtivos.Models;
+using Pulsar.Domain.Global.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Pulsar.Domain.Prontuarios.Models
 {
-    public class AlergiaProntuario : ProntuarioDados
+    public class AlergiaProntuario : FragmentoProntuarioDados
     {
         public virtual CategoriaAlergia Categoria { get; set; }
         public virtual PrincipioAtivoResumido PrincipioAtivo { get; set; }

@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson;
 using Pulsar.Domain.Comum;
-using Pulsar.Domain.Especialidades.Models;
+using Pulsar.Domain.Global.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +19,7 @@ namespace Pulsar.Domain.Usuarios.Models
         public DataRegistro DataRegistro { get; set; }
         public List<RedeEstabelecimentoLotacao> LotacoesRedesEstabelecimentos { get; set; }
         public List<EstabelecimentoLotacao> LotacoesEstabelecimentos { get; set; }
-        public List<EspecialidadeResumida> Especialidades { get; set; }
+        public List<UsuarioEspecialidade> Especialidades { get; set; }
         public long DataVersion { get; set; }
     }
 }

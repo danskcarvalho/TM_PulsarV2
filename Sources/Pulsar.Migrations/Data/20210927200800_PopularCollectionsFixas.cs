@@ -1,12 +1,5 @@
 ﻿using Pulsar.Common;
-using Pulsar.Domain.ChavesCondicaoSaude.Models;
-using Pulsar.Domain.Dentes.Models;
-using Pulsar.Domain.Diagnosticos.Models;
-using Pulsar.Domain.Etnias.Models;
-using Pulsar.Domain.Ineps.Models;
-using Pulsar.Domain.Materiais.Models;
-using Pulsar.Domain.PerguntasPuericultura.Models;
-using Pulsar.Domain.Regioes.Models;
+using Pulsar.Domain.Global.Models;
 using Pulsar.Infrastructure.Migrations;
 using System;
 using System.Collections.Generic;
@@ -15,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Driver;
-using Pulsar.Domain.PrincipiosAtivos.Models;
 
 namespace Pulsar.Migrations.Data
 {

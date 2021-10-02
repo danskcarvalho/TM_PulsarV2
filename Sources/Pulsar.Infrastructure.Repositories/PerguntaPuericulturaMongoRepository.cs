@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Pulsar.Common;
-using Pulsar.Domain.PerguntasPuericultura.Models;
-using Pulsar.Domain.PerguntasPuericultura.Repositories;
+using Pulsar.Domain.Global.Models;
+using Pulsar.Domain.Global.Repositories;
 using Pulsar.Infrastructure.Database;
 
 namespace Pulsar.Infrastructure.Repositories

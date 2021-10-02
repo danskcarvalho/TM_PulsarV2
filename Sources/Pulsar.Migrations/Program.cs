@@ -1,4 +1,4 @@
-﻿using Pulsar.Domain.Especialidades.Models;
+﻿using Pulsar.Domain.Global.Models;
 using Pulsar.Infrastructure.Database;
 using Pulsar.Infrastructure.Migrations;
 using System;
