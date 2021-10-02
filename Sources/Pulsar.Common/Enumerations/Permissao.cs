@@ -12,6 +12,8 @@ namespace Pulsar.Common.Enumerations
         [Display(Name = "Gerenciar Usuários")]
         GerenciarUsuarios = 1,
         [Display(Name = "Gerenciar Perfis")]
-        GerenciarPerfis = 2
+        GerenciarPerfis = 2,
+        [Display(Name = "Criar Atendimento")]
+        CriarAtendimento = 3
     }
 }

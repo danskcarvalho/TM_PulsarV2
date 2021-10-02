@@ -1,5 +1,6 @@
 ﻿using Pulsar.CommandHandlers.Common;
 using Pulsar.Common.Cqrs;
+using Pulsar.Common.Database;
 using Pulsar.Contracts.Usuarios.Commands;
 using Pulsar.Domain.Common;
 using Pulsar.Domain.Global.Models;
@@ -15,7 +16,7 @@ namespace Pulsar.CommandHandlers.Usuarios
     public class UsuarioCommandHandler : CommandHandler,
         IAsyncCommandHandler<RedefinirSenhaCommand>
     {
-        public UsuarioCommandHandler(ContainerFactory containerFactory) : base(containerFactory)
+        public UsuarioCommandHandler(IDbContextFactory contextfactory, ContainerFactory containerFactory) : base(contextfactory, containerFactory)
         {
         }
 

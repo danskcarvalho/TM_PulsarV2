@@ -29,38 +29,38 @@ namespace Pulsar.Domain.Common
 {
     public class ContainerFactory
     {
-        public IAsyncRepositoryFactory<Acompanhamento> Acompanhamentos { get; }
-        public IAsyncRepositoryFactory<Agendamento> Agendamentos { get; }
-        public IAsyncRepositoryFactory<Agenda> Agendas { get; }
-        public IAsyncRepositoryFactory<Escala> Escalas { get; }
-        public IAsyncRepositoryFactory<Atendimento> Atendimentos { get; }
-        public IAsyncRepositoryFactory<Equipe> Equipes { get; }
-        public IAsyncRepositoryFactory<Estabelecimento> Estabelecimentos { get; }
-        public IAsyncRepositoryFactory<Exportacao> Exportacoes { get; }
-        public IAsyncRepositoryFactory<Familia> Familias { get; }
-        public IAsyncRepositoryFactory<FichaEsus> FichasEsus { get; }
-        public IAsyncRepositoryFactory<FilaAtendimentos> FilasAtendimentos { get; }
-        public IAsyncRepositoryFactory<ChaveCondicaoSaude> ChavesCondicaoSaude { get; }
-        public IAsyncRepositoryFactory<Dente> Dentes { get; }
-        public IAsyncRepositoryFactory<Diagnostico> Diagnosticos { get; }
-        public IAsyncRepositoryFactory<Especialidade> Especialidades { get; }
-        public IAsyncRepositoryFactory<Etnia> Etnias { get; }
-        public IAsyncRepositoryFactory<Inep> Ineps { get; }
-        public IAsyncRepositoryFactory<Material> Materiais { get; }
-        public IAsyncRepositoryFactory<PerguntaPuericultura> PerguntasPuericultura { get; }
-        public IAsyncRepositoryFactory<PrincipioAtivo> PrincipiosAtivos { get; }
-        public IAsyncRepositoryFactory<Procedimento> Procedimentos { get; }
-        public IAsyncRepositoryFactory<Regiao> Regioes { get; }
-        public IAsyncRepositoryFactory<Importacao> Importacoes { get; }
-        public IAsyncRepositoryFactory<Notificacao> Notificacoes { get; }
-        public IAsyncRepositoryFactory<Paciente> Pacientes { get; }
-        public IAsyncRepositoryFactory<Pasta> Pastas { get; }
-        public IAsyncRepositoryFactory<Perfil> Perfis { get; }
-        public IAsyncRepositoryFactory<ProcedimentoOdontologico> ProcedimentosOdontologicos { get; }
-        public IAsyncRepositoryFactory<FragmentoProntuario> Prontuarios { get; }
-        public IAsyncRepositoryFactory<RedeEstabelecimentos> RedesEstabelecimentos { get; }
-        public IAsyncRepositoryFactory<Servico> Servicos { get; }
-        public IAsyncRepositoryFactory<Usuario> Usuarios { get; }
+        private IAsyncRepositoryFactory<Acompanhamento> Acompanhamentos { get; }
+        private IAsyncRepositoryFactory<Agendamento> Agendamentos { get; }
+        private IAsyncRepositoryFactory<Agenda> Agendas { get; }
+        private IAsyncRepositoryFactory<Escala> Escalas { get; }
+        private IAsyncRepositoryFactory<Atendimento> Atendimentos { get; }
+        private IAsyncRepositoryFactory<Equipe> Equipes { get; }
+        private IAsyncRepositoryFactory<Estabelecimento> Estabelecimentos { get; }
+        private IAsyncRepositoryFactory<Exportacao> Exportacoes { get; }
+        private IAsyncRepositoryFactory<Familia> Familias { get; }
+        private IAsyncRepositoryFactory<FichaEsus> FichasEsus { get; }
+        private IAsyncRepositoryFactory<FilaAtendimentos> FilasAtendimentos { get; }
+        private IAsyncRepositoryFactory<ChaveCondicaoSaude> ChavesCondicaoSaude { get; }
+        private IAsyncRepositoryFactory<Dente> Dentes { get; }
+        private IAsyncRepositoryFactory<Diagnostico> Diagnosticos { get; }
+        private IAsyncRepositoryFactory<Especialidade> Especialidades { get; }
+        private IAsyncRepositoryFactory<Etnia> Etnias { get; }
+        private IAsyncRepositoryFactory<Inep> Ineps { get; }
+        private IAsyncRepositoryFactory<Material> Materiais { get; }
+        private IAsyncRepositoryFactory<PerguntaPuericultura> PerguntasPuericultura { get; }
+        private IAsyncRepositoryFactory<PrincipioAtivo> PrincipiosAtivos { get; }
+        private IAsyncRepositoryFactory<Procedimento> Procedimentos { get; }
+        private IAsyncRepositoryFactory<Regiao> Regioes { get; }
+        private IAsyncRepositoryFactory<Importacao> Importacoes { get; }
+        private IAsyncRepositoryFactory<Notificacao> Notificacoes { get; }
+        private IAsyncRepositoryFactory<Paciente> Pacientes { get; }
+        private IAsyncRepositoryFactory<Pasta> Pastas { get; }
+        private IAsyncRepositoryFactory<Perfil> Perfis { get; }
+        private IAsyncRepositoryFactory<ProcedimentoOdontologico> ProcedimentosOdontologicos { get; }
+        private IAsyncRepositoryFactory<FragmentoProntuario> Prontuarios { get; }
+        private IAsyncRepositoryFactory<RedeEstabelecimentos> RedesEstabelecimentos { get; }
+        private IAsyncRepositoryFactory<Servico> Servicos { get; }
+        private IAsyncRepositoryFactory<Usuario> Usuarios { get; }
 
         public ContainerFactory(IAsyncRepositoryFactory<Acompanhamento> acompanhamentos,
                                 IAsyncRepositoryFactory<Agendamento> agendamentos,

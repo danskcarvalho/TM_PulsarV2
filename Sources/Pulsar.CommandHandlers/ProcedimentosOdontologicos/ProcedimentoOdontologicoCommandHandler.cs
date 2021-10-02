@@ -1,4 +1,5 @@
 ﻿using Pulsar.CommandHandlers.Common;
+using Pulsar.Common.Database;
 using Pulsar.Domain.Common;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace Pulsar.CommandHandlers.ProcedimentosOdontologicos
 {
     public class ProcedimentoOdontologicoCommandHandler : CommandHandler
     {
-        public ProcedimentoOdontologicoCommandHandler(ContainerFactory containerFactory) : base(containerFactory)
+        public ProcedimentoOdontologicoCommandHandler(IDbContextFactory contextfactory, ContainerFactory containerFactory) : base(contextfactory, containerFactory)
         {
         }
     }

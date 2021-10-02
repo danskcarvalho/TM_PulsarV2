@@ -41,6 +41,14 @@ namespace Pulsar.Contracts.Atendimentos.Commands
             public TipoAtendimento? Tipo { get; set; }
             public ObjectId? ServicoId { get; set; }
             public ObjectId? ProfissionalId { get; set; }
+            /// <summary>
+            /// Uso interno.
+            /// </summary>
+            public ObjectId? AtendimentoId { get; set; }
+            /// <summary>
+            /// Justificativa para alteração do prontuário.
+            /// </summary>
+            public string Justificativa { get; set; }
         }
     }
 
@@ -48,8 +56,28 @@ namespace Pulsar.Contracts.Atendimentos.Commands
     {
         public CriarAtendimentoCommandValidator()
         {
-            RuleFor(x => x.UsuarioId).NotNull();
-            RuleFor(x => x.EstabelecimentoId).NotNull();
+            RuleFor(x => x).Must(x => x.PacienteId != null || x.PacienteAnonimo != null).WithMessage("É necessário informar o paciente.");
+            RuleFor(x => x.PacienteAnonimo).ChildRules(pa =>
+            {
+                pa.RuleFor(x => x.Nome).NotEmpty();
+                pa.RuleFor(x => x.Sexo).NotNull();
+                pa.RuleFor(x => x.DataNascimento).NotNull().Must(dt => dt < DateTime.Today).WithMessage("Data de nascimento não pode estar no futuro.");
+            }).When(x => x.PacienteAnonimo != null);
+            RuleFor(x => x.Categoria).NotNull();
+            RuleFor(x => x.Atendimentos)
+                .NotEmpty()
+                .Must(x => x.All(y => y != null)).WithMessage("Elemento nulo em Atendimentos.").When(x => x.Atendimentos != null);
+            RuleFor(x => x).Must(x => x.Atendimentos.Count == 1)
+                .WithMessage("Alteração de prontuário não pode ser criada com outro atendimentos.")
+                .When(x => x.Atendimentos != null && x.Atendimentos.Any(y => y.Tipo == TipoAtendimento.AlteracaoProntuario));
+            RuleFor(x => x).Must(x => x.Atendimentos.Count == 1)
+                .WithMessage("Atendimento individual só pode ser criado com um único atendimento.")
+                .When(x => x.Atendimentos != null && x.Categoria == CategoriaAtendimento.Individual);
+            RuleForEach(x => x.Atendimentos).ChildRules(a =>
+            {
+                a.RuleFor(x => x.Tipo).NotNull();
+                a.RuleFor(x => x.Justificativa).NotEmpty().When(x => x.Tipo == TipoAtendimento.AlteracaoProntuario);
+            });
         }
     }
 }

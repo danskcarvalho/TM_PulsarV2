@@ -1,4 +1,6 @@
 ﻿using MongoDB.Bson;
+using Pulsar.Common.Enumerations;
+using Pulsar.Common.Exceptions;
 using Pulsar.Domain.Common;
 using Pulsar.Domain.Global.Models;
 using System;
@@ -21,5 +23,27 @@ namespace Pulsar.Domain.Usuarios.Models
         public List<EstabelecimentoLotacao> LotacoesEstabelecimentos { get; set; }
         public List<UsuarioEspecialidade> Especialidades { get; set; }
         public long DataVersion { get; set; }
+
+        public async Task ChecarPermissaoEstabelecimento(ObjectId? estabelecimentoId, Permissao permissao, 
+            Container container)
+        {
+            if (estabelecimentoId == null)
+                throw new PulsarException(PulsarErrorCode.Forbidden);
+
+            if(LotacoesEstabelecimentos == null)
+                throw new PulsarException(PulsarErrorCode.Forbidden);
+
+            foreach (var le in LotacoesEstabelecimentos)
+            {
+                if (le.EstabelecimentoId != estabelecimentoId)
+                    continue;
+
+                var perfil = await container.Perfis.FindOneById(le.PerfilId);
+                if (perfil.Permissoes.Contains(permissao))
+                    return;
+            }
+
+            throw new PulsarException(PulsarErrorCode.Forbidden);
+        }
     }
 }

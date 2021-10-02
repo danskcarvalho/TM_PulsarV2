@@ -14,6 +14,10 @@ namespace Pulsar.Common.Enumerations
         [Display(Name = "Sem permissões para realizar a operação solicitada.")]
         Forbidden = 2,
         [Display(Name = "Erro interno do servidor.")]
-        Unknown = 999999999
+        Unknown = 3,
+        [Display(Name = "Requisição HTTP com dados inválidos.")]
+        BadRequest = 4,
+        [Display(Name = "Entidade com id informado não foi encontrada.")]
+        NotFound = 6
     }
 }

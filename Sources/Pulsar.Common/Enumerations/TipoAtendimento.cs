@@ -16,7 +16,7 @@ namespace Pulsar.Common.Enumerations
         [Display(Name = "Auxiliar de Enfermagem")]
         AuxiliarEnfermagem = 3,
         [Display(Name = "Realização de Procedimentos")]
-        RealizacaoProcedimentos = 3,
+        RealizacaoProcedimentos = 4,
         [Display(Name = "Vacinação")]
         Vacinacao = 5,
         [Display(Name = "Odontológico")]

@@ -1,6 +1,7 @@
 ﻿using Pulsar.Common.Cqrs;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -13,6 +14,7 @@ namespace Pulsar.Infrastructure.Cqrs
     {
         private Dictionary<(Type, Type), object> _RequestHandlers = new Dictionary<(Type, Type), object>();
         private Dictionary<Type, object> _CommandHandlers = new Dictionary<Type, object>();
+        [DebuggerStepThrough]
         Task<TResponse> IRequestBus.Request<T, TResponse>(T request, CancellationToken? ct)
         {
             if (!_RequestHandlers.ContainsKey((typeof(T), typeof(TResponse))))
@@ -21,6 +23,7 @@ namespace Pulsar.Infrastructure.Cqrs
             var handler = _RequestHandlers[(typeof(T), typeof(TResponse))] as IAsyncRequestHandler<T, TResponse>;
             return handler.Handle(request, ct ?? CancellationToken.None);
         }
+        [DebuggerStepThrough]
         Task ICommandBus.Send<T>(T cmd, CancellationToken? ct)
         {
             if (!_CommandHandlers.ContainsKey(typeof(T)))
@@ -29,7 +32,7 @@ namespace Pulsar.Infrastructure.Cqrs
             var handler = _CommandHandlers[typeof(T)] as IAsyncCommandHandler<T>;
             return handler.Handle(cmd, ct ?? CancellationToken.None);
         }
-
+        [DebuggerStepThrough]
         Task ISlowCommandBus.Send(ICommand cmd, CancellationToken? ct)
         {
             cmd = cmd ?? throw new ArgumentNullException(nameof(cmd));

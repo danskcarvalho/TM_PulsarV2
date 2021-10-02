@@ -257,5 +257,84 @@ namespace Pulsar.Infrastructure.Database
 
             return collection.AsQueryable<T>();
         }
+
+        public async Task<TProjection> FindOneById<TProjection>(ObjectId id, Expression<Func<T, TProjection>> projection, ReadAck? rc = null, ReadPref? rp = null, CancellationToken? ct = null)
+        {
+            var collection = Collection;
+            if (rc != null)
+                collection = collection.WithReadConcern(rc?.ToReadConcern());
+            if (rp != null)
+                collection = collection.WithReadPreference(rp?.ToReadPreference());
+
+            var filter = Builders<T>.Filter.Eq("_id", id);
+            var projectionDef = Builders<T>.Projection.Expression(projection);
+            return await (await collection.FindAsync<TProjection>(Context.Session, filter, new FindOptions<T,TProjection> { Limit = 1, Projection = projectionDef },
+                cancellationToken: ct ?? CancellationToken.None)).FirstOrDefaultAsync();
+        }
+
+        public async Task<List<TProjection>> FindManyById<TProjection>(IEnumerable<ObjectId> ids, Expression<Func<T, TProjection>> projection, ReadAck? rc = null, ReadPref? rp = null, CancellationToken? ct = null)
+        {
+            var idList = ids.ToList();
+            var collection = Collection;
+            if (rc != null)
+                collection = collection.WithReadConcern(rc?.ToReadConcern());
+            if (rp != null)
+                collection = collection.WithReadPreference(rp?.ToReadPreference());
+
+            var filter = Builders<T>.Filter.In("_id", idList);
+            var projectionDef = Builders<T>.Projection.Expression(projection);
+            return await (await collection.FindAsync(Context.Session, filter, new FindOptions<T, TProjection> { Projection = projectionDef },
+                cancellationToken: ct ?? CancellationToken.None)).ToListAsync();
+        }
+
+        public async Task<bool> CheckOneById(ObjectId id, ReadAck? rc = null, ReadPref? rp = null, CancellationToken? ct = null)
+        {
+            var collection = Collection;
+            if (rc != null)
+                collection = collection.WithReadConcern(rc?.ToReadConcern());
+            if (rp != null)
+                collection = collection.WithReadPreference(rp?.ToReadPreference());
+
+            var filter = Builders<T>.Filter.Eq("_id", id);
+            var projectionDef = Builders<T>.Projection.Include("_id");
+            var r =  await (await collection.FindAsync(Context.Session, filter, new FindOptions<T> { Limit = 1, Projection = projectionDef },
+                cancellationToken: ct ?? CancellationToken.None)).FirstOrDefaultAsync();
+            return r != default(T);
+        }
+
+        public async Task<List<bool>> CheckManyById(IEnumerable<ObjectId> ids, ReadAck? rc = null, ReadPref? rp = null, CancellationToken? ct = null)
+        {
+            var idList = ids.ToList();
+            var collection = Collection;
+            if (rc != null)
+                collection = collection.WithReadConcern(rc?.ToReadConcern());
+            if (rp != null)
+                collection = collection.WithReadPreference(rp?.ToReadPreference());
+
+            var filter = Builders<T>.Filter.In("_id", idList);
+            var projectionDef = Builders<T>.Projection.Include("_id");
+            var r = await(await collection.FindAsync(Context.Session, filter, new FindOptions<T> { Projection = projectionDef },
+                cancellationToken: ct ?? CancellationToken.None)).ToListAsync();
+            HashSet<ObjectId> found = new HashSet<ObjectId>();
+            found.UnionWith(r.Select(x => (ObjectId)x.GetType().GetProperty("Id").GetValue(x)));
+            return idList.Select(x => found.Contains(x)).ToList();
+        }
+
+        public async Task<TProjection> FindOne<TProjection>(Expression<Func<T, bool>> predicate, Expression<Func<T, TProjection>> projection, ReadAck? rc = null, ReadPref? rp = null, CancellationToken? ct = null)
+        {
+            var collection = Collection;
+            if (rc != null)
+                collection = collection.WithReadConcern(rc?.ToReadConcern());
+            if (rp != null)
+                collection = collection.WithReadPreference(rp?.ToReadPreference());
+
+            var findOptions = new FindOptions<T, TProjection>();
+            findOptions.Limit = 1;
+            var projectionDef = Builders<T>.Projection.Expression(projection);
+            findOptions.Projection = projectionDef;
+
+            return await (await collection.FindAsync<TProjection>(Context.Session, predicate, options: findOptions,
+                cancellationToken: ct ?? CancellationToken.None)).FirstOrDefaultAsync();
+        }
     }
 }

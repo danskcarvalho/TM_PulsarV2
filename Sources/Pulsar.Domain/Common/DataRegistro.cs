@@ -16,5 +16,16 @@ namespace Pulsar.Domain.Common
         public ObjectId? AtualizadoPorUsuarioId { get; set; }
         public DateTime? DeletadoEm { get; set; }
         public ObjectId? DeletadoPorUsuarioId { get; set; }
+
+        public static DataRegistro CriadoHoje(ObjectId usuarioId)
+        {
+            return new DataRegistro()
+            {
+                CriadoEm = DateTime.Now,
+                CriadoPorUsuarioId = usuarioId,
+                AtualizadoEm = DateTime.Now,
+                AtualizadoPorUsuarioId = usuarioId
+            };
+        }
     }
 }
