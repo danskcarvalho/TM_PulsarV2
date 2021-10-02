@@ -10,7 +10,7 @@ namespace Pulsar.Domain.Atendimentos.Models
     {
         public AtestadoComparecimento()
         {
-            Tipo = Common.Enumerations.ArtefatoAtendimentoTipo.AtestadoComparecimento;
+            Tipo = Pulsar.Common.Enumerations.ArtefatoAtendimentoTipo.AtestadoComparecimento;
         }
 
         public virtual string NomeCidadao { get; set; }

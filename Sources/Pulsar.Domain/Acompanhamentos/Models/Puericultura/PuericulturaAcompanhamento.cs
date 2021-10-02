@@ -10,7 +10,7 @@ namespace Pulsar.Domain.Acompanhamentos.Models
     {
         public PuericulturaAcompanhamento()
         {
-            Tipo = Common.Enumerations.AcompanhamentoTipo.Puericultura;
+            Tipo = Pulsar.Common.Enumerations.AcompanhamentoTipo.Puericultura;
         }
 
         public List<PuericulturaAtendimento> DadosAtendimentos { get; set; }

@@ -10,6 +10,6 @@ namespace Pulsar.Common.Cqrs
     public interface IAsyncCommandHandler<TCommand>
         where TCommand : class, ICommand
     {
-        Task Handle(ICommand cmd, CancellationToken ct);
+        Task Handle(TCommand cmd, CancellationToken ct);
     }
 }

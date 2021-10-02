@@ -12,7 +12,7 @@ namespace Pulsar.Domain.Atendimentos.Models
     {
         public PrescricaoProcedimentos()
         {
-            Tipo = Common.Enumerations.ArtefatoAtendimentoTipo.PrescricaoProcedimentos;
+            Tipo = Pulsar.Common.Enumerations.ArtefatoAtendimentoTipo.PrescricaoProcedimentos;
         }
         public List<ProcedimentoItem> Items { get; set; }
     }

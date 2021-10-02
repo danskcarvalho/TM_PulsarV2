@@ -12,7 +12,7 @@ namespace Pulsar.Domain.Atendimentos.Models
     {
         public AtividadeAdministrarVacina()
         {
-            Tipo = Common.Enumerations.TipoAtividade.Vacinacao;
+            Tipo = Pulsar.Common.Enumerations.TipoAtividade.Vacinacao;
         }
 
         public MaterialResumido Vacina { get; set; }

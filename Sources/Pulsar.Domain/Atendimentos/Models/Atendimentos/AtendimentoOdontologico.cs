@@ -12,7 +12,7 @@ namespace Pulsar.Domain.Atendimentos.Models
     {
         public AtendimentoOdontologico()
         {
-            Tipo = Common.Enumerations.TipoAtendimento.Odontologico;
+            Tipo = Pulsar.Common.Enumerations.TipoAtendimento.Odontologico;
         }
         public Antropometria Antropometria { get; set; }
         public Avaliacao Avaliacao { get; set; }

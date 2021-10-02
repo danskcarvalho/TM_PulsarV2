@@ -17,6 +17,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Pulsar.Domain.Common;
 
 namespace Pulsar.Infrastructure
 {
@@ -114,6 +115,7 @@ namespace Pulsar.Infrastructure
             services.AddSingleton<JobOrchestrator>();
             services.AddSingleton<MemoryContainerBus>();
             services.AddSingleton<ISpeechSynthesizer, PollyService>();
+            services.AddSingleton<ContainerFactory>();
 
             var assemblies = new Assembly[]
             {

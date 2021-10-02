@@ -10,7 +10,7 @@ namespace Pulsar.Domain.Acompanhamentos.Models
     {
         public PreNatalAcompanhamento()
         {
-            Tipo = Common.Enumerations.AcompanhamentoTipo.PreNatal;
+            Tipo = Pulsar.Common.Enumerations.AcompanhamentoTipo.PreNatal;
         }
 
         public FinalizacaoPreNatal Finalizacao { get; set; }

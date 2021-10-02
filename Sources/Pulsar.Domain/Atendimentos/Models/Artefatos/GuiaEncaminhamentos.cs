@@ -13,7 +13,7 @@ namespace Pulsar.Domain.Atendimentos.Models
     {
         public GuiaEncaminhamentos()
         {
-            Tipo = Common.Enumerations.ArtefatoAtendimentoTipo.GuiaEncaminhamentos;
+            Tipo = Pulsar.Common.Enumerations.ArtefatoAtendimentoTipo.GuiaEncaminhamentos;
         }
         public List<EncaminhamentoItem> Items { get; set; }
     }

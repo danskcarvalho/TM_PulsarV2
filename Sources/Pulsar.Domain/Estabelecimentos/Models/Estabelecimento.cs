@@ -1,5 +1,5 @@
 ﻿using MongoDB.Bson;
-using Pulsar.Domain.Comum;
+using Pulsar.Domain.Common;
 using Pulsar.Domain.RedesEstabelecimentos.Models;
 using System;
 using System.Collections.Generic;

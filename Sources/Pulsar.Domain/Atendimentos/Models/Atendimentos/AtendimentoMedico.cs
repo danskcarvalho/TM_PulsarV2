@@ -10,7 +10,7 @@ namespace Pulsar.Domain.Atendimentos.Models
     {
         public AtendimentoMedico()
         {
-            Tipo = Common.Enumerations.TipoAtendimento.Medico;
+            Tipo = Pulsar.Common.Enumerations.TipoAtendimento.Medico;
         }
     }
 }

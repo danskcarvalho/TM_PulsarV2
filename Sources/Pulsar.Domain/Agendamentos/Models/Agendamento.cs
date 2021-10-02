@@ -2,7 +2,7 @@
 using Pulsar.Common.Enumerations;
 using Pulsar.Domain.Agendas.Models;
 using Pulsar.Domain.Atendimentos.Models;
-using Pulsar.Domain.Comum;
+using Pulsar.Domain.Common;
 using Pulsar.Domain.Estabelecimentos.Models;
 using Pulsar.Domain.Pacientes.Models;
 using Pulsar.Domain.RedesEstabelecimentos.Models;

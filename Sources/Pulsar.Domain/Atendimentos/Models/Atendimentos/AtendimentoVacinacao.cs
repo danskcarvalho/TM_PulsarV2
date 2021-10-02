@@ -11,7 +11,7 @@ namespace Pulsar.Domain.Atendimentos.Models.Atendimentos
     {
         public AtendimentoVacinacao()
         {
-            Tipo = Common.Enumerations.TipoAtendimento.Vacinacao;
+            Tipo = Pulsar.Common.Enumerations.TipoAtendimento.Vacinacao;
         }
 
         public CondicoesPacienteVacinacao CondicoesPaciente { get; set; }

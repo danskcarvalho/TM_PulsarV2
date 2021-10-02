@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pulsar.Domain.Comum
+namespace Pulsar.Domain.Common
 {
     public class Endereco
     {

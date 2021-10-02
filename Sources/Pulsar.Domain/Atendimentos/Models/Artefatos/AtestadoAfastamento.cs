@@ -11,7 +11,7 @@ namespace Pulsar.Domain.Atendimentos.Models
     {
         public AtestadoAfastamento()
         {
-            this.Tipo = Common.Enumerations.ArtefatoAtendimentoTipo.AtestadoAfastamento;
+            this.Tipo = Pulsar.Common.Enumerations.ArtefatoAtendimentoTipo.AtestadoAfastamento;
         }
 
         public  int? DiasRepouso { get; set; }

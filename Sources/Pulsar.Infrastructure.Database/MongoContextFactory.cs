@@ -155,7 +155,7 @@ namespace Pulsar.Infrastructure.Database
                 }
                 catch(MongoCommandException e)
                 {
-                    if (e.Code != 112) //no write conflict
+                    if (e.Code != 112 && e.Code != 11000) //no write conflict or duplicate key
                         throw new PulsarException(Common.Enumerations.PulsarErrorCode.TooBusy);
                     if (retries >= Constants.MaxRetriesOnTransientFailure)
                         throw new PulsarException(Common.Enumerations.PulsarErrorCode.TooBusy);

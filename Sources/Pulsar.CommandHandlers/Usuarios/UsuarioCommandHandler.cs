@@ -1,5 +1,7 @@
-﻿using Pulsar.Common.Cqrs;
+﻿using Pulsar.CommandHandlers.Common;
+using Pulsar.Common.Cqrs;
 using Pulsar.Contracts.Usuarios.Commands;
+using Pulsar.Domain.Common;
 using Pulsar.Domain.Global.Models;
 using System;
 using System.Collections.Generic;
@@ -10,10 +12,14 @@ using System.Threading.Tasks;
 
 namespace Pulsar.CommandHandlers.Usuarios
 {
-    public class UsuarioCommandHandler :
+    public class UsuarioCommandHandler : CommandHandler,
         IAsyncCommandHandler<RedefinirSenhaCommand>
     {
-        public Task Handle(ICommand cmd, CancellationToken ct)
+        public UsuarioCommandHandler(ContainerFactory containerFactory) : base(containerFactory)
+        {
+        }
+
+        public Task Handle(RedefinirSenhaCommand cmd, CancellationToken ct)
         {
             throw new NotImplementedException();
         }

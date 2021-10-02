@@ -21,7 +21,7 @@ namespace Pulsar.Migrations.Schema
             var ix_Status_ScheduledForExecution = Builders<JobModel>.IndexKeys
                 .Ascending(j => j.Status)
                 .Ascending(j => j.ScheduledForExecution);
-            collection.Indexes.CreateOne(new MongoDB.Driver.CreateIndexModel<JobModel>(ix_Status_ScheduledForExecution, new CreateIndexOptions()
+            await collection.Indexes.CreateOneAsync(new MongoDB.Driver.CreateIndexModel<JobModel>(ix_Status_ScheduledForExecution, new CreateIndexOptions()
             {
                 Name = "ix_Status_ScheduledForExecution"
             }));

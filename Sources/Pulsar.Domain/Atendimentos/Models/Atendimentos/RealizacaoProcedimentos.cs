@@ -11,7 +11,7 @@ namespace Pulsar.Domain.Atendimentos.Models.Atendimentos
     {
         public RealizacaoProcedimentos()
         {
-            Tipo = Common.Enumerations.TipoAtendimento.RealizacaoProcedimentos;
+            Tipo = Pulsar.Common.Enumerations.TipoAtendimento.RealizacaoProcedimentos;
         }
 
         public Antropometria Antropometria { get; set; }

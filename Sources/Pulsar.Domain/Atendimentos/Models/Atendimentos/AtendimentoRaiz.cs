@@ -1,5 +1,5 @@
 ﻿using Pulsar.Common.Enumerations;
-using Pulsar.Domain.Comum;
+using Pulsar.Domain.Common;
 using Pulsar.Domain.Prontuarios.Models;
 using System;
 using System.Collections.Generic;

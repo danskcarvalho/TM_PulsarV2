@@ -10,7 +10,7 @@ namespace Pulsar.Domain.Atendimentos.Models.Atendimentos
     {
         public AlteracaoProntuario()
         {
-            Tipo = Common.Enumerations.TipoAtendimento.AlteracaoProntuario;
+            Tipo = Pulsar.Common.Enumerations.TipoAtendimento.AlteracaoProntuario;
         }
 
         public DateTime Data { get; set; }

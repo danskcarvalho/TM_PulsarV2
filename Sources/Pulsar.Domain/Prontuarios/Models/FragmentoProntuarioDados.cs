@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson;
 using Pulsar.Common.Enumerations;
 using Pulsar.Domain.Atendimentos.Models;
-using Pulsar.Domain.Comum;
+using Pulsar.Domain.Common;
 using Pulsar.Domain.Pastas.Models;
 using System;
 using System.Collections.Generic;

@@ -11,7 +11,7 @@ namespace Pulsar.Domain.Atendimentos.Models
     {
         public ExecutarProcedimentoAtividade()
         {
-            Tipo = Common.Enumerations.TipoAtividade.Procedimento;
+            Tipo = Pulsar.Common.Enumerations.TipoAtividade.Procedimento;
         }
 
         public ProcedimentoResumido Procedimento { get; set; }

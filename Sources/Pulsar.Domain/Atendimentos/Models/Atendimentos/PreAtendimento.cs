@@ -10,7 +10,7 @@ namespace Pulsar.Domain.Atendimentos.Models.Atendimentos
     {
         public PreAtendimento()
         {
-            Tipo = Common.Enumerations.TipoAtendimento.PreAtendimento;
+            Tipo = Pulsar.Common.Enumerations.TipoAtendimento.PreAtendimento;
         }
         public Antropometria Antropometria { get; set; }
         public ExameFisico ExameFisico { get; set; }

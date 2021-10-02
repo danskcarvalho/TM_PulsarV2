@@ -11,7 +11,7 @@ namespace Pulsar.Domain.Atendimentos.Models
     {
         public EscutaInicial()
         {
-            Tipo = Common.Enumerations.TipoAtendimento.EscutaInicial;
+            Tipo = Pulsar.Common.Enumerations.TipoAtendimento.EscutaInicial;
         }
 
         public Subjetivo Subjetivo { get; set; }

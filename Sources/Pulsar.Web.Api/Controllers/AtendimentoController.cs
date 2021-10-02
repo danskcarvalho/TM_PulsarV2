@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 using Pulsar.Common.Cqrs;
 using Pulsar.Common.Exceptions;
+using Pulsar.Contracts.Atendimentos.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,10 +26,16 @@ namespace Pulsar.Web.Api.Controllers
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Cria um atendimento.
+        /// </summary>
+        /// <param name="cmd"> Dados da criação do atendimento.</param>
+        /// <returns></returns>
         [HttpPut]
-        public Task<ActionResult> Criar()
+        public async Task<ActionResult> Criar([FromBody] CriarAtendimentoCommand cmd)
         {
-            throw new NotImplementedException();
+            var state = ModelState.IsValid;
+            return Ok(cmd);
         }
 
         [HttpPost("{atendimentoId}")]
