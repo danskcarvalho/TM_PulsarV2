@@ -16,7 +16,7 @@ namespace Pulsar.Domain.Atendimentos.Models
 {
     public class AtendimentoComProfissional : Atendimento
     {
-        public ObjectId ProfissionalId { get; set; }
+        public ObjectId? ProfissionalId { get; set; }
         public ObjectId? ServicoId { get; set; }
         public List<ObjectId> UltimosServicos { get; set; }
         public ObjectId AtendimentoRaizId { get; set; }
@@ -24,6 +24,7 @@ namespace Pulsar.Domain.Atendimentos.Models
         public HistoricoStatus HistoricoStatus { get; set; }
         public RealizacaoAtendimento Realizacao { get; set; }
         public EspecialidadeResumida Especialidade { get; set; }
+        public ConselhoProfissional ConselhoProfissional { get; set; }
         public ObjectId? EquipeId { get; set; }
         public ObjectId? AgendamentoId { get; set; }
         public List<ProcedimentoResumido> ProcedimentosReportados { get; set; }

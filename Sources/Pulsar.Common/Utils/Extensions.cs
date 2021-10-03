@@ -13,15 +13,15 @@ namespace Pulsar.Common
     public static class Extensions
     {
         public static IAbstractExtensions AbstractExtensions { get; set; }
-        public static Task<List<T>> ToListAsync<T>(IQueryable<T> queryable)
+        public static Task<List<T>> ToListAsync<T>(this IQueryable<T> queryable)
         {
             return AbstractExtensions.ToListAsync(queryable);
         }
-        public static Task<T> FirstOrDefaultAsync<T>(IQueryable<T> queryable)
+        public static Task<T> FirstOrDefaultAsync<T>(this IQueryable<T> queryable)
         {
             return AbstractExtensions.FirstOrDefaultAsync(queryable);
         }
-        public static Task<T> FirstAsync<T>(IQueryable<T> queryable)
+        public static Task<T> FirstAsync<T>(this IQueryable<T> queryable)
         {
             return AbstractExtensions.FirstAsync(queryable);
         }
@@ -209,6 +209,28 @@ namespace Pulsar.Common
                     return true;
                 default:
                     return false;
+            }
+        }
+        public static Permissao GetPermissao(this TipoAtendimento ta)
+        {
+            switch (ta)
+            {
+                case TipoAtendimento.Medico:
+                    return Permissao.RealizarAtendimentoMedico;
+                case TipoAtendimento.Enfermagem:
+                    return Permissao.RealizarAtendimentoEnfermagem;
+                case TipoAtendimento.AuxiliarEnfermagem:
+                    return Permissao.RealizarAtendimentoAuxiliarEnfermagem;
+                case TipoAtendimento.Vacinacao:
+                    return Permissao.RealizarAtendimentoVacinacao;
+                case TipoAtendimento.Odontologico:
+                    return Permissao.RealizarAtendimentoOdontologico;
+                case TipoAtendimento.AlteracaoProntuario:
+                    return Permissao.AlterarProntuario;
+                case TipoAtendimento.EscutaInicial:
+                    return Permissao.RealizarEscutaInicial;
+                default:
+                    throw new InvalidOperationException();
             }
         }
         public static bool Contains(this (TimeSpan, TimeSpan) parente, TimeSpan ponto) => ponto >= parente.Item1 && ponto <= parente.Item2;

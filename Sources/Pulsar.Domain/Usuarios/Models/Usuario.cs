@@ -27,11 +27,17 @@ namespace Pulsar.Domain.Usuarios.Models
         public async Task ChecarPermissaoEstabelecimento(ObjectId? estabelecimentoId, Permissao permissao, 
             Container container)
         {
+            if (!await PossuiPermissaoEstabelecimento(estabelecimentoId, permissao, container))
+                throw new PulsarException(PulsarErrorCode.Forbidden);
+        }
+        public async Task<bool> PossuiPermissaoEstabelecimento(ObjectId? estabelecimentoId, Permissao permissao,
+           Container container)
+        {
             if (estabelecimentoId == null)
-                throw new PulsarException(PulsarErrorCode.Forbidden);
+                return false;
 
-            if(LotacoesEstabelecimentos == null)
-                throw new PulsarException(PulsarErrorCode.Forbidden);
+            if (LotacoesEstabelecimentos == null)
+                return false;
 
             foreach (var le in LotacoesEstabelecimentos)
             {
@@ -40,10 +46,15 @@ namespace Pulsar.Domain.Usuarios.Models
 
                 var perfil = await container.Perfis.FindOneById(le.PerfilId);
                 if (perfil.Permissoes.Contains(permissao))
-                    return;
+                    return true;
             }
 
-            throw new PulsarException(PulsarErrorCode.Forbidden);
+            return false;
+        }
+
+        public EstabelecimentoLotacao GetLotacao(ObjectId estabelecimentoId)
+        {
+            return LotacoesEstabelecimentos.FirstOrDefault(le => le.EstabelecimentoId == estabelecimentoId);
         }
     }
 }

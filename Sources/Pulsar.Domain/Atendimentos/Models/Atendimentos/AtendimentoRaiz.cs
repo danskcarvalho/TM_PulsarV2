@@ -1,4 +1,5 @@
-﻿using Pulsar.Common.Enumerations;
+﻿using MongoDB.Bson;
+using Pulsar.Common.Enumerations;
 using Pulsar.Domain.Common;
 using Pulsar.Domain.Prontuarios.Models;
 using System;
@@ -16,8 +17,28 @@ namespace Pulsar.Domain.Atendimentos.Models
             Tipo = TipoAtendimento.Raiz;
         }
 
-        public List<AtendimentoEvento> Eventos { get; set; }
-        public LocalAtendimento Local { get; set; }
+        public AtendimentoRaiz(ObjectId usuarioId, 
+            ObjectId estabelecimentoId, 
+            CategoriaAtendimento categoria, 
+            ObjectId pacienteId) : base()
+        {
+            Id = ObjectId.GenerateNewId();
+            if (categoria == CategoriaAtendimento.Individual || categoria == CategoriaAtendimento.Retroativo)
+                Local = LocalAtendimento.Ubs;
+
+            Endereco = new Endereco();
+            Categoria = categoria;
+            Status = StatusAtendimentoRaiz.Aberto;
+            Atividades = new List<Atividade>();
+            Artefatos = new List<ArtefatoAtendimento>();
+            AlteracoesProntuario = new List<FragmentoProntuarioDados>();
+            EstabelecimentoId = estabelecimentoId;
+            PacienteId = pacienteId;
+            FichasEsus = new List<ObjectId>();
+            DataRegistro = DataRegistro.CriadoHoje(usuarioId);
+        }
+
+        public LocalAtendimento? Local { get; set; }
         public Endereco Endereco { get; set; }
         public ModalidadeAD? ModalidadeAD { get; set; }
         public CategoriaAtendimento Categoria { get; set; }

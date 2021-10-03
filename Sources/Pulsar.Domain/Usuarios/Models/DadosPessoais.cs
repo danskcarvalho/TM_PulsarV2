@@ -9,6 +9,7 @@ namespace Pulsar.Domain.Usuarios.Models
 {
     public class DadosPessoais
     {
+        public string Nome { get; set; }
         public string Cpf { get; set; }
         public string Cns { get; set; }
         public Sexo? Sexo { get; set; }

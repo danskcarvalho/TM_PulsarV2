@@ -16,6 +16,8 @@ namespace Pulsar.Common.Enumerations
         [Display(Name = "Finalizado")]
         Finalizado = 3,
         [Display(Name = "Cancelado")]
-        Cancelado = 4
+        Cancelado = 4,
+        [Display(Name = "Aguardando")]
+        Aguardando = 5
     }
 }

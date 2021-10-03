@@ -10,7 +10,7 @@ namespace Pulsar.Domain.Atendimentos.Models
     public class HistoricoStatusItem
     {
         public DateTime Ocorrencia { get; set; }
-        public StatusAtendimento StatusAnterior { get; set; }
+        public StatusAtendimento? StatusAnterior { get; set; }
         public StatusAtendimento StatusPosterior { get; set; }
     }
 }
