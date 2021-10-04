@@ -15,7 +15,6 @@ namespace Pulsar.Domain.Prontuarios.Models
     {
         public ObjectId ProntuarioId { get; set; }
         public ArtefatoProntuarioTipo Tipo { get; set; }
-        public ObjectId DadoId { get; set; }
         /// <summary>
         /// Atendimento que gerou ou modificou o prontuário.
         /// </summary>

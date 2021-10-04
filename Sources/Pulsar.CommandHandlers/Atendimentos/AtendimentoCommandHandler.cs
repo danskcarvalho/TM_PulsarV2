@@ -29,7 +29,7 @@ namespace Pulsar.CommandHandlers.Atendimentos
         {
             await ContextFactory.Start(async ctx =>
             {
-                await CriarAtendimentoService.Criar(cmd, ContainerFactory.Create(ctx));
+                await CriarAtendimentoService.Criar(cmd, agendamento: null, ContainerFactory.Create(ctx));
             }, IsolationOptions.Committed.WithTransaction());
         }
     }

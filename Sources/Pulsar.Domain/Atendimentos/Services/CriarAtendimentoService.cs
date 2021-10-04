@@ -4,6 +4,7 @@ using Pulsar.Common.Enumerations;
 using Pulsar.Common.Exceptions;
 using Pulsar.Common.Services;
 using Pulsar.Contracts.Atendimentos.Commands;
+using Pulsar.Domain.Agendamentos.Models;
 using Pulsar.Domain.Atendimentos.Models;
 using Pulsar.Domain.Atendimentos.Models.Atendimentos;
 using Pulsar.Domain.Common;
@@ -23,12 +24,23 @@ namespace Pulsar.Domain.Atendimentos.Services
 {
     public class CriarAtendimentoService : IService
     { 
-        public async Task Criar(CriarAtendimentoCommand cmd, Common.Container container)
+        public async Task Criar(CriarAtendimentoCommand cmd, Agendamento agendamento,
+            Common.Container container)
         {
             var usuario = await container.Usuarios.FindOneById(cmd.UsuarioId.Value, noSession: true);
             if (usuario == null)
                 throw new PulsarException(PulsarErrorCode.NotFound);
             await usuario.ChecarPermissaoEstabelecimento(cmd.EstabelecimentoId, Permissao.CriarAtendimento, container);
+
+            //se agendamento for passado e o agendamento só referencia um único profissional...
+            if(agendamento != null && agendamento.Configuracao?.Faixa?.Profissionais.Count == 1)
+            {
+                foreach (var atd in cmd.Atendimentos)
+                {
+                    atd.ProfissionalId = agendamento.Configuracao.Faixa.Profissionais[0];
+                }
+            }
+
             var estabelecimento = await GetEstabelecimento(cmd, container);
             var paciente = await TratarPaciente(cmd, container);
 
@@ -38,22 +50,36 @@ namespace Pulsar.Domain.Atendimentos.Services
             await ValidarServicos(cmd, container, estabelecimento, paciente);
             var profissionais = await ValidarProfissionais(cmd, container);
             //cria atendimentos
-            var atendimentosCriados = await CriarAtendimentos(cmd, container, usuario, estabelecimento, paciente, profissionais);
+            var atendimentosCriados = await CriarAtendimentos(cmd, container, agendamento, usuario, estabelecimento, paciente, profissionais);
 
             //incluir nas filas de atendimentos
-            var todosProfissionais = profissionais.Select(p => p.Value).ToList();
-            profissionais = await InserirFilasAtendimentos(cmd, container, usuario, estabelecimento, profissionais, atendimentosCriados, todosProfissionais);
+            var profissionaisFilasAlteradas = profissionais.Select(p => p.Value).ToList();
+            profissionais = await InserirFilasAtendimentos(cmd, container, agendamento, usuario, estabelecimento, profissionais, atendimentosCriados, profissionaisFilasAlteradas);
+            //insere atendimentos no banco
+            await container.Atendimentos.InsertMany(atendimentosCriados);
 
             //incluindo notificações
-            await CriarNotificacoes(cmd, container, usuario, estabelecimento, paciente, todosProfissionais);
+            await CriarNotificacoes(cmd, container, usuario, estabelecimento, paciente, profissionaisFilasAlteradas);
         }
 
-        private static async Task<Dictionary<ObjectId, Usuario>> InserirFilasAtendimentos(CriarAtendimentoCommand cmd, Container container, Usuario usuario, Estabelecimento estabelecimento, Dictionary<ObjectId, Usuario> profissionais, List<Atendimento> atendimentosCriados, List<Usuario> todosProfissionais)
+        private static async Task<Dictionary<ObjectId, Usuario>> InserirFilasAtendimentos(CriarAtendimentoCommand cmd, Container container, Agendamento agendamento, 
+            Usuario usuario, Estabelecimento estabelecimento, Dictionary<ObjectId, Usuario> profissionais, List<Atendimento> atendimentosCriados, 
+            List<Usuario> profissionaisFilasAlteradas)
         {
-            if (cmd.Atendimentos.Any(a => a.ProfissionalId == null && a.Tipo != TipoAtendimento.AlteracaoProntuario))
-                todosProfissionais.AddRange(await container.Usuarios.FindMany(u => u.DataRegistro.DeletadoEm == null &&
-                    u.LotacoesEstabelecimentos.Any(le => le.EstabelecimentoId == estabelecimento.Id), noSession: true));
-            profissionais = todosProfissionais.PartitionByUnique(p => p.Id);
+            if (agendamento == null || agendamento.Configuracao?.Faixa?.Profissionais == null ||
+                agendamento.Configuracao?.Faixa?.Profissionais.Count == 0)
+            {
+                if (cmd.Atendimentos.Any(a => a.ProfissionalId == null && a.Tipo != TipoAtendimento.AlteracaoProntuario))
+                    profissionaisFilasAlteradas.AddRange(await container.Usuarios.FindMany(u => u.DataRegistro.DeletadoEm == null &&
+                        u.LotacoesEstabelecimentos.Any(le => le.EstabelecimentoId == estabelecimento.Id), noSession: true));
+                profissionais = profissionaisFilasAlteradas.PartitionByUnique(p => p.Id);
+            }
+            else
+            {
+                profissionaisFilasAlteradas.Clear();
+                profissionaisFilasAlteradas.AddRange(await container.Usuarios.FindManyById(agendamento.Configuracao.Faixa.Profissionais, noSession: true));
+                profissionais = profissionaisFilasAlteradas.PartitionByUnique(p => p.Id);
+            }
 
             var listaProfissionaisId = profissionais.Select(x => x.Value.Id).Distinct().ToList();
             var filasAtendimentos = await container.FilasAtendimentos.FindMany(fa => listaProfissionaisId.Contains(fa.ProfissionalId) &&
@@ -64,6 +90,7 @@ namespace Pulsar.Domain.Atendimentos.Services
             {
                 if (atd.Tipo == TipoAtendimento.AlteracaoProntuario)
                     continue;
+                var atendimento = (AtendimentoComProfissional)atendimentosCriados.First(a2 => a2.Id == atd.AtendimentoId);
 
                 if (atd.ProfissionalId != null)
                 {
@@ -71,12 +98,14 @@ namespace Pulsar.Domain.Atendimentos.Services
                     if (fa == null) //cria uma nova fila de atendimento
                     {
                         fa = new FilaAtendimentos(usuario, estabelecimento, profissionais[atd.ProfissionalId.Value], DateTime.Today);
-                        fa.Items.Add(new FilaAtendimentosItem((AtendimentoComProfissional)atendimentosCriados.First(a2 => a2.Id == atd.AtendimentoId)));
+                        fa.Items.Add(new FilaAtendimentosItem(atendimento));
+                        atendimento.FilasAtendimentos.Add(fa.Id);
                         await container.FilasAtendimentos.InsertOne(fa);
                     }
                     else
                     {
-                        fa.Items.Add(new FilaAtendimentosItem((AtendimentoComProfissional)atendimentosCriados.First(a2 => a2.Id == atd.AtendimentoId)));
+                        fa.Items.Add(new FilaAtendimentosItem(atendimento));
+                        atendimento.FilasAtendimentos.Add(fa.Id);
                         fa.DataVersion++;
                         fa.DataRegistro.AtualizadoEm = DateTime.Now;
                         fa.DataRegistro.AtualizadoPorUsuarioId = usuario.Id;
@@ -87,7 +116,7 @@ namespace Pulsar.Domain.Atendimentos.Services
                 {
                     bool adicionouEmAlgumaFila = false;
 
-                    foreach (var prof in todosProfissionais)
+                    foreach (var prof in profissionaisFilasAlteradas)
                     {
                         if (!await prof.PodeAtender(estabelecimento.Id, atd.Tipo.Value, container))
                             continue;
@@ -96,12 +125,14 @@ namespace Pulsar.Domain.Atendimentos.Services
                         if (fa == null) //cria uma nova fila de atendimento
                         {
                             fa = new FilaAtendimentos(usuario, estabelecimento, prof, DateTime.Today);
-                            fa.Items.Add(new FilaAtendimentosItem((AtendimentoComProfissional)atendimentosCriados.First(a2 => a2.Id == atd.AtendimentoId)));
+                            fa.Items.Add(new FilaAtendimentosItem(atendimento));
+                            atendimento.FilasAtendimentos.Add(fa.Id);
                             await container.FilasAtendimentos.InsertOne(fa);
                         }
                         else
                         {
-                            fa.Items.Add(new FilaAtendimentosItem((AtendimentoComProfissional)atendimentosCriados.First(a2 => a2.Id == atd.AtendimentoId)));
+                            fa.Items.Add(new FilaAtendimentosItem(atendimento));
+                            atendimento.FilasAtendimentos.Add(fa.Id);
                             fa.DataVersion++;
                             fa.DataRegistro.AtualizadoEm = DateTime.Now;
                             fa.DataRegistro.AtualizadoPorUsuarioId = usuario.Id;
@@ -118,7 +149,8 @@ namespace Pulsar.Domain.Atendimentos.Services
             return profissionais;
         }
 
-        private static async Task CriarNotificacoes(CriarAtendimentoCommand cmd, Container container, Usuario usuario, Estabelecimento estabelecimento, Paciente paciente, List<Usuario> todosProfissionais)
+        private static async Task CriarNotificacoes(CriarAtendimentoCommand cmd, Container container, Usuario usuario, 
+            Estabelecimento estabelecimento, Paciente paciente, List<Usuario> todosProfissionais)
         {
             foreach (var atd in cmd.Atendimentos)
             {
@@ -168,7 +200,8 @@ namespace Pulsar.Domain.Atendimentos.Services
             }
         }
 
-        private static async Task<List<Atendimento>> CriarAtendimentos(CriarAtendimentoCommand cmd, Container container, Usuario usuario, Estabelecimento estabelecimento, Paciente paciente, Dictionary<ObjectId, Usuario> profissionais)
+        private static async Task<List<Atendimento>> CriarAtendimentos(CriarAtendimentoCommand cmd, Container container, Agendamento agendamento,
+            Usuario usuario, Estabelecimento estabelecimento, Paciente paciente, Dictionary<ObjectId, Usuario> profissionais)
         {
             //cria atendimento raiz
             List<Atendimento> atendimentosCriados = new List<Atendimento>();
@@ -177,8 +210,6 @@ namespace Pulsar.Domain.Atendimentos.Services
             //se for alteração do prontuário então o atendimento estará sincronizado com o prontuário instantaneamente
             if (cmd.Atendimentos.Any(a => a.Tipo == TipoAtendimento.AlteracaoProntuario))
                 atendimentoRaiz.AtualizacaoPronturarioImediata = true;
-            //insere atendimento raiz
-            await container.Atendimentos.InsertOne(atendimentoRaiz);
 
             //pega equipes do estabelecimento
             List<Equipe> equipes = await container.Equipes.FindMany(eq => eq.EstabelecimentoId == estabelecimento.Id &&
@@ -199,11 +230,10 @@ namespace Pulsar.Domain.Atendimentos.Services
                     paciente.Id,
                     atd.ProfissionalId.HasValue ? profissionais[atd.ProfissionalId.Value] : null,
                     atd.ServicoId,
-                    null,
+                    agendamento?.Id,
                     atd.Justificativa);
                 atd.AtendimentoId = atendimento.Id;
                 atendimentosCriados.Add(atendimento);
-                await container.Atendimentos.InsertOne(atendimento);
             }
 
             return atendimentosCriados;

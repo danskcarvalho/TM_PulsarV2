@@ -21,6 +21,7 @@ namespace Pulsar.Domain.Atendimentos.Models
     public class EncaminhamentoItem
     {
         public ObjectId ItemId { get; set; }
+        public ObjectId? ProntuarioId { get; set; }
         public  EspecialidadeResumida Especialidade { get; set; }
         public  List<DiagnosticoResumido> Diagnosticos { get; set; }
         public  string Motivo { get; set; }

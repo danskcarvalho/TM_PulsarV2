@@ -34,6 +34,7 @@ namespace Pulsar.Domain.Atendimentos.Models
             Condutas = new List<CondutaAtendimentoIndividual>();
             ProfissionalId = profissional?.Id;
             UltimosServicos = new List<ObjectId>();
+            FilasAtendimentos = new List<ObjectId>();
             AtendimentoRaizId = atendimentoRaizId;
             HistoricoStatus = new HistoricoStatus()
             {
@@ -52,7 +53,7 @@ namespace Pulsar.Domain.Atendimentos.Models
             ConselhoProfissional = profissional?.GetLotacao(estabelecimentoId).EspecialidadeConselho.Conselho;
             EquipeId = equipeId;
             AgendamentoId = agendamentoId;
-            ProcedimentosReportados = new List<Global.Models.ProcedimentoResumido>();
+            ProcedimentosReportados = new List<ProcedimentoReportado>();
             Documentos = new List<Pastas.Models.PastaArquivo>();
             Acompanhamentos = new List<ObjectId>();
 

@@ -19,5 +19,6 @@ namespace Pulsar.Domain.Atendimentos.Models
         public List<ObjectId> Profissionais { get; set; }
         public ObjectId AtendimentoRaiz { get; set; }
         public List<ObjectId> AtendimentoFilhos { get; set; }
+        public List<ObjectId> FilasAtendimentos { get; set; }
     }
 }
