@@ -9,6 +9,7 @@ namespace Pulsar.Domain.Atendimentos.Models
 {
     public class AtendimentoIndividual : AtendimentoComProfissional
     {
+        public TipoAtendimentoEsus? TipoAtendimentoEsus { get; set; }
         public Antropometria Antropometria { get; set; }
         public Avaliacao Avaliacao { get; set; }
         public DesfechoPreNatal DesfechoPreNatal { get; set; }

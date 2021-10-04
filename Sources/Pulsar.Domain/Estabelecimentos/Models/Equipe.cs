@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using Pulsar.Domain.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,6 @@ namespace Pulsar.Domain.Estabelecimentos.Models
         public string CodigoIne { get; set; }
         public string CodigoArea { get; set; }
         public List<EquipeMembro> Membros { get; set; }
+        public DataRegistro DataRegistro { get; set; }
     }
 }

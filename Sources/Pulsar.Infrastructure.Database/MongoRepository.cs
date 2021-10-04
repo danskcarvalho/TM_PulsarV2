@@ -16,6 +16,7 @@ namespace Pulsar.Infrastructure.Database
 {
     public abstract class MongoRepository<T> : IAsyncRepository<T> where T : class
     {
+        private Dictionary<ObjectId, T> _Cache = new Dictionary<ObjectId, T>();
         private PropertyInfo _IdProperty = null;
         protected MongoContext Context { get; }
         protected abstract string CollectionName { get; }
@@ -36,96 +37,111 @@ namespace Pulsar.Infrastructure.Database
             this._IdProperty = typeof(T).GetProperty("Id");
         }
 
-        async Task IAsyncRepository<T>.DeleteOne(ObjectId id, WriteAck? wc, CancellationToken? ct)
+        async Task IAsyncRepository<T>.DeleteOne(ObjectId id, bool autoFlush, CancellationToken? ct)
         {
-            var collection = Collection;
-            if (wc != null)
-                collection = collection.WithWriteConcern(wc?.ToWriteConcern());
+            if (!autoFlush)
+            {
+                Context.AddFlushAction(() => ((IAsyncRepository<T>)this).DeleteOne(id, true, ct));
+                return;
+            }
+            var filter = Builders<T>.Filter.Eq("_id", id);
+            await Collection.DeleteOneAsync(Context.Session, filter,
+                cancellationToken: ct ?? CancellationToken.None);
+        }
+
+        async Task<T> IAsyncRepository<T>.FindOneById(ObjectId id, bool noSession, bool noCache, CancellationToken? ct)
+        {
+            if (!noCache)
+            {
+                if (_Cache.ContainsKey(id))
+                    return _Cache[id];
+            }
 
             var filter = Builders<T>.Filter.Eq("_id", id);
-            await collection.DeleteOneAsync(Context.Session, filter,
+            T r = null;
+            if (noSession)
+                r = await (await Collection.FindAsync(filter, new FindOptions<T> { Limit = 1 },
+                    cancellationToken: ct ?? CancellationToken.None)).FirstOrDefaultAsync();
+            else
+
+                r = await (await Collection.FindAsync(Context.Session, filter, new FindOptions<T> { Limit = 1 },
+                    cancellationToken: ct ?? CancellationToken.None)).FirstOrDefaultAsync();
+
+            if (!noCache)
+                _Cache[id] = r;
+            return r;
+        }
+
+        async Task IAsyncRepository<T>.InsertMany(IEnumerable<T> items, bool autoFlush, CancellationToken? ct)
+        {
+            if (!autoFlush)
+            {
+                Context.AddInsert(typeof(T), items, ct, (o, c) => ((IAsyncRepository<T>)this).InsertMany(o.Cast<T>(), true, ct));
+                return;
+            }
+
+            await Collection.InsertManyAsync(Context.Session, items,
                 cancellationToken: ct ?? CancellationToken.None);
         }
 
-        async Task<T> IAsyncRepository<T>.FindOneById(ObjectId id, ReadAck? rc, ReadPref? rp, CancellationToken? ct)
+        async Task IAsyncRepository<T>.InsertOne(T item, bool autoFlush, CancellationToken? ct)
         {
-            var collection = Collection;
-            if (rc != null)
-                collection = collection.WithReadConcern(rc?.ToReadConcern());
-            if (rp != null)
-                collection = collection.WithReadPreference(rp?.ToReadPreference());
+            if (!autoFlush)
+            {
+                Context.AddInsert(typeof(T), item, ct, (o, c) => ((IAsyncRepository<T>)this).InsertMany(o.Cast<T>(), true, ct));
+                return;
+            }
 
-            var filter = Builders<T>.Filter.Eq("_id", id);
-            return await (await collection.FindAsync(Context.Session, filter, new FindOptions<T> { Limit = 1 },
-                cancellationToken: ct ?? CancellationToken.None)).FirstOrDefaultAsync();
-        }
-
-        async Task IAsyncRepository<T>.InsertMany(IEnumerable<T> items, WriteAck? wc, CancellationToken? ct)
-        {
-            var collection = Collection;
-            if (wc != null)
-                collection = collection.WithWriteConcern(wc?.ToWriteConcern());
-
-            await collection.InsertManyAsync(Context.Session, items,
+            await Collection.InsertOneAsync(Context.Session, item,
                 cancellationToken: ct ?? CancellationToken.None);
         }
 
-        async Task IAsyncRepository<T>.InsertOne(T item, WriteAck? wc, CancellationToken? ct)
+        async Task IAsyncRepository<T>.UpdateOne(T item, bool autoFlush, CancellationToken? ct)
         {
-            var collection = Collection;
-            if (wc != null)
-                collection = collection.WithWriteConcern(wc?.ToWriteConcern());
-
-            await collection.InsertOneAsync(Context.Session, item,
-                cancellationToken: ct ?? CancellationToken.None);
-        }
-
-        async Task IAsyncRepository<T>.UpdateOne(T item, WriteAck? wc, CancellationToken? ct)
-        {
-            var collection = Collection;
-            if (wc != null)
-                collection = collection.WithWriteConcern(wc?.ToWriteConcern());
+            if (!autoFlush)
+            {
+                Context.AddFlushAction(() => ((IAsyncRepository<T>)this).UpdateOne(item, true, ct));
+                return;
+            }
 
             var filter = Builders<T>.Filter.Eq("_id", (ObjectId)_IdProperty.GetValue(item));
-            await collection.FindOneAndReplaceAsync(Context.Session, filter, item,
+            await Collection.FindOneAndReplaceAsync(Context.Session, filter, item,
                 cancellationToken: ct ?? CancellationToken.None);
         }
 
-        async Task<T> IAsyncRepository<T>.FindOne(Expression<Func<T, bool>> predicate, ReadAck? rc, ReadPref? rp, CancellationToken? ct)
+        async Task<T> IAsyncRepository<T>.FindOne(Expression<Func<T, bool>> predicate, bool noSession, CancellationToken? ct)
         {
-            var collection = Collection;
-            if (rc != null)
-                collection = collection.WithReadConcern(rc?.ToReadConcern());
-            if (rp != null)
-                collection = collection.WithReadPreference(rp?.ToReadPreference());
-
-            return await(await collection.FindAsync(Context.Session, predicate, new FindOptions<T> { 
-                Limit = 1
-            }, cancellationToken: ct ?? CancellationToken.None)).FirstOrDefaultAsync();
+            if (noSession)
+                return await (await Collection.FindAsync(predicate, new FindOptions<T>
+                {
+                    Limit = 1
+                }, cancellationToken: ct ?? CancellationToken.None)).FirstOrDefaultAsync();
+            else
+                return await (await Collection.FindAsync(Context.Session, predicate, new FindOptions<T>
+                {
+                    Limit = 1
+                }, cancellationToken: ct ?? CancellationToken.None)).FirstOrDefaultAsync();
         }
 
         async Task<List<T>> IAsyncRepository<T>.FindMany(Expression<Func<T, bool>> predicate,
             int? skip,
             int? limit,
             List<Ordering<T>> sortBy,
-            ReadAck? rc,
-            ReadPref? rp,
+            bool noSession,
             CancellationToken? ct)
         {
-            var collection = Collection;
-            if (rc != null)
-                collection = collection.WithReadConcern(rc?.ToReadConcern());
-            if (rp != null)
-                collection = collection.WithReadPreference(rp?.ToReadPreference());
-
             var findOptions = new FindOptions<T>();
             findOptions.Skip = skip;
             findOptions.Limit = limit;
             if (sortBy != null && sortBy.Count != 0)
                 findOptions.Sort = BuildSortDefinition(sortBy);
 
-            return await (await collection.FindAsync(Context.Session, predicate, options: findOptions,
-                cancellationToken: ct ?? CancellationToken.None)).ToListAsync();
+            if (noSession)
+                return await (await Collection.FindAsync(predicate, options: findOptions,
+                    cancellationToken: ct ?? CancellationToken.None)).ToListAsync();
+            else
+                return await (await Collection.FindAsync(Context.Session, predicate, options: findOptions,
+                    cancellationToken: ct ?? CancellationToken.None)).ToListAsync();
         }
 
         async Task<List<TProjection>> IAsyncRepository<T>.FindMany<TProjection>(Expression<Func<T, bool>> predicate,
@@ -133,16 +149,9 @@ namespace Pulsar.Infrastructure.Database
             int? skip,
             int? limit,
             List<Ordering<T>> sortBy,
-            ReadAck? rc,
-            ReadPref? rp,
+            bool noSession,
             CancellationToken? ct)
         {
-            var collection = Collection;
-            if (rc != null)
-                collection = collection.WithReadConcern(rc?.ToReadConcern());
-            if (rp != null)
-                collection = collection.WithReadPreference(rp?.ToReadPreference());
-
             var findOptions = new FindOptions<T, TProjection>();
             findOptions.Skip = skip;
             findOptions.Limit = limit;
@@ -151,71 +160,153 @@ namespace Pulsar.Infrastructure.Database
             if (sortBy != null && sortBy.Count != 0)
                 findOptions.Sort = BuildSortDefinition(sortBy);
 
-            return await (await collection.FindAsync<TProjection>(Context.Session, predicate, options: findOptions,
-                cancellationToken: ct ?? CancellationToken.None)).ToListAsync();
+            if (noSession)
+                return await (await Collection.FindAsync<TProjection>(predicate, options: findOptions,
+                    cancellationToken: ct ?? CancellationToken.None)).ToListAsync();
+            else
+                return await (await Collection.FindAsync<TProjection>(Context.Session, predicate, options: findOptions,
+                    cancellationToken: ct ?? CancellationToken.None)).ToListAsync();
         }
 
-        async Task<long> IAsyncRepository<T>.DeleteMany(Expression<Func<T, bool>> predicate, WriteAck? wc, CancellationToken? ct)
+        async Task<long> IAsyncRepository<T>.DeleteMany(Expression<Func<T, bool>> predicate, bool autoFlush, CancellationToken? ct)
         {
-            var collection = Collection;
-            if (wc != null)
-                collection = collection.WithWriteConcern(wc?.ToWriteConcern());
+            if (!autoFlush)
+            {
+                Context.AddFlushAction(() => ((IAsyncRepository<T>)this).DeleteMany(predicate, true, ct));
+                return -1;
+            }
 
-            return (await collection.DeleteManyAsync(Context.Session, predicate,
+            return (await Collection.DeleteManyAsync(Context.Session, predicate,
                 cancellationToken: ct ?? CancellationToken.None)).DeletedCount;
         }
 
-        async Task<long> IAsyncRepository<T>.UpdateMany(Expression<Func<T, bool>> predicate, object fields, WriteAck? wc, CancellationToken? ct)
+        async Task<long> IAsyncRepository<T>.UpdateMany(Expression<Func<T, bool>> predicate, Func<Update<T>, Update<T>> fields, bool autoFlush, CancellationToken? ct)
         {
-            var collection = Collection;
-            if (wc != null)
-                collection = collection.WithWriteConcern(wc?.ToWriteConcern());
-
-            return (await collection.UpdateManyAsync(Context.Session, predicate, ToUpdateDefinition(fields),
-                cancellationToken: ct ?? CancellationToken.None)).ModifiedCount;
-        }
-
-        async Task<long> IAsyncRepository<T>.UpdateOne(Expression<Func<T, bool>> predicate, object fields, WriteAck? wc, CancellationToken? ct)
-        {
-            var collection = Collection;
-            if (wc != null)
-                collection = collection.WithWriteConcern(wc?.ToWriteConcern());
-
-            return (await collection.UpdateOneAsync(Context.Session, predicate, ToUpdateDefinition(fields),
-                cancellationToken: ct ?? CancellationToken.None)).ModifiedCount;
-        }
-
-        private UpdateDefinition<T> ToUpdateDefinition(object fields)
-        {
-            var setDef = new BsonDocument();
-            var pushDef = new BsonDocument();
-            var incDef = new BsonDocument();
-            var properties = fields.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            foreach (var prop in properties)
+            if (!autoFlush)
             {
-                var val = prop.GetValue(fields);
-                if (val is PushUpdate pu)
-                    pushDef.Add(prop.Name, ToBsonValue(pu.Object));
-                else if (val is IncUpdate iu)
-                    incDef.Add(prop.Name, ToBsonValue(iu.Amount));
-                else
-                    setDef.Add(prop.Name, ToBsonValue(val));
+                Context.AddFlushAction(() => ((IAsyncRepository<T>)this).UpdateMany(predicate, fields, true, ct));
+                return -1;
             }
 
-            var updDef = new BsonDocument();
-            if (setDef.ElementCount != 0)
-                updDef.Add("$set", setDef);
-            if (incDef.ElementCount != 0)
-                updDef.Add("$inc", incDef);
-            if (pushDef.ElementCount != 0)
-                updDef.Add("$push", pushDef);
-            return updDef;
+            var upd = fields(new MongoUpdate<T>(Builders<T>.Update)) as MongoUpdate<T>;
+            return (await Collection.UpdateManyAsync(Context.Session, predicate, upd.Definition,
+                cancellationToken: ct ?? CancellationToken.None)).ModifiedCount;
         }
 
-        private BsonValue ToBsonValue(object obj)
+        async Task<long> IAsyncRepository<T>.UpdateOne(Expression<Func<T, bool>> predicate, Func<Update<T>, Update<T>> fields, bool autoFlush, CancellationToken? ct)
         {
-            var doc = (new { Value = obj }).ToBsonDocument();
-            return doc["Value"];
+            if (!autoFlush)
+            {
+                Context.AddFlushAction(() => ((IAsyncRepository<T>)this).UpdateOne(predicate, fields, true, ct));
+                return -1;
+            }
+
+            var upd = fields(new MongoUpdate<T>(Builders<T>.Update)) as MongoUpdate<T>;
+            return (await Collection.UpdateOneAsync(Context.Session, predicate, upd.Definition,
+                cancellationToken: ct ?? CancellationToken.None)).ModifiedCount;
+        }
+
+        async Task<List<T>> IAsyncRepository<T>.FindManyById(IEnumerable<ObjectId> ids, bool noSession, bool noCache, CancellationToken? ct)
+        {
+            if (!noCache)
+            {
+                if (ids.All(x => _Cache.ContainsKey(x)))
+                    return ids.Select(x => _Cache[x]).ToList();
+            }
+
+            var idList = ids.ToList();
+            var filter = Builders<T>.Filter.In("_id", idList);
+            List<T> r = null;
+            if (noSession)
+                r = await (await Collection.FindAsync(filter,
+                    cancellationToken: ct ?? CancellationToken.None)).ToListAsync();
+            else
+                r = await (await Collection.FindAsync(Context.Session, filter,
+                    cancellationToken: ct ?? CancellationToken.None)).ToListAsync();
+
+            if (!noCache)
+            {
+                foreach (var item in r)
+                    _Cache[(ObjectId)_IdProperty.GetValue(item)] = item;
+            }
+            return r;
+        }
+
+        async Task<TProjection> IAsyncRepository<T>.FindOneById<TProjection>(ObjectId id, Expression<Func<T, TProjection>> projection, bool noSession, CancellationToken? ct)
+        {
+            var filter = Builders<T>.Filter.Eq("_id", id);
+            var projectionDef = Builders<T>.Projection.Expression(projection);
+
+            if (noSession)
+                return await (await Collection.FindAsync<TProjection>(filter, new FindOptions<T, TProjection> { Limit = 1, Projection = projectionDef },
+                    cancellationToken: ct ?? CancellationToken.None)).FirstOrDefaultAsync();
+            else
+                return await (await Collection.FindAsync<TProjection>(Context.Session, filter, new FindOptions<T, TProjection> { Limit = 1, Projection = projectionDef },
+                    cancellationToken: ct ?? CancellationToken.None)).FirstOrDefaultAsync();
+        }
+
+        async Task<List<TProjection>> IAsyncRepository<T>.FindManyById<TProjection>(IEnumerable<ObjectId> ids, Expression<Func<T, TProjection>> projection, bool noSession, CancellationToken? ct)
+        {
+            var idList = ids.ToList();
+            var filter = Builders<T>.Filter.In("_id", idList);
+            var projectionDef = Builders<T>.Projection.Expression(projection);
+            if (noSession)
+                return await (await Collection.FindAsync(filter, new FindOptions<T, TProjection> { Projection = projectionDef },
+                    cancellationToken: ct ?? CancellationToken.None)).ToListAsync();
+            else
+                return await (await Collection.FindAsync(Context.Session, filter, new FindOptions<T, TProjection> { Projection = projectionDef },
+                    cancellationToken: ct ?? CancellationToken.None)).ToListAsync();
+        }
+
+        async Task<bool> IAsyncRepository<T>.CheckOneById(ObjectId id, bool noSession, CancellationToken? ct)
+        {
+            var filter = Builders<T>.Filter.Eq("_id", id);
+            var projectionDef = Builders<T>.Projection.Include("_id");
+            T r = null;
+            if (noSession)
+                r = await (await Collection.FindAsync(filter, new FindOptions<T> { Limit = 1, Projection = projectionDef },
+                    cancellationToken: ct ?? CancellationToken.None)).FirstOrDefaultAsync();
+            else
+                r = await (await Collection.FindAsync(Context.Session, filter, new FindOptions<T> { Limit = 1, Projection = projectionDef },
+                    cancellationToken: ct ?? CancellationToken.None)).FirstOrDefaultAsync();
+            return r != default(T);
+        }
+
+        async Task<List<bool>> IAsyncRepository<T>.CheckManyById(IEnumerable<ObjectId> ids, bool noSession, CancellationToken? ct)
+        {
+            var idList = ids.ToList();
+            var filter = Builders<T>.Filter.In("_id", idList);
+            var projectionDef = Builders<T>.Projection.Include("_id");
+            List<T> r = null;
+            if (noSession)
+                r = await(await Collection.FindAsync(filter, new FindOptions<T> { Projection = projectionDef },
+                    cancellationToken: ct ?? CancellationToken.None)).ToListAsync();
+            else
+                r = await (await Collection.FindAsync(Context.Session, filter, new FindOptions<T> { Projection = projectionDef },
+                    cancellationToken: ct ?? CancellationToken.None)).ToListAsync();
+            HashSet<ObjectId> found = new HashSet<ObjectId>();
+            found.UnionWith(r.Select(x => (ObjectId)x.GetType().GetProperty("Id").GetValue(x)));
+            return idList.Select(x => found.Contains(x)).ToList();
+        }
+
+        async Task<TProjection> IAsyncRepository<T>.FindOne<TProjection>(Expression<Func<T, bool>> predicate, Expression<Func<T, TProjection>> projection, bool noSession, CancellationToken? ct)
+        {
+            var findOptions = new FindOptions<T, TProjection>();
+            findOptions.Limit = 1;
+            var projectionDef = Builders<T>.Projection.Expression(projection);
+            findOptions.Projection = projectionDef;
+
+            if (noSession)
+                return await (await Collection.FindAsync<TProjection>(predicate, options: findOptions,
+                    cancellationToken: ct ?? CancellationToken.None)).FirstOrDefaultAsync();
+            else
+                return await (await Collection.FindAsync<TProjection>(Context.Session, predicate, options: findOptions,
+                    cancellationToken: ct ?? CancellationToken.None)).FirstOrDefaultAsync();
+        }
+
+        IAsyncRepository<TOther> IAsyncRepository<T>.Cast<TOther>()
+        {
+            return new CastMongoRepository<TOther>(Context, CollectionName);
         }
 
         private SortDefinition<T> BuildSortDefinition(List<Ordering<T>> sortBy)
@@ -232,109 +323,16 @@ namespace Pulsar.Infrastructure.Database
 
             return r;
         }
+    }
 
-        public async Task<List<T>> FindManyById(IEnumerable<ObjectId> ids, ReadAck? rc = null, ReadPref? rp = null, CancellationToken? ct = null)
+    class CastMongoRepository<T> : MongoRepository<T> where T : class
+    {
+        private string _CollectionName = null;
+        public CastMongoRepository(MongoContext ctx, string collectionName) : base(ctx)
         {
-            var idList = ids.ToList();
-            var collection = Collection;
-            if (rc != null)
-                collection = collection.WithReadConcern(rc?.ToReadConcern());
-            if (rp != null)
-                collection = collection.WithReadPreference(rp?.ToReadPreference());
-
-            var filter = Builders<T>.Filter.In("_id", idList);
-            return await (await collection.FindAsync(Context.Session, filter,
-                cancellationToken: ct ?? CancellationToken.None)).ToListAsync();
+            _CollectionName = collectionName;
         }
 
-        public IQueryable<T> AsQueryable(ReadAck? rc = null, ReadPref? rp = null)
-        {
-            var collection = Collection;
-            if (rc != null)
-                collection = collection.WithReadConcern(rc?.ToReadConcern());
-            if (rp != null)
-                collection = collection.WithReadPreference(rp?.ToReadPreference());
-
-            return collection.AsQueryable<T>();
-        }
-
-        public async Task<TProjection> FindOneById<TProjection>(ObjectId id, Expression<Func<T, TProjection>> projection, ReadAck? rc = null, ReadPref? rp = null, CancellationToken? ct = null)
-        {
-            var collection = Collection;
-            if (rc != null)
-                collection = collection.WithReadConcern(rc?.ToReadConcern());
-            if (rp != null)
-                collection = collection.WithReadPreference(rp?.ToReadPreference());
-
-            var filter = Builders<T>.Filter.Eq("_id", id);
-            var projectionDef = Builders<T>.Projection.Expression(projection);
-            return await (await collection.FindAsync<TProjection>(Context.Session, filter, new FindOptions<T,TProjection> { Limit = 1, Projection = projectionDef },
-                cancellationToken: ct ?? CancellationToken.None)).FirstOrDefaultAsync();
-        }
-
-        public async Task<List<TProjection>> FindManyById<TProjection>(IEnumerable<ObjectId> ids, Expression<Func<T, TProjection>> projection, ReadAck? rc = null, ReadPref? rp = null, CancellationToken? ct = null)
-        {
-            var idList = ids.ToList();
-            var collection = Collection;
-            if (rc != null)
-                collection = collection.WithReadConcern(rc?.ToReadConcern());
-            if (rp != null)
-                collection = collection.WithReadPreference(rp?.ToReadPreference());
-
-            var filter = Builders<T>.Filter.In("_id", idList);
-            var projectionDef = Builders<T>.Projection.Expression(projection);
-            return await (await collection.FindAsync(Context.Session, filter, new FindOptions<T, TProjection> { Projection = projectionDef },
-                cancellationToken: ct ?? CancellationToken.None)).ToListAsync();
-        }
-
-        public async Task<bool> CheckOneById(ObjectId id, ReadAck? rc = null, ReadPref? rp = null, CancellationToken? ct = null)
-        {
-            var collection = Collection;
-            if (rc != null)
-                collection = collection.WithReadConcern(rc?.ToReadConcern());
-            if (rp != null)
-                collection = collection.WithReadPreference(rp?.ToReadPreference());
-
-            var filter = Builders<T>.Filter.Eq("_id", id);
-            var projectionDef = Builders<T>.Projection.Include("_id");
-            var r =  await (await collection.FindAsync(Context.Session, filter, new FindOptions<T> { Limit = 1, Projection = projectionDef },
-                cancellationToken: ct ?? CancellationToken.None)).FirstOrDefaultAsync();
-            return r != default(T);
-        }
-
-        public async Task<List<bool>> CheckManyById(IEnumerable<ObjectId> ids, ReadAck? rc = null, ReadPref? rp = null, CancellationToken? ct = null)
-        {
-            var idList = ids.ToList();
-            var collection = Collection;
-            if (rc != null)
-                collection = collection.WithReadConcern(rc?.ToReadConcern());
-            if (rp != null)
-                collection = collection.WithReadPreference(rp?.ToReadPreference());
-
-            var filter = Builders<T>.Filter.In("_id", idList);
-            var projectionDef = Builders<T>.Projection.Include("_id");
-            var r = await(await collection.FindAsync(Context.Session, filter, new FindOptions<T> { Projection = projectionDef },
-                cancellationToken: ct ?? CancellationToken.None)).ToListAsync();
-            HashSet<ObjectId> found = new HashSet<ObjectId>();
-            found.UnionWith(r.Select(x => (ObjectId)x.GetType().GetProperty("Id").GetValue(x)));
-            return idList.Select(x => found.Contains(x)).ToList();
-        }
-
-        public async Task<TProjection> FindOne<TProjection>(Expression<Func<T, bool>> predicate, Expression<Func<T, TProjection>> projection, ReadAck? rc = null, ReadPref? rp = null, CancellationToken? ct = null)
-        {
-            var collection = Collection;
-            if (rc != null)
-                collection = collection.WithReadConcern(rc?.ToReadConcern());
-            if (rp != null)
-                collection = collection.WithReadPreference(rp?.ToReadPreference());
-
-            var findOptions = new FindOptions<T, TProjection>();
-            findOptions.Limit = 1;
-            var projectionDef = Builders<T>.Projection.Expression(projection);
-            findOptions.Projection = projectionDef;
-
-            return await (await collection.FindAsync<TProjection>(Context.Session, predicate, options: findOptions,
-                cancellationToken: ct ?? CancellationToken.None)).FirstOrDefaultAsync();
-        }
+        protected override string CollectionName => _CollectionName;
     }
 }

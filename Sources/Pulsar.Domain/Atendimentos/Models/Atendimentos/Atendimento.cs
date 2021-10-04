@@ -27,26 +27,26 @@ namespace Pulsar.Domain.Atendimentos.Models
 
         public static Atendimento Criar(TipoAtendimento tipo,
             ObjectId usuarioId, ObjectId atendimentoRaizId,
-            ObjectId estabelecimentoId, ObjectId? equipeId, ObjectId pacienteId, 
+            Estabelecimento estabelecimento, ObjectId? equipeId, ObjectId pacienteId, 
             Usuario profissional, ObjectId? servicoId, ObjectId? agendamentoId,
             string justificativa)
         {
             switch (tipo)
             {
                 case TipoAtendimento.Medico:
-                    return new AtendimentoMedico(usuarioId, atendimentoRaizId, estabelecimentoId, equipeId, pacienteId, profissional, servicoId, agendamentoId);
+                    return new AtendimentoMedico(usuarioId, atendimentoRaizId, estabelecimento.Id, equipeId, pacienteId, profissional, servicoId, agendamentoId);
                 case TipoAtendimento.Enfermagem:
-                    return new AtendimentoEnfermagem(usuarioId, atendimentoRaizId, estabelecimentoId, equipeId, pacienteId, profissional, servicoId, agendamentoId);
+                    return new AtendimentoEnfermagem(usuarioId, atendimentoRaizId, estabelecimento.Id, equipeId, pacienteId, profissional, servicoId, agendamentoId);
                 case TipoAtendimento.AuxiliarEnfermagem:
-                    return new AtendimentoAuxiliarEnfermagem(usuarioId, atendimentoRaizId, estabelecimentoId, equipeId, pacienteId, profissional, servicoId, agendamentoId);
+                    return new AtendimentoAuxiliarEnfermagem(usuarioId, atendimentoRaizId, estabelecimento.Id, equipeId, pacienteId, profissional, servicoId, agendamentoId);
                 case TipoAtendimento.Vacinacao:
-                    return new AtendimentoVacinacao(usuarioId, atendimentoRaizId, estabelecimentoId, equipeId, pacienteId, profissional, servicoId, agendamentoId);
+                    return new AtendimentoVacinacao(usuarioId, atendimentoRaizId, estabelecimento.Id, equipeId, pacienteId, profissional, servicoId, agendamentoId);
                 case TipoAtendimento.Odontologico:
-                    return new AtendimentoOdontologico(usuarioId, atendimentoRaizId, estabelecimentoId, equipeId, pacienteId, profissional, servicoId, agendamentoId);
+                    return new AtendimentoOdontologico(usuarioId, atendimentoRaizId, estabelecimento, equipeId, pacienteId, profissional, servicoId, agendamentoId);
                 case TipoAtendimento.AlteracaoProntuario:
-                    return new AlteracaoProntuario(usuarioId, atendimentoRaizId, estabelecimentoId, pacienteId, profissional, justificativa);
+                    return new AlteracaoProntuario(usuarioId, atendimentoRaizId, estabelecimento.Id, pacienteId, profissional, justificativa);
                 case TipoAtendimento.EscutaInicial:
-                    return new EscutaInicial(usuarioId, atendimentoRaizId, estabelecimentoId, equipeId, pacienteId, profissional, servicoId, agendamentoId);
+                    return new EscutaInicial(usuarioId, atendimentoRaizId, estabelecimento.Id, equipeId, pacienteId, profissional, servicoId, agendamentoId);
                 default:
                     throw new InvalidOperationException();
             }

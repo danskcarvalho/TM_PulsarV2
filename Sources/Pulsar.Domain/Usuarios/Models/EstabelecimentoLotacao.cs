@@ -19,7 +19,7 @@ namespace Pulsar.Domain.Usuarios.Models
         /// Dá permissão a todos os estabelecimentos de uma rede de estabelecimentos.
         /// </summary>
         public ObjectId? RedeEstabelecimentosId { get; set; }
-        public ObjectId PerfilId { get; set; }
+        public ObjectId? PerfilId { get; set; }
         public UsuarioEspecialidade EspecialidadeConselho { get; set; }
         public bool Raiz { get; set; }
         public bool Gestor { get; set; }

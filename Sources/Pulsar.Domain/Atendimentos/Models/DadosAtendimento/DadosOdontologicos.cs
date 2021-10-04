@@ -18,6 +18,7 @@ namespace Pulsar.Domain.Atendimentos.Models
         public bool? VacinacaoEmDia { get; set; }
         public bool? NecessidadeEspeciais { get; set; }
         public bool? Gravidez { get; set; }
+        public TipoConsultaOdonto? TipoConsultaOdonto { get; set; }
         public HashSet<PossuiProtese> PossuiProtese { get; set; }
         public HashSet<VigilanciaSaudeBucal> VigilanciaSaudeBucal { get; set; }
         public HashSet<NecessitaProtese> NecessitaProtese { get; set; }

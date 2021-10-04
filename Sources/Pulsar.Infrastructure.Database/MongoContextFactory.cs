@@ -63,17 +63,22 @@ namespace Pulsar.Infrastructure.Database
                 {
                     if (options.Value.OpenTransaction)
                     {
+                        SetUpClientAndDatabase(options, ref client, ref db);
                         return await session.WithTransactionAsync(async (s, ct) =>
                         {
                             var uow = new MongoContext(s, client, ct, db, options.Value);
-                            return await work(uow);
+                            var r = await work(uow);
+                            await uow.Flush();
+                            return r;
                         }, cancellationToken: cancellationToken ?? CancellationToken.None);
                     }
                     else
                     {
                         SetUpClientAndDatabase(options, ref client, ref db);
                         var uow = new MongoContext(session, client, cancellationToken ?? CancellationToken.None, db, options.Value);
-                        return await work(uow);
+                        var r = await work(uow);
+                        await uow.Flush();
+                        return r;
                     }
                 });
             }

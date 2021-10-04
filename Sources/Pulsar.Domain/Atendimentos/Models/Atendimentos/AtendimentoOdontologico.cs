@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using Pulsar.Common.Enumerations;
+using Pulsar.Domain.Estabelecimentos.Models;
 using Pulsar.Domain.ProcedimentosOdontologicos.Models;
 using Pulsar.Domain.Usuarios.Models;
 using System;
@@ -17,21 +18,21 @@ namespace Pulsar.Domain.Atendimentos.Models
             Tipo = Pulsar.Common.Enumerations.TipoAtendimento.Odontologico;
         }
 
-        public AtendimentoOdontologico(ObjectId usuarioId, ObjectId atendimentoRaizId, ObjectId estabelecimentoId, ObjectId? equipeId, ObjectId pacienteId, Usuario profissional, ObjectId? servicoId, ObjectId? agendamentoId) : base()
+        public AtendimentoOdontologico(ObjectId usuarioId, ObjectId atendimentoRaizId, Estabelecimento estabelecimento, ObjectId? equipeId, 
+            ObjectId pacienteId, Usuario profissional, ObjectId? servicoId, ObjectId? agendamentoId) : this()
         {
-            EstabelecimentoId = estabelecimentoId;
+            EstabelecimentoId = estabelecimento.Id;
             PacienteId = pacienteId;
             ServicoId = servicoId;
             Id = ObjectId.GenerateNewId();
             Status = StatusAtendimento.Aguardando;
-            EstabelecimentoId = estabelecimentoId;
             PacienteId = pacienteId;
             FichasEsus = new List<ObjectId>();
             DataRegistro = Common.DataRegistro.CriadoHoje(usuarioId);
             Motivos = new List<Motivo>();
             Problemas = new List<Problema>();
             Condutas = new List<CondutaAtendimentoOdontologico>();
-            ProfissionalId = profissional.Id;
+            ProfissionalId = profissional?.Id;
             UltimosServicos = new List<ObjectId>();
             AtendimentoRaizId = atendimentoRaizId;
             HistoricoStatus = new HistoricoStatus()
@@ -47,8 +48,8 @@ namespace Pulsar.Domain.Atendimentos.Models
                 }
             };
             Realizacao = new RealizacaoAtendimento();
-            Especialidade = profissional.GetLotacao(estabelecimentoId).EspecialidadeConselho.Especialidade;
-            ConselhoProfissional = profissional.GetLotacao(estabelecimentoId).EspecialidadeConselho.Conselho;
+            Especialidade = profissional?.GetLotacao(estabelecimento.Id).EspecialidadeConselho.Especialidade;
+            ConselhoProfissional = profissional?.GetLotacao(estabelecimento.Id).EspecialidadeConselho.Conselho;
             EquipeId = equipeId;
             AgendamentoId = agendamentoId;
             ProcedimentosReportados = new List<Global.Models.ProcedimentoResumido>();
@@ -64,8 +65,21 @@ namespace Pulsar.Domain.Atendimentos.Models
                 Criados = new List<ObjectId>(),
                 Desfeitos = new List<ObjectId>()
             };
+            DadosOdontologicos = new DadosOdontologicos();
+            if (ServicoId == estabelecimento.Servicos?.ConsultaManutencaoOdontologiaServicoId)
+                DadosOdontologicos.TipoConsultaOdonto = TipoConsultaOdonto.ConsultaManutencaoOdontologia;
+            else if (ServicoId == estabelecimento.Servicos?.ConsultaRetornoOdontologiaServicoId)
+                DadosOdontologicos.TipoConsultaOdonto = TipoConsultaOdonto.ConsultaRetornoOdontologia;
+            else if (ServicoId == estabelecimento.Servicos?.PrimeiraConsultaOdontologiaServicoId)
+                DadosOdontologicos.TipoConsultaOdonto = TipoConsultaOdonto.PrimeiraConsultaOdontologicaProgramatica;
+
+            if (agendamentoId != null)
+                TipoAtendimentoEsus = Pulsar.Common.Enumerations.TipoAtendimentoEsus.ConsultaAgendada;
+            else
+                TipoAtendimentoEsus = Pulsar.Common.Enumerations.TipoAtendimentoEsus.ConsultaDia;
         }
 
+        public TipoAtendimentoEsus? TipoAtendimentoEsus { get; set; }
         public Antropometria Antropometria { get; set; }
         public Avaliacao Avaliacao { get; set; }
         public DadosOdontologicos DadosOdontologicos { get; set; }

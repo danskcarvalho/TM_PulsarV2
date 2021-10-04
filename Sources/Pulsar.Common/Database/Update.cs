@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Pulsar.Common.Database
 {
-    public static class Update
+    public abstract class Update<T>
     {
-        public static PushUpdate Push(object obj) => new PushUpdate(obj);
-        public static IncUpdate Inc(object obj) => new IncUpdate(obj);
+        public abstract Update<T> Set<TField>(Expression<Func<T, TField>> field, TField fieldValue);
     }
-
-    public record PushUpdate(object Object);
-    public record IncUpdate(object Amount);
 }

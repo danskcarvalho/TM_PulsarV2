@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using Pulsar.Common;
 using Pulsar.Common.Enumerations;
 using Pulsar.Common.Exceptions;
 using Pulsar.Domain.Common;
@@ -44,7 +45,10 @@ namespace Pulsar.Domain.Usuarios.Models
                 if (le.EstabelecimentoId != estabelecimentoId)
                     continue;
 
-                var perfil = await container.Perfis.FindOneById(le.PerfilId);
+                if (le.PerfilId == null)
+                    continue;
+
+                var perfil = await container.Perfis.FindOneById(le.PerfilId.Value, noSession: true);
                 if (perfil.Permissoes.Contains(permissao))
                     return true;
             }
@@ -55,6 +59,11 @@ namespace Pulsar.Domain.Usuarios.Models
         public EstabelecimentoLotacao GetLotacao(ObjectId estabelecimentoId)
         {
             return LotacoesEstabelecimentos.FirstOrDefault(le => le.EstabelecimentoId == estabelecimentoId);
+        }
+
+        public async Task<bool> PodeAtender(ObjectId estabelecimentoId, TipoAtendimento tipo, Container container)
+        {
+            return await PossuiPermissaoEstabelecimento(estabelecimentoId, tipo.GetPermissao(), container);
         }
     }
 }

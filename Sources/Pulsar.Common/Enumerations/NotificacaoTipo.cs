@@ -9,5 +9,6 @@ namespace Pulsar.Common.Enumerations
 {
     public enum NotificacaoTipo
     {
+        NovoAtendimento = 1
     }
 }

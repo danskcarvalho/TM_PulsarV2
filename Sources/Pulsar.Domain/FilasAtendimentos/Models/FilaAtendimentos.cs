@@ -13,6 +13,21 @@ namespace Pulsar.Domain.FilasAtendimentos.Models
 {
     public class FilaAtendimentos
     {
+        public FilaAtendimentos()
+        {
+        }
+
+        public FilaAtendimentos(Usuario usuarioLogado, Estabelecimento estabelecimento, Usuario profissional, DateTime data) : this()
+        {
+            Id = ObjectId.GenerateNewId();
+            Data = data;
+            Status = StatusFilaAtendimento.Aberta;
+            EstabelecimentoId = estabelecimento.Id;
+            ProfissionalId = profissional.Id;
+            Items = new List<FilaAtendimentosItem>();
+            DataRegistro = DataRegistro.CriadoHoje(usuarioLogado.Id);
+        }
+
         public ObjectId Id { get; set; }
         public DateTime Data { get; set; }
         public StatusFilaAtendimento Status { get; set; }

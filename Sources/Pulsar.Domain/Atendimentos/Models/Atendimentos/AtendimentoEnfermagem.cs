@@ -16,7 +16,7 @@ namespace Pulsar.Domain.Atendimentos.Models
             Tipo = Pulsar.Common.Enumerations.TipoAtendimento.Enfermagem;
         }
 
-        public AtendimentoEnfermagem(ObjectId usuarioId, ObjectId atendimentoRaizId, ObjectId estabelecimentoId, ObjectId? equipeId, ObjectId pacienteId, Usuario profissional, ObjectId? servicoId, ObjectId? agendamentoId) : base()
+        public AtendimentoEnfermagem(ObjectId usuarioId, ObjectId atendimentoRaizId, ObjectId estabelecimentoId, ObjectId? equipeId, ObjectId pacienteId, Usuario profissional, ObjectId? servicoId, ObjectId? agendamentoId) : this()
         {
             EstabelecimentoId = estabelecimentoId;
             PacienteId = pacienteId;
@@ -30,7 +30,7 @@ namespace Pulsar.Domain.Atendimentos.Models
             Motivos = new List<Motivo>();
             Problemas = new List<Problema>();
             Condutas = new List<CondutaAtendimentoIndividual>();
-            ProfissionalId = profissional.Id;
+            ProfissionalId = profissional?.Id;
             UltimosServicos = new List<ObjectId>();
             AtendimentoRaizId = atendimentoRaizId;
             HistoricoStatus = new HistoricoStatus()
@@ -46,13 +46,18 @@ namespace Pulsar.Domain.Atendimentos.Models
                 }
             };
             Realizacao = new RealizacaoAtendimento();
-            Especialidade = profissional.GetLotacao(estabelecimentoId).EspecialidadeConselho.Especialidade;
-            ConselhoProfissional = profissional.GetLotacao(estabelecimentoId).EspecialidadeConselho.Conselho;
+            Especialidade = profissional?.GetLotacao(estabelecimentoId).EspecialidadeConselho.Especialidade;
+            ConselhoProfissional = profissional?.GetLotacao(estabelecimentoId).EspecialidadeConselho.Conselho;
             EquipeId = equipeId;
             AgendamentoId = agendamentoId;
             ProcedimentosReportados = new List<Global.Models.ProcedimentoResumido>();
             Documentos = new List<Pastas.Models.PastaArquivo>();
             Acompanhamentos = new List<ObjectId>();
+
+            if (agendamentoId != null)
+                TipoAtendimentoEsus = Pulsar.Common.Enumerations.TipoAtendimentoEsus.ConsultaAgendada;
+            else
+                TipoAtendimentoEsus = Pulsar.Common.Enumerations.TipoAtendimentoEsus.ConsultaDia;
         }
     }
 }

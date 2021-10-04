@@ -17,7 +17,7 @@ namespace Pulsar.Domain.Atendimentos.Models
             Tipo = Pulsar.Common.Enumerations.TipoAtendimento.Vacinacao;
         }
 
-        public AtendimentoVacinacao(ObjectId usuarioId, ObjectId atendimentoRaizId, ObjectId estabelecimentoId, ObjectId? equipeId, ObjectId pacienteId, Usuario profissional, ObjectId? servicoId, ObjectId? agendamentoId) : base()
+        public AtendimentoVacinacao(ObjectId usuarioId, ObjectId atendimentoRaizId, ObjectId estabelecimentoId, ObjectId? equipeId, ObjectId pacienteId, Usuario profissional, ObjectId? servicoId, ObjectId? agendamentoId) : this()
         {
             EstabelecimentoId = estabelecimentoId;
             PacienteId = pacienteId;
@@ -28,7 +28,7 @@ namespace Pulsar.Domain.Atendimentos.Models
             PacienteId = pacienteId;
             FichasEsus = new List<ObjectId>();
             DataRegistro = Common.DataRegistro.CriadoHoje(usuarioId);
-            ProfissionalId = profissional.Id;
+            ProfissionalId = profissional?.Id;
             UltimosServicos = new List<ObjectId>();
             AtendimentoRaizId = atendimentoRaizId;
             HistoricoStatus = new HistoricoStatus()
@@ -44,8 +44,8 @@ namespace Pulsar.Domain.Atendimentos.Models
                 }
             };
             Realizacao = new RealizacaoAtendimento();
-            Especialidade = profissional.GetLotacao(estabelecimentoId).EspecialidadeConselho.Especialidade;
-            ConselhoProfissional = profissional.GetLotacao(estabelecimentoId).EspecialidadeConselho.Conselho;
+            Especialidade = profissional?.GetLotacao(estabelecimentoId).EspecialidadeConselho.Especialidade;
+            ConselhoProfissional = profissional?.GetLotacao(estabelecimentoId).EspecialidadeConselho.Conselho;
             EquipeId = equipeId;
             AgendamentoId = agendamentoId;
             ProcedimentosReportados = new List<Global.Models.ProcedimentoResumido>();

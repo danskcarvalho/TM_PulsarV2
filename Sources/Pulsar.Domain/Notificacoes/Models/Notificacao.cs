@@ -13,6 +13,8 @@ namespace Pulsar.Domain.Notificacoes.Models
     {
         public ObjectId Id { get; set; }
         public ObjectId UsuarioId { get; set; }
+        public ObjectId? EstabelecimentoId { get; set; }
+        public ObjectId? RedeEstabelecimentoId { get; set; }
         public NotificacaoTipo Tipo { get; set; }
         public string Mensagem { get; set; }
         public BsonDocument Parametros { get; set; }

@@ -14,6 +14,21 @@ namespace Pulsar.Domain.FilasAtendimentos.Models
 {
     public class FilaAtendimentosItem
     {
+        public FilaAtendimentosItem()
+        {
+
+        }
+        public FilaAtendimentosItem(AtendimentoComProfissional atd) : this()
+        {
+            AtendimentoId = atd.Id;
+            Agendamento = atd.AgendamentoId;
+            Paciente = atd.PacienteId;
+            TipoAtendimento = atd.Tipo;
+            DataInicioEspera = DateTime.Now;
+            Pode = new AcoesFilaAtendimentos() { Evadir = true, Iniciar = true, FinalizarPorDesistencia = true };
+            DataRegistro = DataRegistro.CriadoHoje(atd.DataRegistro.CriadoPorUsuarioId.Value);
+        }
+
         public ObjectId? AtendimentoId { get; set; }
         public ObjectId? Agendamento { get; set; }
         public ObjectId? Paciente { get; set; }

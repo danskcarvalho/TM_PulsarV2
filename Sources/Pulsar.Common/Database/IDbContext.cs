@@ -14,5 +14,6 @@ namespace Pulsar.Common.Database
         public object Database { get; }
         public CancellationToken CancellationToken { get; }
         public IsolationOptions Options { get; }
+        public Task Flush();
     }
 }

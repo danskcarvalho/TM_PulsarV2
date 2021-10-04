@@ -17,7 +17,7 @@ namespace Pulsar.Domain.Atendimentos.Models
         }
 
         public AlteracaoProntuario(ObjectId usuarioId, ObjectId atendimentoRaizId, ObjectId estabelecimentoId, ObjectId pacienteId, Usuario profissional,
-            string justificativa) : base()
+            string justificativa) : this()
         {
             EstabelecimentoId = estabelecimentoId;
             PacienteId = pacienteId;

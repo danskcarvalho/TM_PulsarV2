@@ -8,8 +8,11 @@ using Pulsar.Domain.Atendimentos.Models;
 using Pulsar.Domain.Atendimentos.Models.Atendimentos;
 using Pulsar.Domain.Common;
 using Pulsar.Domain.Estabelecimentos.Models;
+using Pulsar.Domain.FilasAtendimentos.Models;
+using Pulsar.Domain.Notificacoes.Models;
 using Pulsar.Domain.Pacientes.Models;
 using Pulsar.Domain.Servicos.Models;
+using Pulsar.Domain.Usuarios.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,18 +25,218 @@ namespace Pulsar.Domain.Atendimentos.Services
     { 
         public async Task Criar(CriarAtendimentoCommand cmd, Common.Container container)
         {
-            var usuario = await container.Usuarios.FindOneById(cmd.UsuarioId.Value);
+            var usuario = await container.Usuarios.FindOneById(cmd.UsuarioId.Value, noSession: true);
             if (usuario == null)
                 throw new PulsarException(PulsarErrorCode.NotFound);
             await usuario.ChecarPermissaoEstabelecimento(cmd.EstabelecimentoId, Permissao.CriarAtendimento, container);
-            Estabelecimento estabelecimento = await GetEstabelecimento(cmd, container);
+            var estabelecimento = await GetEstabelecimento(cmd, container);
             var paciente = await TratarPaciente(cmd, container);
 
             //não recriaremos a alteração de prontuário se já existe
-            if (await AlteracaoProntuarioExiste(cmd, container))
+            if (await AlteracaoProntuarioExiste(cmd, paciente, container))
                 return;
+            await ValidarServicos(cmd, container, estabelecimento, paciente);
+            var profissionais = await ValidarProfissionais(cmd, container);
+            //cria atendimentos
+            var atendimentosCriados = await CriarAtendimentos(cmd, container, usuario, estabelecimento, paciente, profissionais);
 
-            var servicos = await container.Servicos.FindManyById(cmd.Atendimentos.Where(a => a.ServicoId != null).Select(a => a.ServicoId.Value));
+            //incluir nas filas de atendimentos
+            var todosProfissionais = profissionais.Select(p => p.Value).ToList();
+            profissionais = await InserirFilasAtendimentos(cmd, container, usuario, estabelecimento, profissionais, atendimentosCriados, todosProfissionais);
+
+            //incluindo notificações
+            await CriarNotificacoes(cmd, container, usuario, estabelecimento, paciente, todosProfissionais);
+        }
+
+        private static async Task<Dictionary<ObjectId, Usuario>> InserirFilasAtendimentos(CriarAtendimentoCommand cmd, Container container, Usuario usuario, Estabelecimento estabelecimento, Dictionary<ObjectId, Usuario> profissionais, List<Atendimento> atendimentosCriados, List<Usuario> todosProfissionais)
+        {
+            if (cmd.Atendimentos.Any(a => a.ProfissionalId == null && a.Tipo != TipoAtendimento.AlteracaoProntuario))
+                todosProfissionais.AddRange(await container.Usuarios.FindMany(u => u.DataRegistro.DeletadoEm == null &&
+                    u.LotacoesEstabelecimentos.Any(le => le.EstabelecimentoId == estabelecimento.Id), noSession: true));
+            profissionais = todosProfissionais.PartitionByUnique(p => p.Id);
+
+            var listaProfissionaisId = profissionais.Select(x => x.Value.Id).Distinct().ToList();
+            var filasAtendimentos = await container.FilasAtendimentos.FindMany(fa => listaProfissionaisId.Contains(fa.ProfissionalId) &&
+                fa.EstabelecimentoId == estabelecimento.Id &&
+                fa.Data == DateTime.Today);
+
+            foreach (var atd in cmd.Atendimentos)
+            {
+                if (atd.Tipo == TipoAtendimento.AlteracaoProntuario)
+                    continue;
+
+                if (atd.ProfissionalId != null)
+                {
+                    var fa = filasAtendimentos.FirstOrDefault(f => f.ProfissionalId == atd.ProfissionalId);
+                    if (fa == null) //cria uma nova fila de atendimento
+                    {
+                        fa = new FilaAtendimentos(usuario, estabelecimento, profissionais[atd.ProfissionalId.Value], DateTime.Today);
+                        fa.Items.Add(new FilaAtendimentosItem((AtendimentoComProfissional)atendimentosCriados.First(a2 => a2.Id == atd.AtendimentoId)));
+                        await container.FilasAtendimentos.InsertOne(fa);
+                    }
+                    else
+                    {
+                        fa.Items.Add(new FilaAtendimentosItem((AtendimentoComProfissional)atendimentosCriados.First(a2 => a2.Id == atd.AtendimentoId)));
+                        fa.DataVersion++;
+                        fa.DataRegistro.AtualizadoEm = DateTime.Now;
+                        fa.DataRegistro.AtualizadoPorUsuarioId = usuario.Id;
+                        await container.FilasAtendimentos.UpdateOne(fa);
+                    }
+                }
+                else
+                {
+                    bool adicionouEmAlgumaFila = false;
+
+                    foreach (var prof in todosProfissionais)
+                    {
+                        if (!await prof.PodeAtender(estabelecimento.Id, atd.Tipo.Value, container))
+                            continue;
+
+                        var fa = filasAtendimentos.FirstOrDefault(f => f.ProfissionalId == prof.Id);
+                        if (fa == null) //cria uma nova fila de atendimento
+                        {
+                            fa = new FilaAtendimentos(usuario, estabelecimento, prof, DateTime.Today);
+                            fa.Items.Add(new FilaAtendimentosItem((AtendimentoComProfissional)atendimentosCriados.First(a2 => a2.Id == atd.AtendimentoId)));
+                            await container.FilasAtendimentos.InsertOne(fa);
+                        }
+                        else
+                        {
+                            fa.Items.Add(new FilaAtendimentosItem((AtendimentoComProfissional)atendimentosCriados.First(a2 => a2.Id == atd.AtendimentoId)));
+                            fa.DataVersion++;
+                            fa.DataRegistro.AtualizadoEm = DateTime.Now;
+                            fa.DataRegistro.AtualizadoPorUsuarioId = usuario.Id;
+                            await container.FilasAtendimentos.UpdateOne(fa);
+                        }
+                        adicionouEmAlgumaFila = true;
+                    }
+
+                    if (!adicionouEmAlgumaFila)
+                        throw new PulsarException(PulsarErrorCode.BadRequest, "Não há filas de atendimentos disponíveis para inserir o atendimento.");
+                }
+            }
+
+            return profissionais;
+        }
+
+        private static async Task CriarNotificacoes(CriarAtendimentoCommand cmd, Container container, Usuario usuario, Estabelecimento estabelecimento, Paciente paciente, List<Usuario> todosProfissionais)
+        {
+            foreach (var atd in cmd.Atendimentos)
+            {
+                if (atd.Tipo == TipoAtendimento.AlteracaoProntuario)
+                    continue;
+
+                if (atd.ProfissionalId != null)
+                {
+                    await container.Notificacoes.InsertOne(new Notificacao()
+                    {
+                        DataRegistro = DataRegistro.CriadoHoje(usuario.Id),
+                        EstabelecimentoId = estabelecimento.Id,
+                        Id = ObjectId.GenerateNewId(),
+                        Mensagem = $"O paciente {paciente.DadosAtuais.DadosBasicos.Nome} foi incluído em sua fila de atendimentos.",
+                        Parametros = new
+                        {
+                            AtendimentoId = atd.AtendimentoId,
+                            PacienteId = paciente.Id
+                        }.ToBsonDocument(),
+                        Tipo = NotificacaoTipo.NovoAtendimento,
+                        UsuarioId = atd.ProfissionalId.Value
+                    });
+                }
+                else
+                {
+                    foreach (var prof in todosProfissionais)
+                    {
+                        if (!await prof.PodeAtender(estabelecimento.Id, atd.Tipo.Value, container))
+                            continue;
+
+                        await container.Notificacoes.InsertOne(new Notificacao()
+                        {
+                            DataRegistro = DataRegistro.CriadoHoje(usuario.Id),
+                            EstabelecimentoId = estabelecimento.Id,
+                            Id = ObjectId.GenerateNewId(),
+                            Mensagem = $"O paciente {paciente.DadosAtuais.DadosBasicos.Nome} foi incluído em sua fila de atendimentos.",
+                            Parametros = new
+                            {
+                                AtendimentoId = atd.AtendimentoId,
+                                PacienteId = paciente.Id
+                            }.ToBsonDocument(),
+                            Tipo = NotificacaoTipo.NovoAtendimento,
+                            UsuarioId = prof.Id
+                        });
+                    }
+                }
+            }
+        }
+
+        private static async Task<List<Atendimento>> CriarAtendimentos(CriarAtendimentoCommand cmd, Container container, Usuario usuario, Estabelecimento estabelecimento, Paciente paciente, Dictionary<ObjectId, Usuario> profissionais)
+        {
+            //cria atendimento raiz
+            List<Atendimento> atendimentosCriados = new List<Atendimento>();
+            var atendimentoRaiz = new AtendimentoRaiz(cmd.UsuarioId.Value, cmd.EstabelecimentoId.Value, cmd.Categoria.Value, paciente.Id);
+            atendimentosCriados.Add(atendimentoRaiz);
+            //se for alteração do prontuário então o atendimento estará sincronizado com o prontuário instantaneamente
+            if (cmd.Atendimentos.Any(a => a.Tipo == TipoAtendimento.AlteracaoProntuario))
+                atendimentoRaiz.AtualizacaoPronturarioImediata = true;
+            //insere atendimento raiz
+            await container.Atendimentos.InsertOne(atendimentoRaiz);
+
+            //pega equipes do estabelecimento
+            List<Equipe> equipes = await container.Equipes.FindMany(eq => eq.EstabelecimentoId == estabelecimento.Id &&
+                eq.DataRegistro.DeletadoEm == null, noSession: true);
+
+            foreach (var atd in cmd.Atendimentos)
+            {
+                var eqp = equipes.Where(eq => eq.Membros.Any(m => m.ProfissionalId == atd.ProfissionalId)).ToList();
+                ObjectId? equipeId = null;
+                if (atd.ProfissionalId != null && eqp.Count == 1)
+                    equipeId = eqp.First().Id;
+
+                var atendimento = Atendimento.Criar(atd.Tipo.Value,
+                    usuario.Id,
+                    atendimentoRaiz.Id,
+                    estabelecimento,
+                    equipeId,
+                    paciente.Id,
+                    atd.ProfissionalId.HasValue ? profissionais[atd.ProfissionalId.Value] : null,
+                    atd.ServicoId,
+                    null,
+                    atd.Justificativa);
+                atd.AtendimentoId = atendimento.Id;
+                atendimentosCriados.Add(atendimento);
+                await container.Atendimentos.InsertOne(atendimento);
+            }
+
+            return atendimentosCriados;
+        }
+
+        private static async Task<Dictionary<ObjectId, Usuario>> ValidarProfissionais(CriarAtendimentoCommand cmd, Container container)
+        {
+            var profissionais = await container.Usuarios.FindManyById(cmd.Atendimentos.Where(a => a.ProfissionalId != null).Select(a => a.ProfissionalId.Value), noSession: true);
+            var profissionalPorId = profissionais.PartitionByUnique(s => s.Id);
+
+            foreach (var atd in cmd.Atendimentos)
+            {
+                if (atd.Tipo == TipoAtendimento.AlteracaoProntuario)
+                    atd.ProfissionalId = cmd.UsuarioId;
+                if (atd.ProfissionalId != null)
+                {
+                    if (!profissionalPorId.ContainsKey(atd.ProfissionalId.Value))
+                        throw new PulsarException(PulsarErrorCode.NotFound);
+
+                    var profissional = profissionalPorId[atd.ServicoId.Value];
+                    if (profissional.DataRegistro.DeletadoEm != null)
+                        throw new PulsarException(PulsarErrorCode.NotFound);
+                    if (!await profissional.PossuiPermissaoEstabelecimento(cmd.EstabelecimentoId, atd.Tipo.Value.GetPermissao(), container))
+                        throw new PulsarException(PulsarErrorCode.BadRequest, $"O profissional {profissional.DadosPessoais.Nome} não possui as permissões necessárias para realizar este tipo de atendimento.");
+                }
+            }
+
+            return profissionalPorId;
+        }
+
+        private static async Task<Dictionary<ObjectId, Servico>> ValidarServicos(CriarAtendimentoCommand cmd, Container container, Estabelecimento estabelecimento, Paciente paciente)
+        {
+            var servicos = await container.Servicos.FindManyById(cmd.Atendimentos.Where(a => a.ServicoId != null).Select(a => a.ServicoId.Value), noSession: false);
             var servicoPorId = servicos.PartitionByUnique(s => s.Id);
 
             foreach (var atd in cmd.Atendimentos)
@@ -67,52 +270,7 @@ namespace Pulsar.Domain.Atendimentos.Services
                 }
             }
 
-            var profissionais = await container.Usuarios.FindManyById(cmd.Atendimentos.Where(a => a.ProfissionalId != null).Select(a => a.ProfissionalId.Value));
-            var profissionalPorId = profissionais.PartitionByUnique(s => s.Id);
-
-            foreach (var atd in cmd.Atendimentos)
-            {
-                if (atd.ProfissionalId != null)
-                {
-                    if (!profissionalPorId.ContainsKey(atd.ProfissionalId.Value))
-                        throw new PulsarException(PulsarErrorCode.NotFound);
-
-                    var profissional = profissionalPorId[atd.ServicoId.Value];
-                    if (profissional.DataRegistro.DeletadoEm != null)
-                        throw new PulsarException(PulsarErrorCode.NotFound);
-                    if (!await profissional.PossuiPermissaoEstabelecimento(cmd.EstabelecimentoId, atd.Tipo.Value.GetPermissao(), container))
-                        throw new PulsarException(PulsarErrorCode.BadRequest, $"O profissional {profissional.DadosPessoais.Nome} não possui as permissões necessárias para realizar este tipo de atendimento.");
-                }
-            }
-
-            List<Atendimento> atendimentosCriados = new List<Atendimento>();
-            var atendimentoRaiz = new AtendimentoRaiz(cmd.UsuarioId.Value, cmd.EstabelecimentoId.Value, cmd.Categoria.Value, paciente.Id);
-            if (cmd.Atendimentos.Any(a => a.Tipo == TipoAtendimento.AlteracaoProntuario))
-                atendimentoRaiz.AtualizacaoPronturarioImediata = true;
-            atendimentosCriados.Add(atendimentoRaiz);
-
-            foreach (var atd in cmd.Atendimentos)
-            {
-                //var atendimento = Atendimento.Criar(
-                //    cmd.UsuarioId.Value,
-                //    cmd.EstabelecimentoId.Value,
-                //    cmd.Categoria.Value,
-                //    paciente.Id,
-                //    atd.Tipo.Value,
-                //    atd.ProfissionalId,
-                //    atd.ServicoId,
-                //    atd.Justificativa);
-                //atd.AtendimentoId = atendimento.Id;
-                //atendimentosCriados.Add(atendimentoRaiz);
-
-                //TODO: se for um atendimento odontológico, pegar o último odontograma
-                //TODO: Pegar a equipe...
-            }
-
-            await container.Atendimentos.InsertMany(atendimentosCriados);
-
-            //TODO: incluir na fila de atendimento
-            //TODO: incluir notificações
+            return servicoPorId;
         }
 
         private static async Task<Estabelecimento> GetEstabelecimento(CriarAtendimentoCommand cmd, Container container)
@@ -124,33 +282,31 @@ namespace Pulsar.Domain.Atendimentos.Services
                 DadosBasicos = new Estabelecimentos.Models.DadosBasicos
                 {
                     Nome = e.DadosBasicos.Nome
-                }
-            });
+                },
+                Servicos = e.Servicos
+            }, noSession: true);
             if (estabelecimento == null)
                 throw new PulsarException(PulsarErrorCode.NotFound);
             return estabelecimento;
         }
 
-        private async Task<bool> AlteracaoProntuarioExiste(CriarAtendimentoCommand cmd, Common.Container container)
+        private async Task<bool> AlteracaoProntuarioExiste(CriarAtendimentoCommand cmd, Paciente paciente, Common.Container container)
         {
             if (cmd.Atendimentos.Any(a => a.Tipo == TipoAtendimento.AlteracaoProntuario))
             {
                 //verifica se já existe
-                var ap = await container.Atendimentos.AsQueryable()
-                    .OfType<AlteracaoProntuario>()
-                    .Where(x => x.Data == DateTime.Today && x.ProfissionalId == cmd.UsuarioId.Value && x.EstabelecimentoId == cmd.EstabelecimentoId)
-                    .Select(x => new AlteracaoProntuario() { Id = x.Id })
-                    .FirstOrDefaultAsync();
+                var ap = await container.Atendimentos.Cast<AlteracaoProntuario>().FindOne(
+                        x => x.Tipo == TipoAtendimento.AlteracaoProntuario && x.Data == DateTime.Today && x.ProfissionalId == cmd.UsuarioId.Value && x.EstabelecimentoId == cmd.EstabelecimentoId &&
+                             x.PacienteId == paciente.Id,
+                        x => new AlteracaoProntuario() { Id = x.Id });
                 if (ap != null)
                 {
                     cmd.Atendimentos.First().AtendimentoId = ap.Id;
                     var justificativa = cmd.Atendimentos.First().Justificativa;
                     //atualiza a justificativa
-                    await container.Atendimentos.UpdateOne(x => x.Id == ap.Id, new
-                    {
-                        Justificativa = justificativa
-                    });
-                    //não recriamos a alteração de prontuário..;
+                    await container.Atendimentos.Cast<AlteracaoProntuario>().UpdateOne(x => x.Id == ap.Id,
+                        u => u.Set(ap2 => ap2.Justificativa, justificativa));
+                    //não recriamos a alteração de prontuário...
                     return true;
                 }
             }
