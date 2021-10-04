@@ -27,11 +27,20 @@ namespace Pulsar.Domain.FilasAtendimentos.Models
             DataInicioEspera = DateTime.Now;
             Pode = new AcoesFilaAtendimentos() { Evadir = true, Iniciar = true, FinalizarPorDesistencia = true };
             DataRegistro = DataRegistro.CriadoHoje(atd.DataRegistro.CriadoPorUsuarioId.Value);
+            FilasCorrelacionadas = new List<ObjectId>();
+        }
+
+        public FilaAtendimentosItem(AtendimentoComProfissional atd, ObjectId correlacaoId, IEnumerable<ObjectId> filasCorrelacionadas) : this(atd)
+        {
+            CorrelacaoId = correlacaoId;
+            FilasCorrelacionadas.AddRange(filasCorrelacionadas);
         }
 
         public ObjectId? AtendimentoId { get; set; }
         public ObjectId? Agendamento { get; set; }
         public ObjectId? Paciente { get; set; }
+        public ObjectId? CorrelacaoId { get; set; }
+        public List<ObjectId> FilasCorrelacionadas { get; set; }
         public TipoAtendimento? TipoAtendimento { get; set; }
         public DateTime? DataInicioEspera { get; set; }
         public RiscoAtendimento? Risco { get; set; }

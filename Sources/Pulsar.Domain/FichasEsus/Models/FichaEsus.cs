@@ -14,7 +14,8 @@ namespace Pulsar.Domain.FichasEsus.Models
         public FichaTipo FichaTipo { get; set; }
         public DateTime? DataReferencia { get; set; }
         public ObjectId EstabelecimentoId { get; set; }
-        public ObjectId AtendimentoId { get; set; }
+        public ObjectId? AtendimentoId { get; set; }
+        public bool? AtendimentoCancelado { get; set; }
         public DataRegistro DataRegistro { get; set; }
         public long DataVersion { get; set; }
     }

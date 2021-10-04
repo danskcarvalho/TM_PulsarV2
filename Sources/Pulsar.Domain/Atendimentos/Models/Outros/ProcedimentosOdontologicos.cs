@@ -11,7 +11,8 @@ namespace Pulsar.Domain.Atendimentos.Models
     public class ProcedimentosOdontologicos
     {
         public List<ObjectId> Criados { get; set; }
-        public List<ObjectId> Concluidos { get; set; }
-        public List<ObjectId> Desfeitos { get; set; }
+        public List<ObjectId> Finalizados { get; set; }
+        public List<ObjectId> Reabertos { get; set; }
+        public List<ObjectId> Cancelados { get; set; }
     }
 }

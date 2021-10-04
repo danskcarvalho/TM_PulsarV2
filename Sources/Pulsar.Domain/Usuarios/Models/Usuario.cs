@@ -45,6 +45,9 @@ namespace Pulsar.Domain.Usuarios.Models
                 if (le.EstabelecimentoId != estabelecimentoId)
                     continue;
 
+                if (!le.Ativo)
+                    continue;
+
                 if (le.PerfilId == null)
                     continue;
 

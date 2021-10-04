@@ -25,6 +25,12 @@ namespace Pulsar.Domain.Prontuarios.Models
         public ObjectId? ItemId { get; set; }
         public ProntuarioOrigem Origem { get; set; }
         public bool OrigemExterna { get; set; }
+        /// <summary>
+        /// Apenas relevante quando este fragmento tiver sido gerado à partir de uma atividade. Diz quantas vezes um procedimento foi executado.
+        /// </summary>
+        public int? QuantidadeProcedimentos { get; set; }
+        public FinalizacaoAtividade FinalizacaoAtividade { get; set; }
+        public bool AtendimentoCancelado { get; set; }
         public DataRegistro DataRegistro { get; set; }
     }
 }

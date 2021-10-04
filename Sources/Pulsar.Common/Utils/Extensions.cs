@@ -291,6 +291,16 @@ namespace Pulsar.Common
             return dic;
         }
 
+        public static Dictionary<TKey, TOut> ChangeValues<TKey, TValue, TOut>(this Dictionary<TKey, TValue> dictionary, Func<TValue, TOut> fn)
+        {
+            Dictionary<TKey, TOut> dic = new Dictionary<TKey, TOut>();
+            foreach (var key in dictionary.Keys)
+            {
+                dic[key] = fn(dictionary[key]);
+            }
+            return dic;
+        }
+
         public static long ToUnix(this DateTime date)
         {
             var data = new DateTimeOffset(date);

@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Pulsar.Domain.Atendimentos.Models
 {
-    public class AtividadeAdministrarVacina : Atividade
+    public class AdministrarVacinaAtividade : Atividade
     {
-        public AtividadeAdministrarVacina()
+        public AdministrarVacinaAtividade()
         {
             Tipo = Pulsar.Common.Enumerations.TipoAtividade.Vacinacao;
         }

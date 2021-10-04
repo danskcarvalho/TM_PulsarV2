@@ -25,7 +25,11 @@ namespace Pulsar.Domain.Atendimentos.Models
         public ObjectId AtendimentoGeradorId { get; set; }
         public string Observacoes { get; set; }
         public TipoAtividade Tipo { get; set; }
-        public int Quantidade { get; set; }
+        public int? Quantidade { get; set; }
+        /// <summary>
+        /// Apenas faz sentido quando a quantidade é informado. Ex.: o procedimento deve ser realizado de 20 em 20min.
+        /// </summary>
+        public TimeSpan? FrequenciaRealizacao { get; set; }
         public FinalizacaoAtividade Finalizacao { get; set; }
         public DataRegistro DataRegistro { get; set; }
         public long DataVersion { get; set; }

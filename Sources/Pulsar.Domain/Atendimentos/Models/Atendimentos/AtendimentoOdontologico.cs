@@ -62,9 +62,10 @@ namespace Pulsar.Domain.Atendimentos.Models
             };
             ProcedimentosOdontologicos = new ProcedimentosOdontologicos()
             {
-                Concluidos = new List<ObjectId>(),
+                Finalizados = new List<ObjectId>(),
                 Criados = new List<ObjectId>(),
-                Desfeitos = new List<ObjectId>()
+                Reabertos = new List<ObjectId>(),
+                Cancelados = new List<ObjectId>()
             };
             DadosOdontologicos = new DadosOdontologicos();
             if (ServicoId == estabelecimento.Servicos?.ConsultaManutencaoOdontologiaServicoId)
