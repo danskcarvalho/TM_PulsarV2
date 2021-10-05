@@ -61,7 +61,7 @@ namespace Pulsar.Domain.FilasAtendimentos.Services
             //pega o atendimento
             var atendimento = await container.Atendimentos.FindOneById(item.AtendimentoId.Value);
             //abre o atendimento
-            await atendimento.Abrir(cmd.UsuarioId, container);
+            await atendimento.Abrir(cmd.UsuarioId, filaAtendimentos.Id, container);
             //remove o atendimento de outras filas de atendimentos
             await RemoverFilasCorrelacionadas(cmd.UsuarioId, item.CorrelacaoId, item.FilasCorrelacionadas, container);
             //altera o item atual

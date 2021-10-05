@@ -34,9 +34,15 @@ namespace Pulsar.Domain.Acompanhamentos.Models
             await container.Acompanhamentos.UpdateOne(this);
         }
 
-        protected virtual void InserirDadosAtendimento(ObjectId usuarioId, AtendimentoComProfissional ai)
+        protected virtual void InserirDadosAtendimento(ObjectId usuarioId, AtendimentoComProfissional atendimento)
         {
+            throw new NotImplementedException();
+        }
 
+        public virtual async Task AtualizarAtendimento(ObjectId usuarioId, AtendimentoComProfissional atendimento, Container container)
+        {
+            InserirDadosAtendimento(usuarioId, atendimento);
+            await container.Acompanhamentos.UpdateOne(this);
         }
     }
 }

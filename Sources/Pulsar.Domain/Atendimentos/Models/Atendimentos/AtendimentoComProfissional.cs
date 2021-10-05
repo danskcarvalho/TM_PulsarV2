@@ -74,7 +74,7 @@ namespace Pulsar.Domain.Atendimentos.Models
         public ObjectId? AgendamentoAoFinalizarId { get; set; }
         public ObjectId? AtendimentoInclusoAoFinalizarId { get; set; }
 
-        public override async Task Abrir(ObjectId usuarioId, Container container)
+        public override async Task Abrir(ObjectId usuarioId, ObjectId filaAtendimentosId, Container container)
         {
             //atualiza atendimento raiz
             var atendimentoRaiz = await container.Atendimentos.Cast<AtendimentoRaiz>().FindOneById(AtendimentoRaizId);
@@ -107,6 +107,7 @@ namespace Pulsar.Domain.Atendimentos.Models
             }
 
             //atualiza a mim mesmo
+            FilasAtendimentos = new List<ObjectId>() { filaAtendimentosId }; //só vai estar nesta fila de atendimento...
             Status = StatusAtendimento.Aberto;
             HistoricoStatus.PrimeiraAbertura = DateTime.Now;
             DataRegistro.Atualizado(usuarioId);
@@ -137,6 +138,18 @@ namespace Pulsar.Domain.Atendimentos.Models
             this.DataRegistro.Atualizado(usuario.Id);
             this.DataVersion++;
             await container.Atendimentos.UpdateOne(this);
+
+            //atualiza a fila de atendimento
+            var filaAtendimentos = await container.FilasAtendimentos.FindOneById(this.FilasAtendimentos.First()); //só pode estar em uma única fila de atendimentos
+            var item = filaAtendimentos.Items.FirstOrDefault(x => x.AtendimentoId == this.Id);
+            item.Status = StatusAtendimento.Aberto;
+            filaAtendimentos.Status = StatusFilaAtendimento.Aberta;
+            await container.FilasAtendimentos.UpdateOne(filaAtendimentos);
+
+            //atualizar acompanhamentos
+            var acompanhamentos = await container.Acompanhamentos.FindManyById(this.Acompanhamentos);
+            foreach (var a in acompanhamentos)
+                await a.AtualizarAtendimento(usuario.Id, this, container);
         }
 
         private async Task EnviarNotificacoesAbertura(ObjectId usuarioId, Container container, AtendimentoRaiz atendimentoRaiz)

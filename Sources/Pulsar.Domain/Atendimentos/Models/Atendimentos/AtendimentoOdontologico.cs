@@ -66,7 +66,7 @@ namespace Pulsar.Domain.Atendimentos.Models
         public ProcedimentosOdontologicos ProcedimentosOdontologicos { get; set; } = new ProcedimentosOdontologicos();
         public List<CondutaAtendimentoOdontologico> Condutas { get; set; } = new List<CondutaAtendimentoOdontologico>();
 
-        public override async Task Abrir(ObjectId usuarioId, Container container)
+        public override async Task Abrir(ObjectId usuarioId, ObjectId filaAtendimentosId, Container container)
         {
             var ultimoAtendimento = (await container.Atendimentos.Cast<AtendimentoOdontologico>().FindMany(
                     x => x.PacienteId == this.PacienteId && x.Tipo == TipoAtendimento.Odontologico && x.Status == StatusAtendimento.Finalizado,
@@ -78,7 +78,7 @@ namespace Pulsar.Domain.Atendimentos.Models
                 this.Odontograma = ultimoAtendimento.Odontograma;
 
 
-            await base.Abrir(usuarioId, container);
+            await base.Abrir(usuarioId, filaAtendimentosId, container);
         }
     }
 }

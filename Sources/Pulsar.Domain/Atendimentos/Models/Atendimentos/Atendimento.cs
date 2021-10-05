@@ -60,7 +60,7 @@ namespace Pulsar.Domain.Atendimentos.Models
             throw new PulsarException(PulsarErrorCode.BadRequest, "Atendimento não pode ser reaberto.");
         }
 
-        public virtual Task Abrir(ObjectId usuarioId, Container container)
+        public virtual Task Abrir(ObjectId usuarioId, ObjectId filaAtendimentosId, Container container)
         {
             throw new PulsarException(PulsarErrorCode.BadRequest, "Atendimento não pode ser aberto.");
         }
