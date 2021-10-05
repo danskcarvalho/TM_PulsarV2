@@ -32,12 +32,23 @@ namespace Pulsar.Domain.Atendimentos.Services
                 throw new PulsarException(PulsarErrorCode.NotFound);
             await usuario.ChecarPermissaoEstabelecimento(cmd.EstabelecimentoId, Permissao.CriarAtendimento, container);
 
+            //checa se agendamento pertence ao estabelecimento que se quer criar o atendimento...
+            if (agendamento != null && agendamento.EstabelecimentoId != cmd.EstabelecimentoId)
+                throw new PulsarException(PulsarErrorCode.BadRequest, "O agendamento não pertence ao estabelecimento informado.");
             //se agendamento for passado e o agendamento só referencia um único profissional...
             if(agendamento != null && agendamento.Configuracao?.Faixa?.Profissionais.Count == 1)
             {
                 foreach (var atd in cmd.Atendimentos)
                 {
                     atd.ProfissionalId = agendamento.Configuracao.Faixa.Profissionais[0];
+                }
+            }
+            //pega o serviço do agendamento
+            if(agendamento != null)
+            {
+                foreach (var atd in cmd.Atendimentos)
+                {
+                    atd.ServicoId = agendamento.ServicoId;
                 }
             }
 

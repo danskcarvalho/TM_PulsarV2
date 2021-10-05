@@ -132,6 +132,7 @@ namespace Pulsar.Domain.Common
         public Container Create(IDbContext ctx)
         {
             return new Container(
+                ctx,
                 Acompanhamentos.Get(ctx),
                 Agendamentos.Get(ctx),
                 Agendas.Get(ctx),

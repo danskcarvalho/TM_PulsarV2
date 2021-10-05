@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using Pulsar.Common.Enumerations;
+using Pulsar.Common.Exceptions;
 using Pulsar.Domain.Common;
 using Pulsar.Domain.Estabelecimentos.Models;
 using Pulsar.Domain.FichasEsus.Models;
@@ -50,6 +51,11 @@ namespace Pulsar.Domain.Atendimentos.Models
                 default:
                     throw new InvalidOperationException();
             }
+        }
+
+        public virtual Task Abrir(ObjectId usuarioId, Container container)
+        {
+            throw new PulsarException(PulsarErrorCode.BadRequest, "Atendimento não pode ser aberto.");
         }
     }
 }

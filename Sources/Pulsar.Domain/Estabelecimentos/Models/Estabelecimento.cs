@@ -24,5 +24,15 @@ namespace Pulsar.Domain.Estabelecimentos.Models
         public DataRegistro DataRegistro { get; set; }
         public long ChamadasVersion { get; set; }
         public long DataVersion { get; set; }
+
+        public bool IsPreNatalOuPuerperio(ObjectId servicoId)
+        {
+            return Servicos != null && (Servicos.PreNatalIds.Contains(servicoId) || Servicos.PuericulturaIds.Contains(servicoId));
+        }
+
+        public bool IsPuericultura(ObjectId servicoId)
+        {
+            return Servicos != null && Servicos.PuericulturaIds.Contains(servicoId);
+        }
     }
 }

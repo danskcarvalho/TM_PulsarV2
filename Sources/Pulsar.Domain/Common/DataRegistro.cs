@@ -27,5 +27,17 @@ namespace Pulsar.Domain.Common
                 AtualizadoPorUsuarioId = usuarioId
             };
         }
+
+        public void Atualizado(ObjectId usuarioId)
+        {
+            AtualizadoEm = DateTime.Now;
+            AtualizadoPorUsuarioId = usuarioId;
+        }
+
+        public void Removida(ObjectId usuarioId)
+        {
+            DeletadoEm = DateTime.Now;
+            DeletadoPorUsuarioId = usuarioId;
+        }
     }
 }

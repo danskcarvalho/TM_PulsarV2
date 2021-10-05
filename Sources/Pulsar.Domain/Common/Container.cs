@@ -29,6 +29,7 @@ namespace Pulsar.Domain.Common
 {
     public class Container
     {
+        private IDbContext _Context = null;
         public IAsyncRepository<Acompanhamento> Acompanhamentos { get; }
         public IAsyncRepository<Agendamento> Agendamentos { get; }
         public IAsyncRepository<Agenda> Agendas { get; }
@@ -62,7 +63,8 @@ namespace Pulsar.Domain.Common
         public IAsyncRepository<Servico> Servicos { get; }
         public IAsyncRepository<Usuario> Usuarios { get; }
 
-        public Container(IAsyncRepository<Acompanhamento> acompanhamentos,
+        public Container(IDbContext ctx,
+                         IAsyncRepository<Acompanhamento> acompanhamentos,
                          IAsyncRepository<Agendamento> agendamentos,
                          IAsyncRepository<Agenda> agendas,
                          IAsyncRepository<Escala> escalas,
@@ -95,6 +97,7 @@ namespace Pulsar.Domain.Common
                          IAsyncRepository<Servico> servicos,
                          IAsyncRepository<Usuario> usuarios)
         {
+            _Context = ctx;
             Acompanhamentos = acompanhamentos;
             Agendamentos = agendamentos;
             Agendas = agendas;
@@ -127,6 +130,11 @@ namespace Pulsar.Domain.Common
             RedesEstabelecimentos = redesEstabelecimentos;
             Servicos = servicos;
             Usuarios = usuarios;
+        }
+
+        public Task Flush()
+        {
+            return _Context.Flush();
         }
     }
 }

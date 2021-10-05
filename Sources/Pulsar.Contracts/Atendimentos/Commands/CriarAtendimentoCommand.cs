@@ -66,8 +66,9 @@ namespace Pulsar.Contracts.Atendimentos.Commands
             }).When(x => x.PacienteAnonimo != null);
             RuleFor(x => x.Categoria).NotNull().IsInEnum();
             RuleFor(x => x.Atendimentos)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
-                .Must(x => x.All(y => y != null)).WithMessage("Elemento nulo em Atendimentos.").When(x => x.Atendimentos != null);
+                .Must(x => x.All(y => y != null)).WithMessage("Elemento nulo em Atendimentos.");
             RuleFor(x => x).Must(x => x.Atendimentos.Count == 1)
                 .WithMessage("Alteração de prontuário não pode ser criada com outro atendimentos.")
                 .When(x => x.Atendimentos != null && x.Atendimentos.Any(y => y.Tipo == TipoAtendimento.AlteracaoProntuario));

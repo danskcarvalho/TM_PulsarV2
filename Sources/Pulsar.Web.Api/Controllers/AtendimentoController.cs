@@ -35,14 +35,12 @@ namespace Pulsar.Web.Api.Controllers
         public async Task<ActionResult> Criar([FromBody] CriarAtendimentoCommand cmd)
         {
             if (ModelState.IsValid)
-            {
-                cmd.UsuarioId = CurrentUser.Id;
-                cmd.EstabelecimentoId = CurrentUser.EstabelecimentoId;
-                await CommandBus.Send(cmd);
-                return Ok(cmd.Atendimentos.Select(x => x.AtendimentoId).ToList());
-            }
-            else
                 return BadRequest(ModelState);
+
+            cmd.UsuarioId = CurrentUser.Id;
+            cmd.EstabelecimentoId = CurrentUser.EstabelecimentoId;
+            await CommandBus.Send(cmd);
+            return Ok(cmd.Atendimentos.Select(x => x.AtendimentoId).ToList());
         }
 
         [HttpPost("{atendimentoId}")]

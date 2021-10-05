@@ -1,5 +1,7 @@
 ﻿using MongoDB.Bson;
+using Pulsar.Common.Database;
 using Pulsar.Common.Enumerations;
+using Pulsar.Domain.Common;
 using Pulsar.Domain.Estabelecimentos.Models;
 using Pulsar.Domain.ProcedimentosOdontologicos.Models;
 using Pulsar.Domain.Usuarios.Models;
@@ -96,5 +98,20 @@ namespace Pulsar.Domain.Atendimentos.Models
         public Subjetivo Subjetivo { get; set; }
         public ProcedimentosOdontologicos ProcedimentosOdontologicos { get; set; }
         public List<CondutaAtendimentoOdontologico> Condutas { get; set; }
+
+        public override async Task Abrir(ObjectId usuarioId, Container container)
+        {
+            var ultimoAtendimento = (await container.Atendimentos.Cast<AtendimentoOdontologico>().FindMany(
+                    x => x.PacienteId == this.PacienteId && x.Tipo == TipoAtendimento.Odontologico && x.Status == StatusAtendimento.Finalizado,
+                    limit: 1,
+                    sortBy: Sort.ByDesc<AtendimentoOdontologico>(x => x.Realizacao.Data),
+                    noSession: true
+                )).FirstOrDefault();
+            if (ultimoAtendimento != null && ultimoAtendimento.Odontograma != null)
+                this.Odontograma = ultimoAtendimento.Odontograma;
+
+
+            await base.Abrir(usuarioId, container);
+        }
     }
 }

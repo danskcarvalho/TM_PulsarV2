@@ -10,9 +10,15 @@ namespace Pulsar.Domain.Estabelecimentos.Models
 {
     public class Servicos
     {
-        public ObjectId? PuerperioId { get; set; }
-        public ObjectId? PreNatalId { get; set; }
-        public ObjectId? PuericulturaId { get; set; }
+        public Servicos()
+        {
+            PuericulturaIds = new List<ObjectId>();
+            PreNatalIds = new List<ObjectId>();
+            PuericulturaIds = new List<ObjectId>();
+        }
+        public List<ObjectId> PuerperioIds { get; set; }
+        public List<ObjectId> PreNatalIds { get; set; }
+        public List<ObjectId> PuericulturaIds { get; set; }
         public ObjectId? ConsultaManutencaoOdontologiaServicoId { get; set; }
         public ObjectId? ConsultaRetornoOdontologiaServicoId { get; set; }
         public ObjectId? PrimeiraConsultaOdontologiaServicoId { get; set; }
