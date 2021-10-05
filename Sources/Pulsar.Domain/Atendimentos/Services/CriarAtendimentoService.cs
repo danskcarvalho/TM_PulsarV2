@@ -194,7 +194,7 @@ namespace Pulsar.Domain.Atendimentos.Services
                         DataRegistro = DataRegistro.CriadoHoje(usuario.Id),
                         EstabelecimentoId = estabelecimento.Id,
                         Id = ObjectId.GenerateNewId(),
-                        Mensagem = $"O paciente {paciente.DadosAtuais.DadosBasicos.Nome} foi incluído em sua fila de atendimentos.",
+                        Mensagem = $"O paciente {paciente.DadosBasicos.Nome} foi incluído em sua fila de atendimentos.",
                         Parametros = new
                         {
                             AtendimentoId = atd.AtendimentoId,
@@ -216,7 +216,7 @@ namespace Pulsar.Domain.Atendimentos.Services
                             DataRegistro = DataRegistro.CriadoHoje(usuario.Id),
                             EstabelecimentoId = estabelecimento.Id,
                             Id = ObjectId.GenerateNewId(),
-                            Mensagem = $"O paciente {paciente.DadosAtuais.DadosBasicos.Nome} foi incluído em sua fila de atendimentos.",
+                            Mensagem = $"O paciente {paciente.DadosBasicos.Nome} foi incluído em sua fila de atendimentos.",
                             Parametros = new
                             {
                                 AtendimentoId = atd.AtendimentoId,
@@ -318,7 +318,7 @@ namespace Pulsar.Domain.Atendimentos.Services
                     var idade = paciente.GetIdade().TotalDias;
                     if (servico.Restricoes != null)
                     {
-                        if (!servico.Restricoes.Sexo.Permite(paciente.DadosAtuais.DadosBasicos.Sexo))
+                        if (!servico.Restricoes.Sexo.Permite(paciente.DadosBasicos.Sexo))
                             throw new PulsarException(PulsarErrorCode.BadRequest, $"O sexo do paciente não é compatível com o serviço {servico.Nome}.");
 
                         if (servico.Restricoes.IdadeMinimaEmDias != null && idade < servico.Restricoes.IdadeMinimaEmDias)
@@ -381,7 +381,7 @@ namespace Pulsar.Domain.Atendimentos.Services
                 paciente = await container.Pacientes.FindOneById(cmd.PacienteId.Value, p => new Paciente()
                 {
                     Id = p.Id,
-                    DadosAtuais = p.DadosAtuais
+                    DadosBasicos = p.DadosBasicos
                 });
                 if (paciente == null)
                     throw new PulsarException(PulsarErrorCode.BadRequest, "Paciente não encontrado.");

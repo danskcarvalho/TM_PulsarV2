@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Pulsar.Domain.Prontuarios.Models
 {
-    public class AntecedentesPessoaisProntuario : FragmentoProntuarioDados
+    public class AntecedentesPessoaisProntuario : FragmentoProntuario
     {
         public AntecedentesGerais Gerais { get; set; }
         public AntecedentesClinicos Clinicos { get; set; }

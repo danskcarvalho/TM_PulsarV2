@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Pulsar.Domain.Prontuarios.Models
 {
-    public class CondicaoSaudeProntuario : FragmentoProntuarioDados
+    public class CondicaoSaudeProntuario : FragmentoProntuario
     {
         public virtual ChaveCondicaoSaudeResumida ChaveCondicaoSaude { get; set; }
         public virtual DateTime? DataInicial { get; set; }

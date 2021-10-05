@@ -47,7 +47,7 @@ namespace Pulsar.Domain.Atendimentos.Models
         public StatusAtendimentoRaiz Status { get; set; }
         public List<Atividade> Atividades { get; set; }
         public List<ArtefatoAtendimento> Artefatos { get; set; }
-        public List<FragmentoProntuarioDados> AlteracoesProntuario { get; set; }
+        public List<FragmentoProntuario> AlteracoesProntuario { get; set; }
         public bool AtualizacaoPronturarioImediata { get; set; }
     }
 }

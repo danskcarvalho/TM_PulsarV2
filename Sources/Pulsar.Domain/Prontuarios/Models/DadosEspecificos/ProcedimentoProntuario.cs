@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Pulsar.Domain.Prontuarios.Models
 {
-    public class ProcedimentoProntuario : FragmentoProntuarioDados
+    public class ProcedimentoProntuario : FragmentoProntuario
     {
         public bool ApenasReportado { get; set; }
         public ProcedimentoResumido Procedimento { get; set; }

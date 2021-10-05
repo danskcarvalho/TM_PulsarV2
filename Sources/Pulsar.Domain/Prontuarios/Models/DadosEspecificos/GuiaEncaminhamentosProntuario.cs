@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Pulsar.Domain.Prontuarios.Models
 {
-    public class GuiaEncaminhamentosProntuario : FragmentoProntuarioDados
+    public class GuiaEncaminhamentosProntuario : FragmentoProntuario
     {
         public List<EncaminhamentoItem> Items { get; set; }
     }

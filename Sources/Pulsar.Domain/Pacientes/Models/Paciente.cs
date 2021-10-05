@@ -14,13 +14,18 @@ namespace Pulsar.Domain.Pacientes.Models
     {
         public ObjectId Id { get; set; }
         public string TermosPesquisa { get; set; }
-        public PacienteHistorico DadosAtuais { get; set; }
+        public Endereco Endereco { get; set; }
+        public DadosBasicos DadosBasicos { get; set; }
+        public DadosNacionalidade DadosNacionalidade { get; set; }
+        public Contatos Contatos { get; set; }
+        public DadosFinanceiros DadosFinanceiros { get; set; }
+        public CaracteristicasFisicas CaracteristicasFisicas { get; set; }
+        public EducacaoFamilia EducacaoFamilia { get; set; }
         public bool Anonimo { get; set; }
         public ObjectId? AntecedentesPessoais { get; set; }
         public ObjectId? AntecedentesFamiliares { get; set; }
         public DataRegistro DataRegistro { get; set; }
         public long DataVersion { get; set; }
-        public List<PacienteHistorico> Historico { get; set; }
 
         public static Paciente CriarPacienteAnonimo(ObjectId usuarioId, string nome, Sexo sexo, DateTime dataNascimento)
         {
@@ -29,38 +34,23 @@ namespace Pulsar.Domain.Pacientes.Models
             {
                 Id = ObjectId.GenerateNewId(),
                 Anonimo = true,
-                DadosAtuais = new PacienteHistorico()
+
+                DadosBasicos = new DadosBasicos()
                 {
-                    DadosBasicos = new DadosBasicos()
-                    {
-                        Nome = nome,
-                        Sexo = sexo,
-                        DataNascimento = dataNascimento
-                    },
-                    DataRegistro = criadoHoje
+                    Nome = nome,
+                    Sexo = sexo,
+                    DataNascimento = dataNascimento
                 },
-                TermosPesquisa = nome.Tokenize(),
-                DataRegistro = criadoHoje
+                DataRegistro = criadoHoje,
+                TermosPesquisa = nome.Tokenize()
             };
-            p.AdicionarHistorico();
 
             return p;
         }
 
-        private void AdicionarHistorico()
-        {
-            if (this.Historico == null)
-                this.Historico = new List<PacienteHistorico>();
-
-            this.Historico.Add(this.DadosAtuais);
-
-            while (this.Historico.Count > 100)
-                this.Historico.RemoveAt(1); //o primeiro histórico de criação é sempre mantido...
-        }
-
         public Idade GetIdade()
         {
-            return Idade.Calcular(this.DadosAtuais.DadosBasicos.DataNascimento);
+            return Idade.Calcular(this.DadosBasicos.DataNascimento);
         }
     }
 }

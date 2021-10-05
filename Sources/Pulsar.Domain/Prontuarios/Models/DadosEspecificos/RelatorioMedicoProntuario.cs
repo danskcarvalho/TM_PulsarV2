@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Pulsar.Domain.Prontuarios.Models
 {
-    public class RelatorioMedicoProntuario : FragmentoProntuarioDados
+    public class RelatorioMedicoProntuario : FragmentoProntuario
     {
         public virtual string Titulo { get; set; }
         public virtual string Texto { get; set; }
