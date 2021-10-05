@@ -31,7 +31,7 @@ namespace Pulsar.Domain.Atendimentos.Models
             Status = StatusAtendimentoRaiz.Aberto;
             Atividades = new List<Atividade>();
             Artefatos = new List<ArtefatoAtendimento>();
-            AlteracoesProntuario = new List<FragmentoProntuarioDados>();
+            AlteracoesProntuario = new List<FragmentoProntuario>();
             EstabelecimentoId = estabelecimentoId;
             PacienteId = pacienteId;
             FichasEsus = new List<ObjectId>();
