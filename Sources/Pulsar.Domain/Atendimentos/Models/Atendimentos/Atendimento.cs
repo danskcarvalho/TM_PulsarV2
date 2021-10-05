@@ -16,13 +16,15 @@ using System.Threading.Tasks;
 
 namespace Pulsar.Domain.Atendimentos.Models
 {
-    public class Atendimento
+    public class Atendimento : System.ComponentModel.ISupportInitialize
     {
+        private bool _Initializing = false;
+
         public ObjectId Id { get; set; }
         public ObjectId EstabelecimentoId { get; set; }
         public ObjectId PacienteId { get; set; }
         public TipoAtendimento Tipo { get; set; }
-        public List<ObjectId> FichasEsus { get; set; }
+        public List<ObjectId> FichasEsus { get; set; } = new List<ObjectId>();
         public DataRegistro DataRegistro { get; set; }
         public long DataVersion { get; set; }
 
@@ -53,9 +55,25 @@ namespace Pulsar.Domain.Atendimentos.Models
             }
         }
 
+        public virtual Task Reabrir(Usuario usuario, Estabelecimento estabelecimento, Container container)
+        {
+            throw new PulsarException(PulsarErrorCode.BadRequest, "Atendimento não pode ser reaberto.");
+        }
+
         public virtual Task Abrir(ObjectId usuarioId, Container container)
         {
             throw new PulsarException(PulsarErrorCode.BadRequest, "Atendimento não pode ser aberto.");
+        }
+
+        public bool IsInitializing => _Initializing;
+
+        void System.ComponentModel.ISupportInitialize.BeginInit()
+        {
+            _Initializing = true;
+        }
+        void System.ComponentModel.ISupportInitialize.EndInit()
+        {
+            _Initializing = false;
         }
     }
 }

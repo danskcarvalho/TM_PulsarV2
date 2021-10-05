@@ -10,7 +10,7 @@ namespace Pulsar.Domain.Atendimentos.Models
 {
     public class Odontograma
     {
-        public List<OdontogramaDente> Dentes { get; set; }
+        public List<OdontogramaDente> Dentes { get; set; } = new List<OdontogramaDente>();
     }
 
     public class OdontogramaDente

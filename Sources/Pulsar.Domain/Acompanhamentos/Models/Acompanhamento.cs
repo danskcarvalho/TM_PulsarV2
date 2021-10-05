@@ -17,7 +17,7 @@ namespace Pulsar.Domain.Acompanhamentos.Models
         public AcompanhamentoTipo Tipo { get; set; }
         public StatusAcompanhamento Status { get; set; }
         public ObjectId PacienteId { get; set; }
-        public List<ObjectId> AtendimentosIds { get; set; }
+        public List<AtendimentoAcompanhamento> Atendimentos { get; set; }
         public DateTime? DataPrimeiraAbertura { get; set; }
         public DateTime? DataUltimaFinalizacao { get; set; }
         public DataRegistro DataRegistro { get; set; }
@@ -28,10 +28,15 @@ namespace Pulsar.Domain.Acompanhamentos.Models
             if (Status != StatusAcompanhamento.Aberto)
                 throw new PulsarException(PulsarErrorCode.BadRequest, "O acompanhamento já foi finalizado.");
 
-            AtendimentosIds.Add(atendimento.Id);
+            InserirDadosAtendimento(usuarioId, atendimento);
             DataRegistro.Atualizado(usuarioId);
             DataVersion++;
             await container.Acompanhamentos.UpdateOne(this);
+        }
+
+        protected virtual void InserirDadosAtendimento(ObjectId usuarioId, AtendimentoComProfissional ai)
+        {
+
         }
     }
 }

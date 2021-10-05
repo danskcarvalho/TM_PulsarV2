@@ -29,12 +29,8 @@ namespace Pulsar.Domain.Atendimentos.Models
             Endereco = new Endereco();
             Categoria = categoria;
             Status = StatusAtendimentoRaiz.Aberto;
-            Atividades = new List<Atividade>();
-            Artefatos = new List<ArtefatoAtendimento>();
-            AlteracoesProntuario = new List<FragmentoProntuario>();
             EstabelecimentoId = estabelecimentoId;
             PacienteId = pacienteId;
-            FichasEsus = new List<ObjectId>();
             DataRegistro = DataRegistro.CriadoHoje(usuarioId);
         }
 
@@ -45,9 +41,9 @@ namespace Pulsar.Domain.Atendimentos.Models
         public RegistroEvasao RegistroEvasao { get; set; }
         public RiscoAtendimento? Risco { get; set; }
         public StatusAtendimentoRaiz Status { get; set; }
-        public List<Atividade> Atividades { get; set; }
-        public List<ArtefatoAtendimento> Artefatos { get; set; }
-        public List<FragmentoProntuario> AlteracoesProntuario { get; set; }
+        public List<Atividade> Atividades { get; set; } = new List<Atividade>();
+        public List<ArtefatoAtendimento> Artefatos { get; set; } = new List<ArtefatoAtendimento>();
+        public List<FragmentoProntuario> AlteracoesProntuario { get; set; } = new List<FragmentoProntuario>();
         public bool AtualizacaoPronturarioImediata { get; set; }
     }
 }

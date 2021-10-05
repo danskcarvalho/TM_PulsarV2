@@ -9,10 +9,8 @@ using System.Threading.Tasks;
 
 namespace Pulsar.Domain.Acompanhamentos.Models
 {
-    public class PuericulturaAtendimento
+    public class PuericulturaAtendimento : AtendimentoAcompanhamento
     {
-        public ObjectId AtendimentoId { get; set; }
-        public DataRegistro DataRegistro { get; set; }
         public Antropometria Antropometria { get; set; }
         public SinaisVitais SinaisVitais { get; set; }
         public MedicaoGlicemia MedicaoGlicemia { get; set; }

@@ -29,46 +29,13 @@ namespace Pulsar.Domain.Atendimentos.Models
             Id = ObjectId.GenerateNewId();
             Status = StatusAtendimento.Aguardando;
             PacienteId = pacienteId;
-            FichasEsus = new List<ObjectId>();
             DataRegistro = Common.DataRegistro.CriadoHoje(usuarioId);
-            Motivos = new List<Motivo>();
-            Problemas = new List<Problema>();
-            Condutas = new List<CondutaAtendimentoOdontologico>();
             ProfissionalId = profissional?.Id;
-            UltimosServicos = new List<ObjectId>();
-            FilasAtendimentos = new List<ObjectId>();
             AtendimentoRaizId = atendimentoRaizId;
-            HistoricoStatus = new HistoricoStatus()
-            {
-                MudancasStatus = new List<HistoricoStatusItem>()
-                {
-                    new HistoricoStatusItem()
-                    {
-                        StatusAnterior = null,
-                        StatusPosterior = StatusAtendimento.Aguardando,
-                        Ocorrencia = DateTime.Now
-                    }
-                }
-            };
-            Realizacao = new RealizacaoAtendimento();
             Especialidade = profissional?.GetLotacao(estabelecimento.Id).EspecialidadeConselho.Especialidade;
             ConselhoProfissional = profissional?.GetLotacao(estabelecimento.Id).EspecialidadeConselho.Conselho;
             EquipeId = equipeId;
             AgendamentoId = agendamentoId;
-            ProcedimentosReportados = new List<ProcedimentoReportado>();
-            Documentos = new List<Pastas.Models.PastaArquivo>();
-            Acompanhamentos = new List<ObjectId>();
-            Odontograma = new Odontograma()
-            {
-                Dentes = new List<OdontogramaDente>()
-            };
-            ProcedimentosOdontologicos = new ProcedimentosOdontologicos()
-            {
-                Finalizados = new List<ObjectId>(),
-                Criados = new List<ObjectId>(),
-                Reabertos = new List<ObjectId>(),
-                Cancelados = new List<ObjectId>()
-            };
             DadosOdontologicos = new DadosOdontologicos();
             if (ServicoId == estabelecimento.Servicos?.ConsultaManutencaoOdontologiaServicoId)
                 DadosOdontologicos.TipoConsultaOdonto = TipoConsultaOdonto.ConsultaManutencaoOdontologia;
@@ -89,15 +56,15 @@ namespace Pulsar.Domain.Atendimentos.Models
         public DadosOdontologicos DadosOdontologicos { get; set; }
         public ExameFisico ExameFisico { get; set; }
         public MedicaoGlicemia MedicaoGlicemia { get; set; }
-        public List<Motivo> Motivos { get; set; }
+        public List<Motivo> Motivos { get; set; } = new List<Motivo>();
         public Objetivo Objetivo { get; set; }
-        public Odontograma Odontograma { get; set; }
+        public Odontograma Odontograma { get; set; } = new Odontograma();
         public Plano Plano { get; set; }
-        public List<Problema> Problemas { get; set; }
+        public List<Problema> Problemas { get; set; } = new List<Problema>();
         public SinaisVitais SinaisVitais { get; set; }
         public Subjetivo Subjetivo { get; set; }
-        public ProcedimentosOdontologicos ProcedimentosOdontologicos { get; set; }
-        public List<CondutaAtendimentoOdontologico> Condutas { get; set; }
+        public ProcedimentosOdontologicos ProcedimentosOdontologicos { get; set; } = new ProcedimentosOdontologicos();
+        public List<CondutaAtendimentoOdontologico> Condutas { get; set; } = new List<CondutaAtendimentoOdontologico>();
 
         public override async Task Abrir(ObjectId usuarioId, Container container)
         {

@@ -14,7 +14,8 @@ using System.Threading.Tasks;
 namespace Pulsar.CommandHandlers.Atendimentos
 {
     public class AtendimentoCommandHandler : CommandHandler,
-        IAsyncCommandHandler<CriarAtendimentoCommand>
+        IAsyncCommandHandler<CriarAtendimentoCommand>,
+        IAsyncCommandHandler<ReabrirAtendimentoCommand>
     {
         private readonly CriarAtendimentoService CriarAtendimentoService = null;
         public AtendimentoCommandHandler(
@@ -30,6 +31,18 @@ namespace Pulsar.CommandHandlers.Atendimentos
             await ContextFactory.Start(async ctx =>
             {
                 await CriarAtendimentoService.Criar(cmd, agendamento: null, ContainerFactory.Create(ctx));
+            }, IsolationOptions.Committed.WithTransaction());
+        }
+
+        public async Task Handle(ReabrirAtendimentoCommand cmd, CancellationToken ct)
+        {
+            await ContextFactory.Start(async ctx =>
+            {
+                var container = ContainerFactory.Create(ctx);
+                var usuario = await container.Usuarios.FindOneById(cmd.UsuarioId, noSession: true);
+                var estabelecimento = await container.Estabelecimentos.FindOneById(cmd.UsuarioId, noSession: true);
+                var atendimento = await container.Atendimentos.FindOneById(cmd.AtendimentoId);
+                await atendimento.Reabrir(usuario, estabelecimento, container);
             }, IsolationOptions.Committed.WithTransaction());
         }
     }

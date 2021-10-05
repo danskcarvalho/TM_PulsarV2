@@ -10,9 +10,9 @@ namespace Pulsar.Domain.Atendimentos.Models
 {
     public class ProcedimentosOdontologicos
     {
-        public List<ObjectId> Criados { get; set; }
-        public List<ObjectId> Finalizados { get; set; }
-        public List<ObjectId> Reabertos { get; set; }
-        public List<ObjectId> Cancelados { get; set; }
+        public List<ObjectId> Criados { get; set; } = new List<ObjectId>();
+        public List<ObjectId> Finalizados { get; set; } = new List<ObjectId>();
+        public List<ObjectId> Reabertos { get; set; } = new List<ObjectId>();
+        public List<ObjectId> Cancelados { get; set; } = new List<ObjectId>();
     }
 }

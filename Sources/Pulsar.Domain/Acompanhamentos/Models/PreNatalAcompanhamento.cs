@@ -19,43 +19,52 @@ namespace Pulsar.Domain.Acompanhamentos.Models
         }
 
         public FinalizacaoPreNatal Finalizacao { get; set; }
-        public List<PreNatalAtendimento> DadosAtendimentos { get; set; }
 
-        public override async Task Entrar(ObjectId usuarioId, AtendimentoComProfissional atendimento, Container container)
+        protected override void InserirDadosAtendimento(ObjectId usuarioId, AtendimentoComProfissional atendimento)
         {
-            if (atendimento is AtendimentoIndividual ai)
-                InserirDadosAtendimento(usuarioId, ai);
-            await base.Entrar(usuarioId, atendimento, container);
-        }
-
-        private void InserirDadosAtendimento(ObjectId usuarioId, AtendimentoIndividual ai)
-        {
-            var dados = DadosAtendimentos.FirstOrDefault(da => da.AtendimentoId == ai.Id);
+            var dados = Atendimentos.FirstOrDefault(da => da.AtendimentoId == atendimento.Id) as PreNatalAtendimento;
+            var individual = atendimento as AtendimentoIndividual;
             if (dados == null)
             {
                 dados = new PreNatalAtendimento()
                 {
-                    Antropometria = ai.Antropometria,
-                    AtendimentoId = ai.Id,
+                    Antropometria = individual?.Antropometria,
+                    AtendimentoId = atendimento.Id,
                     DataRegistro = DataRegistro.CriadoHoje(usuarioId),
-                    MedicaoGlicemia = ai.MedicaoGlicemia,
-                    PreNatal = ai.PreNatal,
-                    Puerperio = ai.Puerperio,
-                    SaudeMulher = ai.SaudeMulher,
-                    SinaisVitais = ai.SinaisVitais
+                    MedicaoGlicemia = individual?.MedicaoGlicemia,
+                    PreNatal = individual?.PreNatal,
+                    Puerperio = individual?.Puerperio,
+                    SaudeMulher = individual?.SaudeMulher,
+                    SinaisVitais = individual?.SinaisVitais,
+                    ConselhoProfissional = atendimento.ConselhoProfissional,
+                    Especialidade = atendimento.Especialidade,
+                    HistoricoStatus = atendimento.HistoricoStatus,
+                    ProfissionalId = atendimento.ProfissionalId,
+                    Realizacao = atendimento.Realizacao,
+                    ServicoId = atendimento.ServicoId,
+                    Status = atendimento.Status
                 };
-                DadosAtendimentos.Add(dados);
+                Atendimentos.Add(dados);
             }
             else
             {
-                dados.Antropometria = ai.Antropometria;
-                dados.MedicaoGlicemia = ai.MedicaoGlicemia;
-                dados.PreNatal = ai.PreNatal;
-                dados.Puerperio = ai.Puerperio;
-                dados.SaudeMulher = ai.SaudeMulher;
-                dados.SinaisVitais = ai.SinaisVitais;
+                dados.Antropometria = individual?.Antropometria;
+                dados.AtendimentoId = atendimento.Id;
+                dados.DataRegistro = DataRegistro.CriadoHoje(usuarioId);
+                dados.MedicaoGlicemia = individual?.MedicaoGlicemia;
+                dados.PreNatal = individual?.PreNatal;
+                dados.Puerperio = individual?.Puerperio;
+                dados.SaudeMulher = individual?.SaudeMulher;
+                dados.SinaisVitais = individual?.SinaisVitais;
+                dados.ConselhoProfissional = atendimento.ConselhoProfissional;
+                dados.Especialidade = atendimento.Especialidade;
+                dados.HistoricoStatus = atendimento.HistoricoStatus;
+                dados.ProfissionalId = atendimento.ProfissionalId;
+                dados.Realizacao = atendimento.Realizacao;
+                dados.ServicoId = atendimento.ServicoId;
+                dados.Status = atendimento.Status;
                 dados.DataRegistro.Atualizado(usuarioId);
-            } 
+            }
         }
     }
 }

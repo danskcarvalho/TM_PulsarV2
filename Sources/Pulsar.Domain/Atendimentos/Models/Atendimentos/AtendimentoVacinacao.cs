@@ -26,37 +26,16 @@ namespace Pulsar.Domain.Atendimentos.Models
             Status = StatusAtendimento.Aguardando;
             EstabelecimentoId = estabelecimentoId;
             PacienteId = pacienteId;
-            FichasEsus = new List<ObjectId>();
             DataRegistro = Common.DataRegistro.CriadoHoje(usuarioId);
             ProfissionalId = profissional?.Id;
-            UltimosServicos = new List<ObjectId>();
-            FilasAtendimentos = new List<ObjectId>();
             AtendimentoRaizId = atendimentoRaizId;
-            HistoricoStatus = new HistoricoStatus()
-            {
-                MudancasStatus = new List<HistoricoStatusItem>()
-                {
-                    new HistoricoStatusItem()
-                    {
-                        StatusAnterior = null,
-                        StatusPosterior = StatusAtendimento.Aguardando,
-                        Ocorrencia = DateTime.Now
-                    }
-                }
-            };
-            Realizacao = new RealizacaoAtendimento();
             Especialidade = profissional?.GetLotacao(estabelecimentoId).EspecialidadeConselho.Especialidade;
             ConselhoProfissional = profissional?.GetLotacao(estabelecimentoId).EspecialidadeConselho.Conselho;
             EquipeId = equipeId;
             AgendamentoId = agendamentoId;
-            ProcedimentosReportados = new List<ProcedimentoReportado>();
-            Documentos = new List<Pastas.Models.PastaArquivo>();
-            Acompanhamentos = new List<ObjectId>();
-            CondicoesPaciente = new CondicoesPacienteVacinacao();
-            Aprazadas = new List<AgendamentoVacinacao>();
         }
 
-        public CondicoesPacienteVacinacao CondicoesPaciente { get; set; }
-        public List<AgendamentoVacinacao> Aprazadas { get; set; }
+        public CondicoesPacienteVacinacao CondicoesPaciente { get; set; } = new CondicoesPacienteVacinacao();
+        public List<AgendamentoVacinacao> Aprazadas { get; set; } = new List<AgendamentoVacinacao>();
     }
 }
