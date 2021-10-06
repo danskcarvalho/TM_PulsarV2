@@ -30,7 +30,9 @@ namespace Pulsar.Domain.Atendimentos.Services
             var usuario = await container.Usuarios.FindOneById(cmd.UsuarioId.Value, noSession: true);
             if (usuario == null)
                 throw new PulsarException(PulsarErrorCode.NotFound);
-            await usuario.ChecarPermissaoEstabelecimento(cmd.EstabelecimentoId, Permissao.CriarAtendimento, container);
+
+            var estabelecimento = await GetEstabelecimento(cmd, container);
+            await usuario.ChecarPermissaoEstabelecimento(estabelecimento, Permissao.CriarAtendimento, container);
 
             //checa se agendamento pertence ao estabelecimento que se quer criar o atendimento...
             if (agendamento != null && agendamento.EstabelecimentoId != cmd.EstabelecimentoId)
@@ -52,14 +54,13 @@ namespace Pulsar.Domain.Atendimentos.Services
                 }
             }
 
-            var estabelecimento = await GetEstabelecimento(cmd, container);
             var paciente = await TratarPaciente(cmd, container);
 
             //não recriaremos a alteração de prontuário se já existe
             if (await AlteracaoProntuarioExiste(cmd, paciente, container))
                 return;
             await ValidarServicos(cmd, container, estabelecimento, paciente);
-            var profissionais = await ValidarProfissionais(cmd, container);
+            var profissionais = await ValidarProfissionais(cmd, estabelecimento, container);
             //cria atendimentos
             var atendimentosCriados = await CriarAtendimentos(cmd, container, agendamento, usuario, estabelecimento, paciente, profissionais);
 
@@ -88,7 +89,8 @@ namespace Pulsar.Domain.Atendimentos.Services
                     //pega todos os profissionais ligados ao estabelecimento...
                     if (cmd.Atendimentos.Any(a => a.ProfissionalId == null && a.Tipo != TipoAtendimento.AlteracaoProntuario))
                         profissionaisFilasAlteradas.AddRange(await container.Usuarios.FindMany(u => u.DataRegistro.DeletadoEm == null &&
-                            u.LotacoesEstabelecimentos.Any(le => le.EstabelecimentoId == estabelecimento.Id && le.Ativo), noSession: true));
+                            u.LotacoesEstabelecimentos.Any(le => (le.EstabelecimentoId == estabelecimento.Id || le.RedeEstabelecimentosId == estabelecimento.RedeEstabelecimentosId) 
+                            && le.Ativo), noSession: true));
                     profissionais = profissionaisFilasAlteradas.PartitionByUnique(p => p.Id);
                 }
                 else
@@ -106,7 +108,7 @@ namespace Pulsar.Domain.Atendimentos.Services
                 fa.EstabelecimentoId == estabelecimento.Id &&
                 fa.Data == DateTime.Today);
 
-            //mapeaia profissionais para o id de uma fila de atendimento...
+            //mapeia profissionais para o id de uma fila de atendimento...
             var profissionaisToFila = profissionaisFilasAlteradas.PartitionByUnique(x => x.Id).ChangeValues(x =>
             {
                 var fa = filasAtendimentos.FirstOrDefault(f => f.ProfissionalId == x.Id);
@@ -149,7 +151,7 @@ namespace Pulsar.Domain.Atendimentos.Services
                     List<Usuario> profissionaisFila = new List<Usuario>();
                     foreach (var prof in profissionaisFilasAlteradas)
                     {
-                        if (!await prof.PodeAtender(estabelecimento.Id, atd.Tipo.Value, container))
+                        if (!await prof.PodeAtender(estabelecimento, atd.Tipo.Value, container))
                             continue;
 
                         profissionaisFila.Add(prof);
@@ -221,7 +223,7 @@ namespace Pulsar.Domain.Atendimentos.Services
                 {
                     foreach (var prof in todosProfissionais)
                     {
-                        if (!await prof.PodeAtender(estabelecimento.Id, atd.Tipo.Value, container))
+                        if (!await prof.PodeAtender(estabelecimento, atd.Tipo.Value, container))
                             continue;
 
                         await container.Notificacoes.InsertOne(new Notificacao()
@@ -282,7 +284,7 @@ namespace Pulsar.Domain.Atendimentos.Services
             return atendimentosCriados;
         }
 
-        private static async Task<Dictionary<ObjectId, Usuario>> ValidarProfissionais(CriarAtendimentoCommand cmd, Container container)
+        private static async Task<Dictionary<ObjectId, Usuario>> ValidarProfissionais(CriarAtendimentoCommand cmd, Estabelecimento estabelecimento, Container container)
         {
             var profissionais = await container.Usuarios.FindManyById(cmd.Atendimentos.Where(a => a.ProfissionalId != null).Select(a => a.ProfissionalId.Value), noSession: true);
             var profissionalPorId = profissionais.PartitionByUnique(s => s.Id);
@@ -299,7 +301,7 @@ namespace Pulsar.Domain.Atendimentos.Services
                     var profissional = profissionalPorId[atd.ServicoId.Value];
                     if (profissional.DataRegistro.DeletadoEm != null)
                         throw new PulsarException(PulsarErrorCode.NotFound);
-                    if (!await profissional.PossuiPermissaoEstabelecimento(cmd.EstabelecimentoId, atd.Tipo.Value.GetPermissao(), container))
+                    if (!await profissional.PossuiPermissaoEstabelecimento(estabelecimento, atd.Tipo.Value.GetPermissao(), container))
                         throw new PulsarException(PulsarErrorCode.BadRequest, $"O profissional {profissional.DadosPessoais.Nome} não possui as permissões necessárias para realizar este tipo de atendimento.");
                 }
             }

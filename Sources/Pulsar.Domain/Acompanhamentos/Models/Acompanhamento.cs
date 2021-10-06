@@ -36,7 +36,7 @@ namespace Pulsar.Domain.Acompanhamentos.Models
 
         protected virtual void InserirDadosAtendimento(ObjectId usuarioId, AtendimentoComProfissional atendimento)
         {
-            throw new NotImplementedException();
+            throw new PulsarException(PulsarErrorCode.Unknown);
         }
 
         public virtual async Task AtualizarAtendimento(ObjectId usuarioId, AtendimentoComProfissional atendimento, Container container)

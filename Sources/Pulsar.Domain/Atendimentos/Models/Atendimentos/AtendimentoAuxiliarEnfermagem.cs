@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using Pulsar.Common.Enumerations;
+using Pulsar.Domain.Estabelecimentos.Models;
 using Pulsar.Domain.Usuarios.Models;
 using System;
 using System.Collections.Generic;
@@ -16,20 +17,19 @@ namespace Pulsar.Domain.Atendimentos.Models
             Tipo = Pulsar.Common.Enumerations.TipoAtendimento.AuxiliarEnfermagem;
         }
 
-        public AtendimentoAuxiliarEnfermagem(ObjectId usuarioId, ObjectId atendimentoRaizId, ObjectId estabelecimentoId, ObjectId? equipeId, ObjectId pacienteId, Usuario profissional, ObjectId? servicoId, ObjectId? agendamentoId) : this()
+        public AtendimentoAuxiliarEnfermagem(ObjectId usuarioId, ObjectId atendimentoRaizId, Estabelecimento estabelecimento, ObjectId? equipeId, ObjectId pacienteId, Usuario profissional, ObjectId? servicoId, ObjectId? agendamentoId) : this()
         {
-            EstabelecimentoId = estabelecimentoId;
+            EstabelecimentoId = estabelecimento.Id;
             PacienteId = pacienteId;
             ServicoId = servicoId;
             Id = ObjectId.GenerateNewId();
             Status = StatusAtendimento.Aguardando;
-            EstabelecimentoId = estabelecimentoId;
             PacienteId = pacienteId;
             DataRegistro = Common.DataRegistro.CriadoHoje(usuarioId);
             ProfissionalId = profissional?.Id;
             AtendimentoRaizId = atendimentoRaizId;
-            Especialidade = profissional?.GetLotacao(estabelecimentoId).EspecialidadeConselho.Especialidade;
-            ConselhoProfissional = profissional?.GetLotacao(estabelecimentoId).EspecialidadeConselho.Conselho;
+            Especialidade = profissional?.GetLotacao(estabelecimento)?.EspecialidadeConselho.Especialidade;
+            ConselhoProfissional = profissional?.GetLotacao(estabelecimento)?.EspecialidadeConselho.Conselho;
             EquipeId = equipeId;
             AgendamentoId = agendamentoId;
             Documentos = new List<Pastas.Models.PastaArquivo>();

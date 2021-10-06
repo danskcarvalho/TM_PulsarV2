@@ -37,9 +37,18 @@ namespace Pulsar.Domain.Estabelecimentos.Models
             return Servicos != null && Servicos.PuericulturaIds.Contains(servicoId);
         }
 
-        public Task<List<Usuario>> GetProfissionaisPodemAtender(Container container, TipoAtendimento tipoAtendimento)
+        public async Task<List<Usuario>> GetProfissionaisPodemAtender(Container container, TipoAtendimento tipoAtendimento)
         {
-            throw new NotImplementedException();
+            var usuarios = await container.Usuarios.FindMany(u => u.DataRegistro.DeletadoEm == null &&
+                            u.LotacoesEstabelecimentos.Any(le => (le.EstabelecimentoId == this.Id || le.RedeEstabelecimentosId == this.RedeEstabelecimentosId)
+                            && le.Ativo), noSession: true);
+            var response = new List<Usuario>();
+            foreach (var u in usuarios)
+            {
+                if (await u.PodeAtender(this, tipoAtendimento, container))
+                    response.Add(u);
+            }
+            return response;
         }
     }
 }

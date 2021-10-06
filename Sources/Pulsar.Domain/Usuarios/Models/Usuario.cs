@@ -3,6 +3,7 @@ using Pulsar.Common;
 using Pulsar.Common.Enumerations;
 using Pulsar.Common.Exceptions;
 using Pulsar.Domain.Common;
+using Pulsar.Domain.Estabelecimentos.Models;
 using Pulsar.Domain.FilasAtendimentos.Models;
 using Pulsar.Domain.Global.Models;
 using System;
@@ -26,16 +27,16 @@ namespace Pulsar.Domain.Usuarios.Models
         public List<UsuarioEspecialidade> Especialidades { get; set; }
         public long DataVersion { get; set; }
 
-        public async Task ChecarPermissaoEstabelecimento(ObjectId? estabelecimentoId, Permissao permissao, 
+        public async Task ChecarPermissaoEstabelecimento(Estabelecimento estabelecimento, Permissao permissao, 
             Container container)
         {
-            if (!await PossuiPermissaoEstabelecimento(estabelecimentoId, permissao, container))
+            if (!await PossuiPermissaoEstabelecimento(estabelecimento, permissao, container))
                 throw new PulsarException(PulsarErrorCode.Forbidden);
         }
-        public async Task<bool> PossuiPermissaoEstabelecimento(ObjectId? estabelecimentoId, Permissao permissao,
+        public async Task<bool> PossuiPermissaoEstabelecimento(Estabelecimento estabelecimento, Permissao permissao,
            Container container)
         {
-            if (estabelecimentoId == null)
+            if (estabelecimento == null)
                 return false;
 
             if (LotacoesEstabelecimentos == null)
@@ -43,7 +44,7 @@ namespace Pulsar.Domain.Usuarios.Models
 
             foreach (var le in LotacoesEstabelecimentos)
             {
-                if (le.EstabelecimentoId != estabelecimentoId)
+                if (le.EstabelecimentoId != estabelecimento.Id && le.RedeEstabelecimentosId != estabelecimento.RedeEstabelecimentosId)
                     continue;
 
                 if (!le.Ativo)
@@ -60,19 +61,33 @@ namespace Pulsar.Domain.Usuarios.Models
             return false;
         }
 
-        public EstabelecimentoLotacao GetLotacao(ObjectId estabelecimentoId)
+        public EstabelecimentoLotacao GetLotacao(Estabelecimento estabelecimento)
         {
-            return LotacoesEstabelecimentos.FirstOrDefault(le => le.EstabelecimentoId == estabelecimentoId);
+            var lotacao = LotacoesEstabelecimentos.FirstOrDefault(le => le.EstabelecimentoId == estabelecimento.Id);
+            if (lotacao == null)
+                lotacao = LotacoesEstabelecimentos.FirstOrDefault(le => le.RedeEstabelecimentosId == estabelecimento.RedeEstabelecimentosId);
+            if (!lotacao.Ativo)
+                return null;
+            return lotacao;
         }
 
-        public async Task<bool> PodeAtender(ObjectId estabelecimentoId, TipoAtendimento tipo, Container container)
+        public async Task<bool> PodeAtender(Estabelecimento estabelecimento, TipoAtendimento tipo, Container container)
         {
-            return await PossuiPermissaoEstabelecimento(estabelecimentoId, tipo.GetPermissao(), container);
+            return await PossuiPermissaoEstabelecimento(estabelecimento, tipo.GetPermissao(), container);
         }
 
-        public Task<FilaAtendimentos> GetFilaAtendimentosDia(Usuario usuario, Estabelecimentos.Models.Estabelecimento estabelecimento, Container container)
+        public async Task<FilaAtendimentos> GetFilaAtendimentosDia(Usuario usuario, Estabelecimento estabelecimento, Container container)
         {
-            throw new NotImplementedException();
+            var filaAtendimentos = await container.FilasAtendimentos.FindOne(fa => fa.ProfissionalId == this.Id &&
+                fa.EstabelecimentoId == estabelecimento.Id &&
+                fa.Data == DateTime.Today);
+
+            if (filaAtendimentos != null)
+                return filaAtendimentos;
+
+            filaAtendimentos = new FilaAtendimentos(usuario, estabelecimento, this, DateTime.Today);
+            await container.FilasAtendimentos.InsertOne(filaAtendimentos);
+            return filaAtendimentos;
         }
     }
 }

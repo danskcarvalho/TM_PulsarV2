@@ -36,11 +36,15 @@ namespace Pulsar.Domain.FilasAtendimentos.Models
         public List<FilaAtendimentosItem> Items { get; set; }
         public DataRegistro DataRegistro { get; set; }
         public long DataVersion { get; set; }
-        public bool PossuiRealizacaoProcedimento => throw new NotImplementedException();
+        public bool PossuiRealizacaoProcedimento => Items.Any(i => i.IsRealizacaoProcedimento && i.Status != StatusAtendimento.Cancelado);
 
-        public Task ItemAtualizado(Usuario usuario, Container container)
+        public async Task ItemAtualizado(Usuario usuario, Container container)
         {
-            throw new NotImplementedException();
+            DataRegistro.Atualizado(usuario.Id);
+            DataVersion++;
+            Status = Items.All(x => x.Status == StatusAtendimento.Cancelado || x.Status == StatusAtendimento.Finalizado) ? StatusFilaAtendimento.Fechada
+                : StatusFilaAtendimento.Aberta;
+            await container.FilasAtendimentos.UpdateOne(this);
         }
     }
 }

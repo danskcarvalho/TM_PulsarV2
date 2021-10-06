@@ -51,7 +51,7 @@ namespace Pulsar.Domain.FilasAtendimentos.Models
         public AcoesFilaAtendimentos Pode { get; set; }
         public DataRegistro DataRegistro { get; set; }
         public long DataVersion { get; set; }
-        public bool IsRealizacaoProcedimento => throw new NotImplementedException();
+        public bool IsRealizacaoProcedimento => TipoAtendimento == Pulsar.Common.Enumerations.TipoAtendimento.RealizacaoProcedimentos;
 
         public void Atualizar(ObjectId usuarioId, AtendimentoComProfissional atendimento)
         {

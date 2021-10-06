@@ -32,8 +32,8 @@ namespace Pulsar.Domain.Atendimentos.Models
             DataRegistro = Common.DataRegistro.CriadoHoje(usuarioId);
             ProfissionalId = profissional?.Id;
             AtendimentoRaizId = atendimentoRaizId;
-            Especialidade = profissional?.GetLotacao(estabelecimento.Id).EspecialidadeConselho.Especialidade;
-            ConselhoProfissional = profissional?.GetLotacao(estabelecimento.Id).EspecialidadeConselho.Conselho;
+            Especialidade = profissional?.GetLotacao(estabelecimento)?.EspecialidadeConselho.Especialidade;
+            ConselhoProfissional = profissional?.GetLotacao(estabelecimento)?.EspecialidadeConselho.Conselho;
             EquipeId = equipeId;
             AgendamentoId = agendamentoId;
             DadosOdontologicos = new DadosOdontologicos();

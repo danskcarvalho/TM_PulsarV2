@@ -37,21 +37,21 @@ namespace Pulsar.Domain.Atendimentos.Models
             switch (tipo)
             {
                 case TipoAtendimento.Medico:
-                    return new AtendimentoMedico(usuarioId, atendimentoRaizId, estabelecimento.Id, equipeId, pacienteId, profissional, servicoId, agendamentoId);
+                    return new AtendimentoMedico(usuarioId, atendimentoRaizId, estabelecimento, equipeId, pacienteId, profissional, servicoId, agendamentoId);
                 case TipoAtendimento.Enfermagem:
-                    return new AtendimentoEnfermagem(usuarioId, atendimentoRaizId, estabelecimento.Id, equipeId, pacienteId, profissional, servicoId, agendamentoId);
+                    return new AtendimentoEnfermagem(usuarioId, atendimentoRaizId, estabelecimento, equipeId, pacienteId, profissional, servicoId, agendamentoId);
                 case TipoAtendimento.AuxiliarEnfermagem:
-                    return new AtendimentoAuxiliarEnfermagem(usuarioId, atendimentoRaizId, estabelecimento.Id, equipeId, pacienteId, profissional, servicoId, agendamentoId);
+                    return new AtendimentoAuxiliarEnfermagem(usuarioId, atendimentoRaizId, estabelecimento, equipeId, pacienteId, profissional, servicoId, agendamentoId);
                 case TipoAtendimento.Vacinacao:
-                    return new AtendimentoVacinacao(usuarioId, atendimentoRaizId, estabelecimento.Id, equipeId, pacienteId, profissional, servicoId, agendamentoId);
+                    return new AtendimentoVacinacao(usuarioId, atendimentoRaizId, estabelecimento, equipeId, pacienteId, profissional, servicoId, agendamentoId);
                 case TipoAtendimento.Odontologico:
                     return new AtendimentoOdontologico(usuarioId, atendimentoRaizId, estabelecimento, equipeId, pacienteId, profissional, servicoId, agendamentoId);
                 case TipoAtendimento.AlteracaoProntuario:
-                    return new AlteracaoProntuario(usuarioId, atendimentoRaizId, estabelecimento.Id, pacienteId, profissional, justificativa);
+                    return new AlteracaoProntuario(usuarioId, atendimentoRaizId, estabelecimento, pacienteId, profissional, justificativa);
                 case TipoAtendimento.EscutaInicial:
-                    return new EscutaInicial(usuarioId, atendimentoRaizId, estabelecimento.Id, equipeId, pacienteId, profissional, servicoId, agendamentoId);
+                    return new EscutaInicial(usuarioId, atendimentoRaizId, estabelecimento, equipeId, pacienteId, profissional, servicoId, agendamentoId);
                 case TipoAtendimento.RealizacaoProcedimentos:
-                    return new RealizacaoProcedimentos(usuarioId, atendimentoRaizId, estabelecimento.Id, equipeId, pacienteId, profissional, servicoId, agendamentoId);
+                    return new RealizacaoProcedimentos(usuarioId, atendimentoRaizId, estabelecimento, equipeId, pacienteId, profissional, servicoId, agendamentoId);
                 default:
                     throw new InvalidOperationException();
             }
@@ -59,7 +59,7 @@ namespace Pulsar.Domain.Atendimentos.Models
 
         public virtual Task Acompanhar(Usuario usuario, Estabelecimento estabelecimento, Container container)
         {
-            throw new NotImplementedException();
+            throw new PulsarException(PulsarErrorCode.Unknown);
         }
 
         public virtual Task Reabrir(Usuario usuario, Estabelecimento estabelecimento, Container container)

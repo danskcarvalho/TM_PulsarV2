@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using Pulsar.Common.Enumerations;
+using Pulsar.Domain.Estabelecimentos.Models;
 using Pulsar.Domain.Usuarios.Models;
 using System;
 using System.Collections.Generic;
@@ -16,10 +17,10 @@ namespace Pulsar.Domain.Atendimentos.Models
             Tipo = Pulsar.Common.Enumerations.TipoAtendimento.AlteracaoProntuario;
         }
 
-        public AlteracaoProntuario(ObjectId usuarioId, ObjectId atendimentoRaizId, ObjectId estabelecimentoId, ObjectId pacienteId, Usuario profissional,
+        public AlteracaoProntuario(ObjectId usuarioId, ObjectId atendimentoRaizId, Estabelecimento estabelecimento, ObjectId pacienteId, Usuario profissional,
             string justificativa) : this()
         {
-            EstabelecimentoId = estabelecimentoId;
+            EstabelecimentoId = estabelecimento.Id;
             PacienteId = pacienteId;
             Id = ObjectId.GenerateNewId();
             Status = StatusAtendimento.Aguardando;
@@ -27,8 +28,8 @@ namespace Pulsar.Domain.Atendimentos.Models
             DataRegistro = Common.DataRegistro.CriadoHoje(usuarioId);
             ProfissionalId = profissional.Id;
             AtendimentoRaizId = atendimentoRaizId;
-            Especialidade = profissional.GetLotacao(estabelecimentoId).EspecialidadeConselho.Especialidade;
-            ConselhoProfissional = profissional.GetLotacao(estabelecimentoId).EspecialidadeConselho.Conselho;
+            Especialidade = profissional.GetLotacao(estabelecimento)?.EspecialidadeConselho.Especialidade;
+            ConselhoProfissional = profissional.GetLotacao(estabelecimento)?.EspecialidadeConselho.Conselho;
             Data = DateTime.Today;
             Justificativa = justificativa;
         }
