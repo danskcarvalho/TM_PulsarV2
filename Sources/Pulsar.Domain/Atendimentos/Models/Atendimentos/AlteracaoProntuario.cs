@@ -1,5 +1,7 @@
 ﻿using MongoDB.Bson;
 using Pulsar.Common.Enumerations;
+using Pulsar.Common.Exceptions;
+using Pulsar.Domain.Common;
 using Pulsar.Domain.Estabelecimentos.Models;
 using Pulsar.Domain.Usuarios.Models;
 using System;
@@ -36,5 +38,15 @@ namespace Pulsar.Domain.Atendimentos.Models
 
         public DateTime Data { get; set; }
         public string Justificativa { get; set; }
+
+        public override Task Acompanhar(Usuario usuario, Estabelecimento estabelecimento, Container container)
+        {
+            throw new PulsarException(PulsarErrorCode.BadRequest, "Não é possível realizar esta operação.");
+        }
+
+        public override Task Reabrir(Usuario usuario, Estabelecimento estabelecimento, Container container)
+        {
+            throw new PulsarException(PulsarErrorCode.BadRequest, "Não é possível realizar esta operação.");
+        }
     }
 }
