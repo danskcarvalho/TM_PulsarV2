@@ -73,7 +73,7 @@ namespace Pulsar.Domain.Atendimentos.Models
         public List<ObjectId> Acompanhamentos { get; set; } = new List<ObjectId>();
         public ObjectId? AgendamentoAoFinalizarId { get; set; }
         public ObjectId? AtendimentoInclusoAoFinalizarId { get; set; }
-
+        
         public override async Task Abrir(ObjectId usuarioId, ObjectId filaAtendimentosId, Container container)
         {
             //atualiza atendimento raiz
@@ -150,6 +150,26 @@ namespace Pulsar.Domain.Atendimentos.Models
             var acompanhamentos = await container.Acompanhamentos.FindManyById(this.Acompanhamentos);
             foreach (var a in acompanhamentos)
                 await a.AtualizarAtendimento(usuario.Id, this, container);
+        }
+
+        public override async Task Acompanhar(Usuario usuario, Estabelecimento estabelecimento, Container container)
+        {
+            if (this.ProfissionalId != usuario.Id)
+                throw new PulsarException(PulsarErrorCode.BadRequest, "Apenas o profissional deste atendimento pode reabri-lo.");
+            if (this.Status != StatusAtendimento.Aberto)
+                throw new PulsarException(PulsarErrorCode.BadRequest, "O atendimento não está aberto.");
+
+            //atualizar a mim mesmo
+            this.Status = StatusAtendimento.AguardandoRetorno;
+            this.HistoricoStatus.UltimaInterrupcao = DateTime.Now;
+            this.DataRegistro.Atualizado(usuario.Id);
+            this.DataVersion++;
+            await container.Atendimentos.UpdateOne(this);
+
+            //possui atividades abertas?
+            var atendimentoRaiz = await container.Atendimentos.FindOneById(this.AtendimentoRaizId) as AtendimentoRaiz;
+            if (atendimentoRaiz.PossuiAtividadesAbertas)
+                await atendimentoRaiz.CriarRealizacoesProcedimento(usuario, estabelecimento, container);
         }
 
         private async Task EnviarNotificacoesAbertura(ObjectId usuarioId, Container container, AtendimentoRaiz atendimentoRaiz)

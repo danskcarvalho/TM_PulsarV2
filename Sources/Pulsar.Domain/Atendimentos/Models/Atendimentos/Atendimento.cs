@@ -50,9 +50,16 @@ namespace Pulsar.Domain.Atendimentos.Models
                     return new AlteracaoProntuario(usuarioId, atendimentoRaizId, estabelecimento.Id, pacienteId, profissional, justificativa);
                 case TipoAtendimento.EscutaInicial:
                     return new EscutaInicial(usuarioId, atendimentoRaizId, estabelecimento.Id, equipeId, pacienteId, profissional, servicoId, agendamentoId);
+                case TipoAtendimento.RealizacaoProcedimentos:
+                    return new RealizacaoProcedimentos(usuarioId, atendimentoRaizId, estabelecimento.Id, equipeId, pacienteId, profissional, servicoId, agendamentoId);
                 default:
                     throw new InvalidOperationException();
             }
+        }
+
+        public virtual Task Acompanhar(Usuario usuario, Estabelecimento estabelecimento, Container container)
+        {
+            throw new NotImplementedException();
         }
 
         public virtual Task Reabrir(Usuario usuario, Estabelecimento estabelecimento, Container container)

@@ -18,7 +18,7 @@ namespace Pulsar.Domain.Notificacoes.Models
         public NotificacaoTipo Tipo { get; set; }
         public string Mensagem { get; set; }
         public BsonDocument Parametros { get; set; }
-        public bool Esconder { get; set; }
+        public bool Vista { get; set; }
         public DataRegistro DataRegistro { get; set; }
     }
 }

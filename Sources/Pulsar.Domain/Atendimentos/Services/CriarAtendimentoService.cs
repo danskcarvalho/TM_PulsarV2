@@ -133,6 +133,7 @@ namespace Pulsar.Domain.Atendimentos.Services
                     else
                     {
                         fa.Items.Add(new FilaAtendimentosItem(atendimento));
+                        fa.Status = StatusFilaAtendimento.Aberta;
                         atendimento.FilasAtendimentos.Add(fa.Id);
                         fa.DataVersion++;
                         fa.DataRegistro.AtualizadoEm = DateTime.Now;
@@ -178,6 +179,7 @@ namespace Pulsar.Domain.Atendimentos.Services
                                 //filas correlacionadas
                                 profissionaisFila.Where(u => u.Id != prof.Id).Select(u => profissionaisToFila[u.Id])));
                             atendimento.FilasAtendimentos.Add(fa.Id);
+                            fa.Status = StatusFilaAtendimento.Aberta;
                             fa.DataVersion++;
                             fa.DataRegistro.AtualizadoEm = DateTime.Now;
                             fa.DataRegistro.AtualizadoPorUsuarioId = usuario.Id;
@@ -253,7 +255,7 @@ namespace Pulsar.Domain.Atendimentos.Services
                 atendimentoRaiz.AtualizacaoPronturarioImediata = true;
 
             //pega equipes do estabelecimento
-            List<Equipe> equipes = await container.Equipes.FindMany(eq => eq.EstabelecimentoId == estabelecimento.Id &&
+            var equipes = await container.Equipes.FindMany(eq => eq.EstabelecimentoId == estabelecimento.Id &&
                 eq.DataRegistro.DeletadoEm == null, noSession: true);
 
             foreach (var atd in cmd.Atendimentos)

@@ -51,6 +51,7 @@ namespace Pulsar.Domain.FilasAtendimentos.Models
         public AcoesFilaAtendimentos Pode { get; set; }
         public DataRegistro DataRegistro { get; set; }
         public long DataVersion { get; set; }
+        public bool IsRealizacaoProcedimento => throw new NotImplementedException();
 
         public void Atualizar(ObjectId usuarioId, AtendimentoComProfissional atendimento)
         {
@@ -62,6 +63,12 @@ namespace Pulsar.Domain.FilasAtendimentos.Models
             DataRegistro.AtualizadoEm = DateTime.Now;
             DataRegistro.AtualizadoPorUsuarioId = usuarioId;
             DataVersion++;
+        }
+        
+        public void AtualizarPode()
+        {
+            if (Status != null)
+                Pode = GetPode(Status.Value);
         }
 
         private AcoesFilaAtendimentos GetPode(StatusAtendimento status)

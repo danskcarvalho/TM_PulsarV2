@@ -23,7 +23,6 @@ namespace Pulsar.Domain.Atendimentos.Models
             ServicoId = servicoId;
             Id = ObjectId.GenerateNewId();
             Status = StatusAtendimento.Aguardando;
-            EstabelecimentoId = estabelecimentoId;
             PacienteId = pacienteId;
             DataRegistro = Common.DataRegistro.CriadoHoje(usuarioId);
             ProfissionalId = profissional?.Id;

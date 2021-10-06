@@ -36,5 +36,11 @@ namespace Pulsar.Domain.FilasAtendimentos.Models
         public List<FilaAtendimentosItem> Items { get; set; }
         public DataRegistro DataRegistro { get; set; }
         public long DataVersion { get; set; }
+        public bool PossuiRealizacaoProcedimento => throw new NotImplementedException();
+
+        public Task ItemAtualizado(Usuario usuario, Container container)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

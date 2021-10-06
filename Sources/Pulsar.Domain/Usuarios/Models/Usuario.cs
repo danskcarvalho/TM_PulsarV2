@@ -3,6 +3,7 @@ using Pulsar.Common;
 using Pulsar.Common.Enumerations;
 using Pulsar.Common.Exceptions;
 using Pulsar.Domain.Common;
+using Pulsar.Domain.FilasAtendimentos.Models;
 using Pulsar.Domain.Global.Models;
 using System;
 using System.Collections.Generic;
@@ -67,6 +68,11 @@ namespace Pulsar.Domain.Usuarios.Models
         public async Task<bool> PodeAtender(ObjectId estabelecimentoId, TipoAtendimento tipo, Container container)
         {
             return await PossuiPermissaoEstabelecimento(estabelecimentoId, tipo.GetPermissao(), container);
+        }
+
+        public Task<FilaAtendimentos> GetFilaAtendimentosDia(Usuario usuario, Estabelecimentos.Models.Estabelecimento estabelecimento, Container container)
+        {
+            throw new NotImplementedException();
         }
     }
 }

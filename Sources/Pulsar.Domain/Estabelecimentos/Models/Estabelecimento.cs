@@ -1,6 +1,8 @@
 ﻿using MongoDB.Bson;
+using Pulsar.Common.Enumerations;
 using Pulsar.Domain.Common;
 using Pulsar.Domain.RedesEstabelecimentos.Models;
+using Pulsar.Domain.Usuarios.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +35,11 @@ namespace Pulsar.Domain.Estabelecimentos.Models
         public bool IsPuericultura(ObjectId servicoId)
         {
             return Servicos != null && Servicos.PuericulturaIds.Contains(servicoId);
+        }
+
+        public Task<List<Usuario>> GetProfissionaisPodemAtender(Container container, TipoAtendimento tipoAtendimento)
+        {
+            throw new NotImplementedException();
         }
     }
 }

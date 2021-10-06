@@ -10,6 +10,7 @@ namespace Pulsar.Common.Enumerations
     public enum NotificacaoTipo
     {
         NovoAtendimento = 1,
-        AtendimentoAberto = 2
+        AtendimentoAberto = 2,
+        ProcedimentosPendentes = 3
     }
 }
