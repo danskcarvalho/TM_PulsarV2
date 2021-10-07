@@ -10,7 +10,7 @@ using Pulsar.Infrastructure.Database;
 
 namespace Pulsar.Infrastructure.Repositories
 {
-    public class FilaAtendimentosMongoRepository : MongoRepository<FilaAtendimentos>, IFilaAtendimentosRepository
+    public class FilaAtendimentosMongoRepository : MongoRepository<ItemFilaAtendimentos>, IPacienteEnfileiradoRepository
     {
         public FilaAtendimentosMongoRepository(MongoContext ctx) : base(ctx)
         {

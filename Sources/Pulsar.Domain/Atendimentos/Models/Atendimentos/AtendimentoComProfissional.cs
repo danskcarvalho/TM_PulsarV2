@@ -40,7 +40,7 @@ namespace Pulsar.Domain.Atendimentos.Models
             }
         }
         public List<ObjectId> UltimosServicos { get; set; } = new List<ObjectId>();
-        public List<ObjectId> FilasAtendimentos { get; set; } = new List<ObjectId>();
+        public List<ObjectId> ItensFilaAtendimentos { get; set; } = new List<ObjectId>();
         public ObjectId AtendimentoRaizId { get; set; }
         private StatusAtendimento _status;
         public StatusAtendimento Status
@@ -107,7 +107,7 @@ namespace Pulsar.Domain.Atendimentos.Models
             }
 
             //atualiza a mim mesmo
-            FilasAtendimentos = new List<ObjectId>() { filaAtendimentosId }; //só vai estar nesta fila de atendimento...
+            ItensFilaAtendimentos = new List<ObjectId>() { filaAtendimentosId }; //só vai estar nesta fila de atendimento...
             Status = StatusAtendimento.Aberto;
             HistoricoStatus.PrimeiraAbertura = DateTime.Now;
             DataRegistro.Atualizado(usuarioId);
@@ -140,11 +140,11 @@ namespace Pulsar.Domain.Atendimentos.Models
             await container.Atendimentos.UpdateOne(this);
 
             //atualiza a fila de atendimento
-            var filaAtendimentos = await container.FilasAtendimentos.FindOneById(this.FilasAtendimentos.First()); //só pode estar em uma única fila de atendimentos
+            var filaAtendimentos = await container.ItensFilaAtendimentos.FindOneById(this.ItensFilaAtendimentos.First()); //só pode estar em uma única fila de atendimentos
             var item = filaAtendimentos.Items.FirstOrDefault(x => x.AtendimentoId == this.Id);
             item.Status = StatusAtendimento.Aberto;
             filaAtendimentos.Status = StatusFilaAtendimento.Aberta;
-            await container.FilasAtendimentos.UpdateOne(filaAtendimentos);
+            await container.ItensFilaAtendimentos.UpdateOne(filaAtendimentos);
 
             //atualizar acompanhamentos
             var acompanhamentos = await container.Acompanhamentos.FindManyById(this.Acompanhamentos);

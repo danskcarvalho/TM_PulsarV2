@@ -20,8 +20,8 @@ namespace Pulsar.Contracts.Atendimentos.Commands
         /// <summary>
         /// Id do usuário logado.
         /// </summary>
-        public ObjectId? UsuarioId { get; set; }
-        public ObjectId? EstabelecimentoId { get; set; }
+        public ObjectId UsuarioId { get; set; }
+        public ObjectId EstabelecimentoId { get; set; }
         public ObjectId? PacienteId { get; set; }
         public PacienteAnonimoModel PacienteAnonimo { get; set; }
         public CategoriaAtendimento? Categoria { get; set; }

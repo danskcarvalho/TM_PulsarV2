@@ -1,9 +1,9 @@
 ﻿using MongoDB.Bson;
 using Pulsar.Common.Enumerations;
-using Pulsar.Domain.Agendamentos.Models;
 using Pulsar.Domain.Atendimentos.Models;
 using Pulsar.Domain.Common;
-using Pulsar.Domain.Pacientes.Models;
+using Pulsar.Domain.Estabelecimentos.Models;
+using Pulsar.Domain.Usuarios.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,46 +12,45 @@ using System.Threading.Tasks;
 
 namespace Pulsar.Domain.FilasAtendimentos.Models
 {
-    public class FilaAtendimentosItem
+    public class ItemFilaAtendimentos
     {
-        public FilaAtendimentosItem()
+        public ItemFilaAtendimentos()
         {
-
         }
-        public FilaAtendimentosItem(AtendimentoComProfissional atd) : this()
+
+        public ItemFilaAtendimentos(ObjectId usuarioId, AtendimentoComProfissional atendimento, DateTime data)
         {
-            AtendimentoId = atd.Id;
-            AgendamentoId = atd.AgendamentoId;
-            PacienteId = atd.PacienteId;
-            TipoAtendimento = atd.Tipo;
+            Id = ObjectId.GenerateNewId();
+            Data = data;
+            Status = atendimento.Status;
+            EstabelecimentoId = atendimento.EstabelecimentoId;
+            ProfissionalId = atendimento.ProfissionalId.Value;
+            DataRegistro = DataRegistro.CriadoHoje(usuarioId);
+            AtendimentoId = atendimento.Id;
+            AgendamentoId = atendimento.AgendamentoId;
+            PacienteId = atendimento.PacienteId;
+            TipoAtendimento = atendimento.Tipo;
             DataInicioEspera = DateTime.Now;
             Pode = new AcoesFilaAtendimentos() { Evadir = true, Iniciar = true, FinalizarPorDesistencia = true };
-            DataRegistro = DataRegistro.CriadoHoje(atd.DataRegistro.CriadoPorUsuarioId.Value);
-            FilasCorrelacionadas = new List<ObjectId>();
-            ItemId = ObjectId.GenerateNewId();
-            Status = StatusAtendimento.Aguardando;
         }
 
-        public FilaAtendimentosItem(AtendimentoComProfissional atd, ObjectId correlacaoId, IEnumerable<ObjectId> filasCorrelacionadas) : this(atd)
-        {
-            CorrelacaoId = correlacaoId;
-            FilasCorrelacionadas.AddRange(filasCorrelacionadas);
-        }
-
-        public ObjectId ItemId { get; set; }
+        public ObjectId Id { get; set; }
+        public DateTime Data { get; set; }
+        public ObjectId EstabelecimentoId { get; set; }
+        public ObjectId ProfissionalId { get; set; }
         public ObjectId? AtendimentoId { get; set; }
         public ObjectId? AgendamentoId { get; set; }
         public ObjectId? PacienteId { get; set; }
         public ObjectId? CorrelacaoId { get; set; }
-        public List<ObjectId> FilasCorrelacionadas { get; set; }
+        public List<ObjectId> ItensCorrelacionados { get; set; }
         public TipoAtendimento? TipoAtendimento { get; set; }
         public DateTime? DataInicioEspera { get; set; }
         public RiscoAtendimento? Risco { get; set; }
         public StatusAtendimento? Status { get; set; }
         public AcoesFilaAtendimentos Pode { get; set; }
+        public bool IsRealizacaoProcedimento => TipoAtendimento == Pulsar.Common.Enumerations.TipoAtendimento.RealizacaoProcedimentos;
         public DataRegistro DataRegistro { get; set; }
         public long DataVersion { get; set; }
-        public bool IsRealizacaoProcedimento => TipoAtendimento == Pulsar.Common.Enumerations.TipoAtendimento.RealizacaoProcedimentos;
 
         public void Atualizar(ObjectId usuarioId, AtendimentoComProfissional atendimento)
         {
@@ -64,7 +63,7 @@ namespace Pulsar.Domain.FilasAtendimentos.Models
             DataRegistro.AtualizadoPorUsuarioId = usuarioId;
             DataVersion++;
         }
-        
+
         public void AtualizarPode()
         {
             if (Status != null)

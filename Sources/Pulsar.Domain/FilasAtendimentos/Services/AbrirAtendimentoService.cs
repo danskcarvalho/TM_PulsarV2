@@ -21,66 +21,54 @@ namespace Pulsar.Domain.FilasAtendimentos.Services
 
         public async Task Abrir(IniciarAtendimentoCommand cmd, Container container)
         {
-            var filaAtendimentos = await container.FilasAtendimentos.FindOneById(cmd.FilaAtendimentosId.Value);
-            if (filaAtendimentos == null || filaAtendimentos.EstabelecimentoId != cmd.EstabelecimentoId)
-                throw new PulsarException(PulsarErrorCode.NotFound);
-            if (filaAtendimentos.ProfissionalId != cmd.UsuarioId)
-                throw new PulsarException(PulsarErrorCode.BadRequest, "Apenas o profissional da fila de atendimentos pode abrir este atendimento.");
-            var item = filaAtendimentos.Items.FirstOrDefault(i => i.ItemId == cmd.ItemId);
-            if (item == null)
+            var itemFila = await container.ItensFilaAtendimentos.FindOneById(cmd.ItemId.Value);
+            if (itemFila == null || itemFila.EstabelecimentoId != cmd.EstabelecimentoId)
                 throw new PulsarException(PulsarErrorCode.BadRequest, "O atendimento já foi iniciado por outro profissional.");
-            if (item.AtendimentoId == null && item.AgendamentoId != null)
+            if (itemFila.ProfissionalId != cmd.UsuarioId)
+                throw new PulsarException(PulsarErrorCode.BadRequest, "Apenas o profissional pode iniciar este atendimento.");
+            if (itemFila.Status != StatusAtendimento.Aguardando)
+                throw new PulsarException(PulsarErrorCode.BadRequest, "O atendimento não pode ser aberto pois já foi iniciado ou finalizado.");
+
+            if (itemFila.AtendimentoId == null && itemFila.AgendamentoId != null)
             {
-                var agendamento = await container.Agendamentos.FindOneById(item.AgendamentoId.Value);
+                var agendamento = await container.Agendamentos.FindOneById(itemFila.AgendamentoId.Value);
+               
                 var criarAtendimentoCmd = new CriarAtendimentoCommand()
                 {
                     UsuarioId = cmd.UsuarioId,
                     Categoria = CategoriaAtendimento.Individual,
                     PacienteAnonimo = null,
-                    PacienteId = item.PacienteId,
+                    PacienteId = itemFila.PacienteId,
                     EstabelecimentoId = cmd.EstabelecimentoId,
                     Atendimentos = new List<CriarAtendimentoCommand.AtendimentoModel>()
                     {
                         new CriarAtendimentoCommand.AtendimentoModel()
                         {
                             ProfissionalId = cmd.UsuarioId,
-                            ServicoId = null,
-                            Tipo = cmd.TipoAtendimento
+                            ServicoId = agendamento.ServicoId,
+                            Tipo = itemFila.TipoAtendimento ?? cmd.TipoAtendimento
                         }
                     }
                 };
 
                 await CriarAtendimentoService.Criar(criarAtendimentoCmd, agendamento, container);
-                item.AtendimentoId = criarAtendimentoCmd.Atendimentos[0].AtendimentoId.Value;
+                itemFila.AtendimentoId = criarAtendimentoCmd.Atendimentos[0].AtendimentoId.Value;
             }
-            else if (item.AtendimentoId == null)
+            else if (itemFila.AtendimentoId == null)
                 throw new PulsarException(PulsarErrorCode.Unknown);
 
             //ensures that atendimentos is in database
             await container.Flush();
             //pega o atendimento
-            var atendimento = await container.Atendimentos.FindOneById(item.AtendimentoId.Value);
+            var atendimento = (await container.Atendimentos.FindOneById(itemFila.AtendimentoId.Value)) as AtendimentoComProfissional;
             //abre o atendimento
-            await atendimento.Abrir(cmd.UsuarioId, filaAtendimentos.Id, container);
+            var outrasFilasAtendimentos = atendimento.ItensFilaAtendimentos.Where(id => id != itemFila.Id).ToList();
+            await atendimento.Abrir(cmd.UsuarioId, itemFila.Id, container);
             //remove o atendimento de outras filas de atendimentos
-            await RemoverFilasCorrelacionadas(cmd.UsuarioId, item.CorrelacaoId, item.FilasCorrelacionadas, container);
+            await container.ItensFilaAtendimentos.DeleteMany(ifa => outrasFilasAtendimentos.Contains(ifa.Id));
             //altera o item atual
-            item.Atualizar(cmd.UsuarioId, atendimento as AtendimentoComProfissional);
-            await container.FilasAtendimentos.UpdateOne(filaAtendimentos);
-        }
-
-        private async Task RemoverFilasCorrelacionadas(ObjectId usuarioId, ObjectId? correlacaoId, List<ObjectId> filasCorrelacionadas, Container container)
-        {
-            if (correlacaoId == null)
-                return;
-            foreach (var filaId in filasCorrelacionadas)
-            {
-                var fila = await container.FilasAtendimentos.FindOneById(filaId);
-                fila.Items = fila.Items.Where(x => x.CorrelacaoId == correlacaoId).ToList();
-                fila.DataRegistro.Atualizado(usuarioId);
-                fila.DataVersion++;
-                await container.FilasAtendimentos.UpdateOne(fila);
-            }
+            itemFila.Atualizar(cmd.UsuarioId, atendimento as AtendimentoComProfissional);
+            await container.ItensFilaAtendimentos.UpdateOne(itemFila);
         }
     }
 }

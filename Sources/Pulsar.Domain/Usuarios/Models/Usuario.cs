@@ -76,18 +76,11 @@ namespace Pulsar.Domain.Usuarios.Models
             return await PossuiPermissaoEstabelecimento(estabelecimento, tipo.GetPermissao(), container);
         }
 
-        public async Task<FilaAtendimentos> GetFilaAtendimentosDia(Usuario usuario, Estabelecimento estabelecimento, Container container)
+        public async Task<List<ItemFilaAtendimentos>> GetItensFilaAtendimentosDia(Usuario usuario, Estabelecimento estabelecimento, Container container)
         {
-            var filaAtendimentos = await container.FilasAtendimentos.FindOne(fa => fa.ProfissionalId == this.Id &&
+            return await container.ItensFilaAtendimentos.FindMany(fa => fa.ProfissionalId == this.Id &&
                 fa.EstabelecimentoId == estabelecimento.Id &&
                 fa.Data == DateTime.Today);
-
-            if (filaAtendimentos != null)
-                return filaAtendimentos;
-
-            filaAtendimentos = new FilaAtendimentos(usuario, estabelecimento, this, DateTime.Today);
-            await container.FilasAtendimentos.InsertOne(filaAtendimentos);
-            return filaAtendimentos;
         }
     }
 }

@@ -39,7 +39,7 @@ namespace Pulsar.Domain.Common
         private IAsyncRepositoryFactory<Exportacao> Exportacoes { get; }
         private IAsyncRepositoryFactory<Familia> Familias { get; }
         private IAsyncRepositoryFactory<FichaEsus> FichasEsus { get; }
-        private IAsyncRepositoryFactory<FilaAtendimentos> FilasAtendimentos { get; }
+        private IAsyncRepositoryFactory<ItemFilaAtendimentos> FilasAtendimentos { get; }
         private IAsyncRepositoryFactory<ChaveCondicaoSaude> ChavesCondicaoSaude { get; }
         private IAsyncRepositoryFactory<Dente> Dentes { get; }
         private IAsyncRepositoryFactory<Diagnostico> Diagnosticos { get; }
@@ -72,7 +72,7 @@ namespace Pulsar.Domain.Common
                                 IAsyncRepositoryFactory<Exportacao> exportacoes,
                                 IAsyncRepositoryFactory<Familia> familias,
                                 IAsyncRepositoryFactory<FichaEsus> fichasEsus,
-                                IAsyncRepositoryFactory<FilaAtendimentos> filasAtendimentos,
+                                IAsyncRepositoryFactory<ItemFilaAtendimentos> filasAtendimentos,
                                 IAsyncRepositoryFactory<ChaveCondicaoSaude> chavesCondicaoSaude,
                                 IAsyncRepositoryFactory<Dente> dentes,
                                 IAsyncRepositoryFactory<Diagnostico> diagnosticos,

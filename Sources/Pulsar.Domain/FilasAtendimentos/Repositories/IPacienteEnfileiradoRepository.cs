@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Pulsar.Domain.FilasAtendimentos.Repositories
 {
-    public interface IFilaAtendimentosRepository : IAsyncRepository<FilaAtendimentos>
+    public interface IPacienteEnfileiradoRepository : IAsyncRepository<ItemFilaAtendimentos>
     {
     }
 }

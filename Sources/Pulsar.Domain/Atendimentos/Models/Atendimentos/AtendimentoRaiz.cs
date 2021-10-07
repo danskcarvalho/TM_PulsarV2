@@ -2,6 +2,7 @@
 using Pulsar.Common.Enumerations;
 using Pulsar.Domain.Common;
 using Pulsar.Domain.Estabelecimentos.Models;
+using Pulsar.Domain.FilasAtendimentos.Models;
 using Pulsar.Domain.Notificacoes.Models;
 using Pulsar.Domain.Prontuarios.Models;
 using Pulsar.Domain.Usuarios.Models;
@@ -59,10 +60,10 @@ namespace Pulsar.Domain.Atendimentos.Models
             var paciente = await container.Pacientes.FindOneById(this.PacienteId);
             foreach (var prof in profissionais)
             {
-                var filaAtendimentos = await prof.GetFilaAtendimentosDia(usuario, estabelecimento, container);
-                if (filaAtendimentos.PossuiRealizacaoProcedimento)
+                var itensFilas = await prof.GetItensFilaAtendimentosDia(usuario, estabelecimento, container);
+                if (itensFilas.Any(x => x.TipoAtendimento == TipoAtendimento.RealizacaoProcedimentos && x.Status != StatusAtendimento.Cancelado))
                 {
-                    var item = filaAtendimentos.Items.FirstOrDefault(i => i.IsRealizacaoProcedimento && i.Status != StatusAtendimento.Cancelado);
+                    var item = itensFilas.First(x => x.TipoAtendimento == TipoAtendimento.RealizacaoProcedimentos && x.Status != StatusAtendimento.Cancelado);
                     if (item.Status == StatusAtendimento.Finalizado)
                     {
                         item.Status = StatusAtendimento.Aguardando;
@@ -71,9 +72,8 @@ namespace Pulsar.Domain.Atendimentos.Models
                         var atd = await container.Atendimentos.FindOneById(item.AtendimentoId.Value) as AtendimentoComProfissional;
                         atd.Status = StatusAtendimento.Aguardando;
                         await container.Atendimentos.UpdateOne(atd);
+                        await container.ItensFilaAtendimentos.UpdateOne(item);
                     }
-
-                    await filaAtendimentos.ItemAtualizado(usuario, container); 
                 }
                 else
                 {
@@ -84,8 +84,7 @@ namespace Pulsar.Domain.Atendimentos.Models
 
                     var atd = Atendimento.Criar(TipoAtendimento.RealizacaoProcedimentos, usuario.Id, this.Id, estabelecimento,
                         eqpId, this.PacienteId, prof, null, null, null) as AtendimentoComProfissional;
-                    filaAtendimentos.Items.Add(new FilasAtendimentos.Models.FilaAtendimentosItem(atd));
-                    await filaAtendimentos.ItemAtualizado(usuario, container);
+                    var item = new ItemFilaAtendimentos(atd);
                 }
 
                 //enviar notificação

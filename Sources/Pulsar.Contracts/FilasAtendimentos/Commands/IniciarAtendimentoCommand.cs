@@ -15,7 +15,6 @@ namespace Pulsar.Contracts.FilasAtendimentos.Commands
     {
         public ObjectId UsuarioId { get; set; }
         public ObjectId EstabelecimentoId { get; set; }
-        public ObjectId? FilaAtendimentosId { get; set; }
         public ObjectId? ItemId { get; set; }
         public ObjectId? AtendimentoId { get; set; }
         public TipoAtendimento? TipoAtendimento { get; set; }
@@ -25,11 +24,10 @@ namespace Pulsar.Contracts.FilasAtendimentos.Commands
     {
         public IniciarAtendimentoCommandValidator()
         {
-            RuleFor(x => x.FilaAtendimentosId).NotNull();
             RuleFor(x => x.ItemId).NotNull();
             RuleFor(x => x.TipoAtendimento).Cascade(CascadeMode.Stop)
                 .IsInEnum()
-                .Must(x => x.Value.ValidoParaCriacao());
+                .Must(x => x.Value.ValidoParaCriacao()).When(x => x.TipoAtendimento != null);
         }
     }
 }
